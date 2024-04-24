@@ -19,17 +19,15 @@ const audioUrls = [
 function App() {
   return (
     <div
-      style={
-        {
-          // width: '100%',
-          // padding: '10px',
-          // display: 'flex',
-          // flexDirection: 'column',
-          // justifyContent: 'center',
-        }
-      }
+      style={{
+        width: '100%',
+        padding: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
     >
-      <DrawableSpectrogram audioUrls={audioUrls} />
+      <DrawableSpectrogram spectrogramWidth={1080} spectrogramHeight={350} audioUrls={audioUrls} />
     </div>
   );
 }

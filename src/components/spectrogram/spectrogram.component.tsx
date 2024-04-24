@@ -9,7 +9,14 @@ import SpectrogramPlugin from 'wavesurfer.js/dist/plugins/spectrogram.js';
 import { formatTime } from '../../utils/formatTime';
 import CanvasDrawing from '../canvas/canvas.component';
 
-const DrawableSpectrogram = ({ audioUrls }: { audioUrls: Array<string> }): JSX.Element => {
+const DrawableSpectrogram = ({
+  audioUrls,
+  spectrogramWidth,
+  spectrogramHeight,
+}: {
+  audioUrls: Array<string>;
+  spectrogramWidth: number;
+}): JSX.Element => {
   const containerRef = useRef(null);
 
   const [urlIndex, setUrlIndex] = useState(0);
@@ -46,7 +53,7 @@ const DrawableSpectrogram = ({ audioUrls }: { audioUrls: Array<string> }): JSX.E
         wavesurfer.registerPlugin(
           SpectrogramPlugin.create({
             labels: false,
-            height: 300,
+            height: spectrogramHeight,
             colorMap: spectrogramColorMap,
             container: containerRef.current,
           }),
@@ -72,9 +79,15 @@ const DrawableSpectrogram = ({ audioUrls }: { audioUrls: Array<string> }): JSX.E
   return (
     <>
       <div style={{ position: 'relative' }}>
-        <div ref={containerRef} style={{ background: 'red', marginTop: '-54px' }} />
+        <div
+          ref={containerRef}
+          style={{
+            //  marginTop: '-54px'
+            width: `${spectrogramWidth}px`,
+          }}
+        />
         <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 100 }}>
-          <CanvasDrawing />
+          <CanvasDrawing spectrogramWidth={spectrogramWidth} />
         </div>
       </div>
 
@@ -85,7 +98,6 @@ const DrawableSpectrogram = ({ audioUrls }: { audioUrls: Array<string> }): JSX.E
           display: 'flex',
           gap: '1em',
           justifyContent: 'center',
-          width: '100%',
         }}
       >
         <button onClick={stepBack} disabled={urlIndex === 0}>

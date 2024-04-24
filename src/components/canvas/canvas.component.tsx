@@ -204,7 +204,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 
-const CanvasDrawing = () => {
+const CanvasDrawing = ({ spectrogramWidth }: { spectrogramWidth: number }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -440,7 +440,7 @@ const CanvasDrawing = () => {
     <div>
       <canvas
         ref={canvasRef}
-        width={800}
+        width={spectrogramWidth}
         height={600}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -452,9 +452,9 @@ const CanvasDrawing = () => {
         value={labelInput}
         onChange={(e) => setLabelInput(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder="Enter label text and press Enter"
+        placeholder="Digite o nome da espécie"
       />
-      <button onClick={handleDeleteSelectedSquare}>Delete Selected Square</button>
+      <button onClick={handleDeleteSelectedSquare}>Excluir roi selecionada</button>
     </div>
   );
 };
