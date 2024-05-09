@@ -204,7 +204,13 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 
-const CanvasDrawing = ({ spectrogramWidth }: { spectrogramWidth: number }) => {
+const CanvasDrawing = ({
+  spectrogramWidth,
+  spectrogramHeight,
+}: {
+  spectrogramWidth: number;
+  spectrogramHeight: number;
+}) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -438,23 +444,29 @@ const CanvasDrawing = ({ spectrogramWidth }: { spectrogramWidth: number }) => {
 
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        width={spectrogramWidth}
-        height={600}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        style={{ cursor: 'crosshair' }}
-      />
-      <input
-        type="text"
-        value={labelInput}
-        onChange={(e) => setLabelInput(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Digite o nome da espécie"
-      />
-      <button onClick={handleDeleteSelectedSquare}>Excluir roi selecionada</button>
+      <div style={{ position: 'absolute', top: -10, left: 70, zIndex: 9999 }}>
+        <canvas
+          ref={canvasRef}
+          width={`${spectrogramWidth}px`}
+          height={`${spectrogramHeight - 98}px`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          style={{
+            cursor: 'crosshair',
+          }}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          value={labelInput}
+          onChange={(e) => setLabelInput(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Digite o nome da espécie"
+        />
+        <button onClick={handleDeleteSelectedSquare}>Excluir roi selecionada</button>
+      </div>
     </div>
   );
 };
