@@ -159,10 +159,12 @@ const DrawableSpectrogram = ({
   audioUrls,
   spectrogramWidth,
   spectrogramHeight,
+  maxFrequencyKHz,
 }: {
   audioUrls: Array<string>;
   spectrogramWidth: number;
   spectrogramHeight: number;
+  maxFrequencyKHz: number;
 }): JSX.Element => {
   const containerRef = useRef(null);
   const [urlIndex, setUrlIndex] = useState(0);
@@ -172,7 +174,7 @@ const DrawableSpectrogram = ({
     format: 'float',
     alpha: 1,
   });
-  const maxFrequencyKHz = 10; // Frequência máxima em kHz
+
   const { wavesurfer, isPlaying, currentTime } = useWavesurfer({
     container: containerRef,
     height: 0,
@@ -227,8 +229,22 @@ const DrawableSpectrogram = ({
   return (
     <>
       <div style={{ width: '100%' }}>
-        <div style={{ display: 'flex', position: 'relative', marginLeft: '300px', marginTop: '50px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+        <div
+          style={{
+            display: 'flex',
+            position: 'relative',
+            marginLeft: '300px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              height: `${spectrogramHeight}px`,
+            }}
+          >
             {frequencies.map((freq) => (
               <div
                 key={freq}
@@ -238,14 +254,13 @@ const DrawableSpectrogram = ({
                   zIndex: 999,
                 }}
               >
-                {freq.toFixed(1)} kHz -
+                <span style={{ fontSize: '12px' }}>{freq.toFixed(1)} kHz -</span>
               </div>
             ))}
           </div>
           <div
             ref={containerRef}
             style={{
-              marginTop: '-100px',
               width: spectrogramWidth,
               height: spectrogramHeight,
             }}

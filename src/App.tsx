@@ -10,15 +10,8 @@ const audioUrls = [
 
 function App() {
   return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}
-    >
-      <DrawableSpectrogram spectrogramWidth={1080} spectrogramHeight={350} audioUrls={audioUrls} maxFrequencyKHz={10} />
+    <div style={{ marginTop: '300px' }}>
+      <DrawableSpectrogram spectrogramWidth={1080} spectrogramHeight={300} audioUrls={audioUrls} maxFrequencyKHz={20} />
     </div>
   );
 }

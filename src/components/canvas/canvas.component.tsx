@@ -444,11 +444,11 @@ const CanvasDrawing = ({
 
   return (
     <div>
-      <div style={{ position: 'absolute', top: -10, left: 70, zIndex: 9999 }}>
+      <div style={{ position: 'absolute', bottom: -3, opacity: '0.5', left: 53, zIndex: 9999 }}>
         <canvas
           ref={canvasRef}
           width={`${spectrogramWidth}px`}
-          height={`${spectrogramHeight - 98}px`}
+          height={`${spectrogramHeight - 3}px`}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
