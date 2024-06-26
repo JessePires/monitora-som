@@ -277,8 +277,9 @@ const CanvasDrawing = ({
   };
 
   const drawLabel = (context, position, label) => {
-    context.fillStyle = '#000000';
+    context.fillStyle = '#fff';
     context.font = '12px Arial';
+    context.fontWeight = '600';
     context.fillText(label, position.x, position.y - 5);
   };
 

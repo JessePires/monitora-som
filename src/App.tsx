@@ -1,6 +1,7 @@
-import './App.css';
+// import './App.css';
 
 import 'wavesurfer.js/dist/wavesurfer';
+import Segmentation from './components/pages/segmentation/segmentation.component';
 import DrawableSpectrogram from './components/spectrogram/spectrogram.component';
 
 const audioUrls = [
@@ -11,9 +12,20 @@ const audioUrls = [
 function App() {
   return (
     <div style={{ marginTop: '300px' }}>
-      <DrawableSpectrogram spectrogramWidth={1080} spectrogramHeight={300} audioUrls={audioUrls} maxFrequencyKHz={20} />
+      <DrawableSpectrogram
+        spectrogramWidth={1080}
+        spectrogramHeight={300}
+        audioUrls={audioUrls}
+        maxFrequencyKHz={20}
+        nFFT={1024}
+        sampleRate={44100}
+      />
     </div>
   );
 }
+
+// function App() {
+//   return <Segmentation />;
+// }
 
 export default App;
