@@ -3,5 +3,5 @@ import styled from 'styled-components';
 export const ScreenWrapper = styled.div`
   width: 100%;
   height: 100%;
-  /* background-color: red; */
+  margin-top: 300px;
 `;

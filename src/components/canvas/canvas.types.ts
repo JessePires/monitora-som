@@ -1,4 +1,4 @@
-import { RefObject, SetStateAction } from 'react';
+import { RefObject } from 'react';
 
 export interface CanvasContainerProps {
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -12,4 +12,21 @@ export interface CanvasContainerProps {
     handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     handleDeleteSelectedSquare: () => void;
   };
+}
+
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface Square {
+  start: Position;
+  end: Position;
+  color: string;
+  label: string;
+}
+
+export interface CanvasContainerArgs {
+  spectrogramWidth: number;
+  spectrogramHeight: number;
 }

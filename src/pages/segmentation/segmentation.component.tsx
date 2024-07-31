@@ -10,16 +10,14 @@ const Segmentation = (): JSX.Element => {
 
   return (
     <Styles.ScreenWrapper>
-      <div style={{ marginTop: '300px' }}>
-        <DrawableSpectrogram
-          audioUrls={audioUrls}
-          spectrogramWidth={1024}
-          spectrogramHeight={512}
-          sampleRate={44100}
-          nFFT={1024}
-          maxFrequencyKHz={20}
-        />
-      </div>
+      <DrawableSpectrogram
+        audioUrls={audioUrls}
+        spectrogramWidth={1024}
+        spectrogramHeight={512}
+        maxFrequencyKHz={20}
+        sampleRate={44100}
+        nFFT={1024}
+      />
     </Styles.ScreenWrapper>
   );
 };

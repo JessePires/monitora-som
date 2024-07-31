@@ -1,24 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { CanvasContainerProps } from './canvas.types';
+import { CanvasContainerProps, Position, Square } from './canvas.types';
 
 import { ContainerWithProps } from '@/common/types/container.type';
 
-export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>) => {
+export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>): JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
-  const [squares, setSquares] = useState([]);
-  const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
+  const [squares, setSquares] = useState<Array<Square>>([]);
+  const [selectedSquareIndex, setSelectedSquareIndex] = useState<number | null>(null);
   const [isResizing, setIsResizing] = useState<boolean>(false);
-  const [resizeHandle, setResizeHandle] = useState(null);
+  const [resizeHandle, setResizeHandle] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const [dragStartPos, setDragStartPos] = useState<Position>({ x: 0, y: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
 
-  const drawSquare = (context, start, end, color, isSelected) => {
+  const drawSquare = (
+    context: CanvasRenderingContext2D,
+    start: Position,
+    end: Position,
+    color: string,
+    isSelected: boolean,
+  ): void => {
     context.fillStyle = color;
     const width = end.x - start.x;
     const height = end.y - start.y;
@@ -30,7 +36,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     }
   };
 
-  const drawResizeHandles = (context, start, end) => {
+  const drawResizeHandles = (context: CanvasRenderingContext2D, start: Position, end: Position): void => {
     context.fillStyle = 'rgba(255, 0, 0, 1)';
     const handleSize = 6;
     context.fillRect(start.x - handleSize / 2, start.y - handleSize / 2, handleSize, handleSize);
@@ -39,7 +45,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     context.fillRect(end.x - handleSize / 2, end.y - handleSize / 2, handleSize, handleSize);
   };
 
-  const drawLabel = (context, position, label) => {
+  const drawLabel = (context: CanvasRenderingContext2D, position: Position, label: string): void => {
     context.fillStyle = '#fff';
     context.font = '12px Arial';
     context.fontWeight = '600';
@@ -119,7 +125,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     setSquares(updatedSquares);
   };
 
-  const dragSquare = (index, x, y) => {
+  const dragSquare = (index: number | null, x: number, y: number): void => {
     if (index === null) return;
 
     const updatedSquares = [...squares];
@@ -154,7 +160,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     }
   };
 
-  const handleDeleteSelectedSquare = () => {
+  const handleDeleteSelectedSquare = (): void => {
     if (selectedSquareIndex !== null) {
       const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
       setSquares(updatedSquares);
@@ -176,7 +182,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     }
   };
 
-  const checkResizeHandleClicked = (square, { x, y }) => {
+  const checkResizeHandleClicked = (square: Square, { x, y }: Position): string | null => {
     const handleSize = 10;
     const handleMargin = 10; // Margem ao redor do canto para torná-lo mais fácil de clicar
     const handles = [
@@ -207,32 +213,36 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     return null;
   };
 
+  const handleDeleteKeyPress = (event: KeyboardEvent): void => {
+    if (event.key === 'Delete' && selectedSquareIndex !== null) {
+      const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
+      setSquares(updatedSquares);
+      setSelectedSquareIndex(null);
+    }
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    if (canvas) {
+      const context = canvas?.getContext('2d');
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    squares.forEach((square, index) => {
-      drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
-      drawLabel(context, square.start, square.label);
-      if (index === selectedSquareIndex) {
-        drawResizeHandles(context, square.start, square.end);
+      if (context) {
+        context?.clearRect(0, 0, canvas.width, canvas.height);
+        squares.forEach((square, index) => {
+          drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
+          drawLabel(context, square.start, square.label);
+          if (index === selectedSquareIndex) {
+            drawResizeHandles(context, square.start, square.end);
+          }
+        });
+        if (isDrawing) {
+          drawSquare(context, startPos, currentPos, 'rgba(0, 0, 255, 0.5)', false);
+        }
       }
-    });
-    if (isDrawing) {
-      drawSquare(context, startPos, currentPos, 'rgba(0, 0, 255, 0.5)', false);
     }
   }, [squares, startPos, currentPos, isDrawing, selectedSquareIndex]);
 
   useEffect(() => {
-    const handleDeleteKeyPress = (event) => {
-      if (event.key === 'Delete' && selectedSquareIndex !== null) {
-        const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
-        setSquares(updatedSquares);
-        setSelectedSquareIndex(null);
-      }
-    };
-
     document.addEventListener('keydown', handleDeleteKeyPress);
     return () => {
       document.removeEventListener('keydown', handleDeleteKeyPress);

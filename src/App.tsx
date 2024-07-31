@@ -1,10 +1,7 @@
 // import './App.css';
 
 import 'wavesurfer.js/dist/wavesurfer';
-import CanvasDrawing from './components/canvas/canvas.component';
-import Segmentation from './components/pages/segmentation/segmentation.component';
-import DrawableSpectrogram from './components/spectrogram/spectrogram.component';
-import Spectrogram from './components/spectrogram/spectrogram.component';
+import Segmentation from './pages/segmentation/segmentation.component';
 
 // function App() {
 //   return (
