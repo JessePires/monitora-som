@@ -9,7 +9,7 @@ export interface SpectrogramContainerProps {
   currentTime: number;
   urlIndex: number;
   actions: {
-    handleScroll: (event: any) => void;
+    handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
     stepBack: () => void;
     onPlayPause: () => void;
