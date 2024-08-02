@@ -61,6 +61,7 @@ export const SpectrogramContainer = (
   const calculateTimeFromColumn = (columnIndex: number): number => {
     const dt = props.nFFT / props.sampleRate; // Interval of time per column in seconds
     const dtMs = dt * 1000; // Convert to milliseconds
+
     return columnIndex * dtMs - scrollAmount * dtMs;
   };
 

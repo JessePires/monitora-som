@@ -30,3 +30,8 @@ export interface CanvasContainerArgs {
   spectrogramWidth: number;
   spectrogramHeight: number;
 }
+
+export interface CanvasDrawingProps {
+  spectrogramWidth: number;
+  spectrogramHeight: number;
+}

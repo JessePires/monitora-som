@@ -3,16 +3,9 @@ import CanvasDrawing from '../canvas/canvas.component';
 
 import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
-import { SpectrogramContainerProps } from './spectrogram.types';
+import { DrawableSpectrogramProps, SpectrogramContainerProps } from './spectrogram.types';
 
-const DrawableSpectrogram = (props: {
-  audioUrls: Array<string>;
-  spectrogramWidth: number;
-  spectrogramHeight: number;
-  maxFrequencyKHz: number;
-  sampleRate: number;
-  nFFT: number;
-}): JSX.Element => {
+const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
   return (
     <Containers.SpectrogramContainer {...props}>
       {(containerProps: SpectrogramContainerProps): JSX.Element => {

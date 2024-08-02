@@ -29,3 +29,12 @@ export interface TimeFrequencyDots {
   start: number;
   end: number;
 }
+
+export interface DrawableSpectrogramProps {
+  audioUrls: Array<string>;
+  spectrogramWidth: number;
+  spectrogramHeight: number;
+  maxFrequencyKHz: number;
+  sampleRate: number;
+  nFFT: number;
+}

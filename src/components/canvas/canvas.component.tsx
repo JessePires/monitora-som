@@ -1,14 +1,8 @@
 import * as Containers from './canvas.container';
 import * as Styles from './canvas.styles';
-import { CanvasContainerProps } from './canvas.types';
+import { CanvasContainerProps, CanvasDrawingProps } from './canvas.types';
 
-const CanvasDrawing = ({
-  spectrogramWidth,
-  spectrogramHeight,
-}: {
-  spectrogramWidth: number;
-  spectrogramHeight: number;
-}): JSX.Element => {
+const CanvasDrawing = (props: CanvasDrawingProps): JSX.Element => {
   return (
     <Containers.CanvasContainer>
       {(containerProps: CanvasContainerProps): JSX.Element => {
@@ -17,8 +11,8 @@ const CanvasDrawing = ({
             <Styles.CanvasWrapper>
               <Styles.Canvas
                 ref={containerProps.canvasRef}
-                width={`${spectrogramWidth - 15}px`}
-                height={`${spectrogramHeight - 38}px`}
+                width={`${props.spectrogramWidth - 15}px`}
+                height={`${props.spectrogramHeight - 38}px`}
                 onMouseDown={containerProps.actions.handleMouseDown}
                 onMouseMove={containerProps.actions.handleMouseMove}
                 onMouseUp={containerProps.actions.handleMouseUp}
