@@ -12,24 +12,12 @@ const CanvasDrawing = (props: CanvasDrawingProps): JSX.Element => {
               <Styles.Canvas
                 ref={containerProps.canvasRef}
                 width={`${props.spectrogramWidth - 15}px`}
-                height={`${props.spectrogramHeight - 38}px`}
+                height={`${props.spectrogramHeight - 15}px`}
                 onMouseDown={containerProps.actions.handleMouseDown}
                 onMouseMove={containerProps.actions.handleMouseMove}
                 onMouseUp={containerProps.actions.handleMouseUp}
               />
             </Styles.CanvasWrapper>
-            <Styles.SpeciesInputWrapper>
-              <Styles.SpeciesName
-                type="text"
-                value={containerProps.labelInput}
-                onChange={(e) => containerProps.actions.setLabelInput(e.target.value)}
-                onKeyDown={containerProps.actions.handleKeyPress}
-                placeholder="Digite o nome da espécie"
-              />
-              <Styles.Button onClick={containerProps.actions.handleDeleteSelectedSquare}>
-                Excluir roi selecionada
-              </Styles.Button>
-            </Styles.SpeciesInputWrapper>
           </Styles.CanvasDrwawingWrapper>
         );
       }}

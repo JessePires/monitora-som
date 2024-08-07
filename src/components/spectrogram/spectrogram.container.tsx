@@ -17,6 +17,7 @@ export const SpectrogramContainer = (
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
+  const [labelInput, setLabelInput] = useState<string>('');
 
   const spectrogramColorMap = createColormap({
     colormap: 'inferno',

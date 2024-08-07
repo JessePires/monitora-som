@@ -29,6 +29,19 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               </Styles.CanvasWrapper>
             </Styles.DrawableSpectrogramWrapper>
 
+            <Styles.SpeciesInputWrapper>
+              <Styles.SpeciesName
+                type="text"
+                value={containerProps.labelInput}
+                onChange={(e) => containerProps.actions.setLabelInput(e.target.value)}
+                onKeyDown={containerProps.actions.handleKeyPress}
+                placeholder="Digite o nome da espécie"
+              />
+              <Styles.Button onClick={containerProps.actions.handleDeleteSelectedSquare}>
+                Excluir roi selecionada
+              </Styles.Button>
+            </Styles.SpeciesInputWrapper>
+
             <Styles.Text>
               Visible time range: {containerProps.visibleTimes.start.toFixed(2)} ms -{' '}
               {containerProps.visibleTimes.end.toFixed(2)} ms

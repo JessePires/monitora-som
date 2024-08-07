@@ -26,7 +26,7 @@ export const FrequencyText = styled.span`
 
 export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramHeight: number }>`
   width: ${({ spectrogramWidth }: { spectrogramWidth: number }) => `${spectrogramWidth}px`};
-  height: ${({ spectrogramHeight }: { spectrogramHeight: number }) => `${spectrogramHeight}`};
+  height: ${({ spectrogramHeight }: { spectrogramHeight: number }) => `${spectrogramHeight}px`};
   overflow-x: scroll;
 `;
 
@@ -40,3 +40,7 @@ export const ActionButtonsWrapper = styled.div`
 `;
 
 export const Button = styled.button``;
+
+export const SpeciesName = styled.input``;
+
+export const SpeciesInputWrapper = styled.div``;
