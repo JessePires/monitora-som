@@ -25,7 +25,11 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 spectrogramHeight={props.spectrogramHeight}
                 onScroll={containerProps.actions.handleScroll}
               >
-                <CanvasDrawing spectrogramWidth={props.spectrogramWidth} spectrogramHeight={props.spectrogramHeight} />
+                <CanvasDrawing
+                  spectrogramWidth={props.spectrogramWidth}
+                  spectrogramHeight={props.spectrogramHeight}
+                  ref={containerProps.spectrogramRef}
+                />
               </Styles.CanvasWrapper>
             </Styles.DrawableSpectrogramWrapper>
 

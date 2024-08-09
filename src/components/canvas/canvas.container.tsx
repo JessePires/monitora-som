@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
-import { CanvasContainerProps, Position, Square } from './canvas.types';
+import { CanvasContainerArgs, CanvasContainerProps, Position, Square } from './canvas.types';
 
 import { ContainerWithProps } from '@/common/types/container.type';
 
-export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>): JSX.Element => {
+export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, CanvasContainerArgs>): JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
@@ -17,6 +17,13 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStartPos, setDragStartPos] = useState<Position>({ x: 0, y: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
+
+  useImperativeHandle(props.spectrogramRef, () => ({
+    ...props.spectrogramRef?.current,
+    getSquares() {
+      return squares;
+    },
+  }));
 
   const drawSquare = (
     context: CanvasRenderingContext2D,
@@ -242,17 +249,10 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps>)
     }
   }, [squares, startPos, currentPos, isDrawing, selectedSquareIndex]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleDeleteKeyPress);
-    return () => {
-      document.removeEventListener('keydown', handleDeleteKeyPress);
-    };
-  }, [selectedSquareIndex, squares]);
-
   return props.children({
-    canvasRef,
     isDrawing,
     labelInput,
+    canvasRef,
     actions: {
       handleMouseDown,
       handleMouseMove,

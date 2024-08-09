@@ -1,10 +1,12 @@
+import { ForwardedRef, forwardRef } from 'react';
+
 import * as Containers from './canvas.container';
 import * as Styles from './canvas.styles';
 import { CanvasContainerProps, CanvasDrawingProps } from './canvas.types';
 
-const CanvasDrawing = (props: CanvasDrawingProps): JSX.Element => {
+const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<HTMLCanvasElement>): JSX.Element => {
   return (
-    <Containers.CanvasContainer>
+    <Containers.CanvasContainer spectrogramRef={ref}>
       {(containerProps: CanvasContainerProps): JSX.Element => {
         return (
           <Styles.CanvasDrwawingWrapper>
@@ -23,6 +25,6 @@ const CanvasDrawing = (props: CanvasDrawingProps): JSX.Element => {
       }}
     </Containers.CanvasContainer>
   );
-};
+});
 
 export default CanvasDrawing;

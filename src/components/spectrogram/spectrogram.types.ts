@@ -8,6 +8,7 @@ export interface SpectrogramContainerProps {
   isPlaying: boolean;
   currentTime: number;
   urlIndex: number;
+  spectrogramRef: RefObject<HTMLCanvasElement>;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;

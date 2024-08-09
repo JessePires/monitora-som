@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { ForwardedRef, RefObject } from 'react';
 
 export interface CanvasContainerProps {
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -27,8 +27,7 @@ export interface Square {
 }
 
 export interface CanvasContainerArgs {
-  spectrogramWidth: number;
-  spectrogramHeight: number;
+  spectrogramRef: ForwardedRef<HTMLCanvasElement>;
 }
 
 export interface CanvasDrawingProps {

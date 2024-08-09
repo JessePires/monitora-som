@@ -13,6 +13,7 @@ export const SpectrogramContainer = (
   props: ContainerWithProps<SpectrogramContainerProps, SpectrogramContainerArgs>,
 ): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const spectrogramRef = useRef<HTMLCanvasElement>(null);
   const [urlIndex, setUrlIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
@@ -31,24 +32,6 @@ export const SpectrogramContainer = (
     height: 0,
     url: props.audioUrls[urlIndex],
   });
-
-  useEffect(() => {
-    if (containerRef.current && wavesurfer) {
-      const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
-
-      wavesurfer.registerPlugin(
-        SpectrogramPlugin.create({
-          labels: false,
-          height: props.spectrogramHeight,
-          colorMap: spectrogramColorMap,
-          container: containerRef.current,
-          fftSamples: fftSamples,
-        }),
-      );
-
-      wavesurfer.registerPlugin(RegionsPlugin.create());
-    }
-  }, [wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
 
   const calculateFrequencies = useCallback(() => {
     const frequencies = [];
@@ -100,6 +83,24 @@ export const SpectrogramContainer = (
   }, [wavesurfer]);
 
   useEffect(() => {
+    if (containerRef.current && wavesurfer) {
+      const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
+
+      wavesurfer.registerPlugin(
+        SpectrogramPlugin.create({
+          labels: false,
+          height: props.spectrogramHeight,
+          colorMap: spectrogramColorMap,
+          container: containerRef.current,
+          fftSamples: fftSamples,
+        }),
+      );
+
+      wavesurfer.registerPlugin(RegionsPlugin.create());
+    }
+  }, [wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
+
+  useEffect(() => {
     const visibleStartTime = calculateTimeFromColumn(0);
     const visibleEndTime = calculateTimeFromColumn(props.spectrogramWidth);
     setVisibleTimes({ start: visibleStartTime, end: visibleEndTime });
@@ -117,6 +118,7 @@ export const SpectrogramContainer = (
     currentTime,
     isPlaying,
     urlIndex,
+    spectrogramRef,
     actions: {
       handleScroll,
       stepForward,
