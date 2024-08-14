@@ -6,7 +6,7 @@ import { CanvasContainerProps, CanvasDrawingProps } from './canvas.types';
 
 const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<HTMLCanvasElement>): JSX.Element => {
   return (
-    <Containers.CanvasContainer spectrogramRef={ref}>
+    <Containers.CanvasContainer spectrogramRef={ref} labelInput={props.labelInput} setLabelInput={props.setLabelInput}>
       {(containerProps: CanvasContainerProps): JSX.Element => {
         return (
           <Styles.CanvasDrwawingWrapper>

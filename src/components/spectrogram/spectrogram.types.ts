@@ -9,11 +9,15 @@ export interface SpectrogramContainerProps {
   currentTime: number;
   urlIndex: number;
   spectrogramRef: RefObject<HTMLCanvasElement>;
+  labelInput: string;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
     stepBack: () => void;
     onPlayPause: () => void;
+    handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    setLabelInput: React.Dispatch<React.SetStateAction<string>>;
+    handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
   };
 }
 

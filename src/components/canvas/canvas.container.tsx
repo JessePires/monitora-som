@@ -16,12 +16,17 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   const [resizeHandle, setResizeHandle] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStartPos, setDragStartPos] = useState<Position>({ x: 0, y: 0 });
-  const [labelInput, setLabelInput] = useState<string>('');
 
   useImperativeHandle(props.spectrogramRef, () => ({
     ...props.spectrogramRef?.current,
-    getSquares() {
-      return squares;
+    canvasSquares: squares,
+
+    createLabel(event: React.KeyboardEvent<HTMLInputElement>) {
+      return handleKeyPress(event);
+    },
+
+    deleteSquare(event: KeyboardEvent) {
+      return handleDeleteSelectedSquare();
     },
   }));
 
@@ -159,11 +164,11 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         start: { ...startPos },
         end: { ...currentPos },
         color: 'rgba(0, 0, 255, 0.5)',
-        label: labelInput,
+        label: props.labelInput,
       };
       setSquares([...squares, newSquare]);
       setSelectedSquareIndex(squares.length); // Seleciona o quadrado mais recentemente adicionado
-      setLabelInput('');
+      props.setLabelInput('');
     }
   };
 
@@ -172,6 +177,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
       const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
       setSquares(updatedSquares);
       setSelectedSquareIndex(null);
+      props.setLabelInput('');
     }
   };
 
@@ -180,11 +186,11 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
       if (isDrawing) {
         setIsDrawing(false);
       }
-      if (labelInput.trim() !== '' && selectedSquareIndex !== null) {
+      if (props.labelInput.trim() !== '' && selectedSquareIndex !== null) {
         const updatedSquares = [...squares];
-        updatedSquares[selectedSquareIndex].label = labelInput;
+        updatedSquares[selectedSquareIndex].label = props.labelInput;
         setSquares(updatedSquares);
-        setLabelInput('');
+        props.setLabelInput('');
       }
     }
   };
@@ -220,13 +226,20 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     return null;
   };
 
-  const handleDeleteKeyPress = (event: KeyboardEvent): void => {
-    if (event.key === 'Delete' && selectedSquareIndex !== null) {
-      const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
-      setSquares(updatedSquares);
-      setSelectedSquareIndex(null);
-    }
-  };
+  useEffect(() => {
+    const handleDeleteKeyPress = (event) => {
+      if (event.key === 'Delete' && selectedSquareIndex !== null) {
+        const updatedSquares = squares.filter((_, index) => index !== selectedSquareIndex);
+        setSquares(updatedSquares);
+        setSelectedSquareIndex(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleDeleteKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleDeleteKeyPress);
+    };
+  }, [selectedSquareIndex, squares]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -251,13 +264,11 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
 
   return props.children({
     isDrawing,
-    labelInput,
     canvasRef,
     actions: {
       handleMouseDown,
       handleMouseMove,
       handleMouseUp,
-      setLabelInput,
       handleKeyPress,
       handleDeleteSelectedSquare,
     },

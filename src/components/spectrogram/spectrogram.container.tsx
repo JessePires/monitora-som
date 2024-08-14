@@ -82,6 +82,14 @@ export const SpectrogramContainer = (
     wavesurfer && wavesurfer.playPause();
   }, [wavesurfer]);
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    spectrogramRef.current?.createLabel(event);
+  };
+
+  const handleDeleteSelectedSquare = (event: KeyboardEvent) => {
+    spectrogramRef.current?.deleteSquare(event);
+  };
+
   useEffect(() => {
     if (containerRef.current && wavesurfer) {
       const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
@@ -119,11 +127,15 @@ export const SpectrogramContainer = (
     isPlaying,
     urlIndex,
     spectrogramRef,
+    labelInput,
     actions: {
       handleScroll,
       stepForward,
       stepBack,
       onPlayPause,
+      handleKeyPress,
+      setLabelInput,
+      handleDeleteSelectedSquare,
     },
   });
 };

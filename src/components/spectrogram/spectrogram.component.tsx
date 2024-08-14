@@ -28,6 +28,8 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 <CanvasDrawing
                   spectrogramWidth={props.spectrogramWidth}
                   spectrogramHeight={props.spectrogramHeight}
+                  labelInput={containerProps.labelInput}
+                  setLabelInput={containerProps.actions.setLabelInput}
                   ref={containerProps.spectrogramRef}
                 />
               </Styles.CanvasWrapper>
