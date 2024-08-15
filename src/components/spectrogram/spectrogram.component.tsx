@@ -46,6 +46,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               <Styles.Button onClick={containerProps.actions.handleDeleteSelectedSquare}>
                 Excluir roi selecionada
               </Styles.Button>
+              <Styles.Button onClick={containerProps.actions.exportSquares}>Exportar</Styles.Button>
             </Styles.SpeciesInputWrapper>
 
             <Styles.Text>

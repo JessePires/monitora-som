@@ -5,6 +5,8 @@ import createColormap from 'colormap';
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.js';
 import SpectrogramPlugin from 'wavesurfer.js/dist/plugins/spectrogram.js';
 
+import { Square } from '../canvas/canvas.types';
+
 import { SpectrogramContainerArgs, SpectrogramContainerProps, TimeFrequencyDots } from './spectrogram.types';
 
 import { ContainerWithProps } from '@/common/types/container.type';
@@ -19,6 +21,11 @@ export const SpectrogramContainer = (
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
+  const [calculatedSquares, setCalculatedSquares] = useState<
+    Array<{ startFrequency: number; endFrequency: number; startTime: number; endTime: number }>
+  >([]);
+
+  console.log('calculatedSquares', calculatedSquares);
 
   const spectrogramColorMap = createColormap({
     colormap: 'inferno',
@@ -90,6 +97,21 @@ export const SpectrogramContainer = (
     spectrogramRef.current?.deleteSquare(event);
   };
 
+  const exportSquares = () => {
+    if (spectrogramRef.current) {
+      setCalculatedSquares(
+        spectrogramRef.current.canvasSquares.map(
+          (square: Square): { startFrequency: number; endFrequency: number; startTime: number; endTime: number } => ({
+            startFrequency: calculateFrequencyFromRow(square.start.y),
+            endFrequency: calculateFrequencyFromRow(square.end.y),
+            startTime: calculateTimeFromColumn(square.start.x),
+            endTime: calculateTimeFromColumn(square.end.x),
+          }),
+        ),
+      );
+    }
+  };
+
   useEffect(() => {
     if (containerRef.current && wavesurfer) {
       const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
@@ -136,6 +158,7 @@ export const SpectrogramContainer = (
       handleKeyPress,
       setLabelInput,
       handleDeleteSelectedSquare,
+      exportSquares,
     },
   });
 };
