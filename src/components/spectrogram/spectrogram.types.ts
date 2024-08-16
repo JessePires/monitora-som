@@ -18,6 +18,7 @@ export interface SpectrogramContainerProps {
     handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     setLabelInput: React.Dispatch<React.SetStateAction<string>>;
     handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
+    exportSquares: () => void;
   };
 }
 

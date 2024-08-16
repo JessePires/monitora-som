@@ -21,11 +21,6 @@ export const SpectrogramContainer = (
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
-  const [calculatedSquares, setCalculatedSquares] = useState<
-    Array<{ startFrequency: number; endFrequency: number; startTime: number; endTime: number }>
-  >([]);
-
-  console.log('calculatedSquares', calculatedSquares);
 
   const spectrogramColorMap = createColormap({
     colormap: 'inferno',
@@ -99,16 +94,16 @@ export const SpectrogramContainer = (
 
   const exportSquares = () => {
     if (spectrogramRef.current) {
-      setCalculatedSquares(
-        spectrogramRef.current.canvasSquares.map(
-          (square: Square): { startFrequency: number; endFrequency: number; startTime: number; endTime: number } => ({
-            startFrequency: calculateFrequencyFromRow(square.start.y),
-            endFrequency: calculateFrequencyFromRow(square.end.y),
-            startTime: calculateTimeFromColumn(square.start.x),
-            endTime: calculateTimeFromColumn(square.end.x),
-          }),
-        ),
-      );
+      const arrayContent = [['label, freq início, freq fim, tempo início, tempo fim']];
+      spectrogramRef.current.canvasSquares.forEach((square: Square) => {
+        arrayContent.push([`${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x}`]);
+      });
+
+      const csvContent = arrayContent.join('\n');
+      const link = window.document.createElement('a');
+      link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvContent));
+      link.setAttribute('download', 'upload_data.csv');
+      link.click();
     }
   };
 
