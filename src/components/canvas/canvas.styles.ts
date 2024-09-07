@@ -18,6 +18,4 @@ export const SpeciesInputWrapper = styled.div``;
 
 export const Canvas = styled.canvas`
   cursor: crosshair;
-
-  background: red;
 `;

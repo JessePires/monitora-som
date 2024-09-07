@@ -57,17 +57,26 @@ export const SpectrogramContainer = (
     return (rowIndex / nBins) * (props.sampleRate / 2); // Frequency in Hz
   };
 
+  // const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+  //   const newScrollAmount = (event.target.scrollLeft / event.target.scrollWidth) * (wavesurfer.getDuration() * 1000); // Convert scrollLeft to ms
+  //   setScrollAmount(newScrollAmount);
+
+  //   const visibleStartTime = calculateTimeFromColumn(0);
+  //   const visibleEndTime = calculateTimeFromColumn(props.spectrogramWidth);
+  //   setVisibleTimes({ start: visibleStartTime, end: visibleEndTime });
+
+  //   const visibleStartFrequency = calculateFrequencyFromRow(0);
+  //   const visibleEndFrequency = calculateFrequencyFromRow(props.spectrogramHeight);
+  //   setVisibleFrequencies({ start: visibleStartFrequency, end: visibleEndFrequency });
+  // };
+
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const newScrollAmount = (event.target.scrollLeft / event.target.scrollWidth) * (wavesurfer.getDuration() * 1000); // Convert scrollLeft to ms
+    const newScrollAmount = (event.target.scrollLeft / event.target.scrollWidth) * (wavesurfer.getDuration() * 1000);
     setScrollAmount(newScrollAmount);
 
     const visibleStartTime = calculateTimeFromColumn(0);
     const visibleEndTime = calculateTimeFromColumn(props.spectrogramWidth);
     setVisibleTimes({ start: visibleStartTime, end: visibleEndTime });
-
-    const visibleStartFrequency = calculateFrequencyFromRow(0);
-    const visibleEndFrequency = calculateFrequencyFromRow(props.spectrogramHeight);
-    setVisibleFrequencies({ start: visibleStartFrequency, end: visibleEndFrequency });
   };
 
   const frequencies = calculateFrequencies();

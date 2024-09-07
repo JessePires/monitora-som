@@ -1,5 +1,7 @@
 import { formatTime } from '../../utils/formatTime';
 import CanvasDrawing from '../canvas/canvas.component';
+import ComboboxForm from '../form/form.component';
+import { Button } from '../ui/button';
 
 import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
@@ -36,6 +38,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
             </Styles.DrawableSpectrogramWrapper>
 
             <Styles.SpeciesInputWrapper>
+              <ComboboxForm />
               <Styles.SpeciesName
                 type="text"
                 value={containerProps.labelInput}
@@ -43,10 +46,8 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 onKeyDown={containerProps.actions.handleKeyPress}
                 placeholder="Digite o nome da espécie"
               />
-              <Styles.Button onClick={containerProps.actions.handleDeleteSelectedSquare}>
-                Excluir roi selecionada
-              </Styles.Button>
-              <Styles.Button onClick={containerProps.actions.exportSquares}>Exportar</Styles.Button>
+              <Button onClick={containerProps.actions.handleDeleteSelectedSquare}>Excluir roi selecionada</Button>
+              <Button onClick={containerProps.actions.exportSquares}>Exportar</Button>
             </Styles.SpeciesInputWrapper>
 
             <Styles.Text>
@@ -60,20 +61,20 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
             <Styles.Text>Current time: {formatTime(containerProps.currentTime)}</Styles.Text>
             <Styles.ActionButtonsWrapper>
-              <Styles.Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
+              <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
                 Retroceda
-              </Styles.Button>
+              </Button>
 
-              <Styles.Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }}>
+              <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }}>
                 {containerProps.isPlaying ? 'Pause' : 'Play'}
-              </Styles.Button>
+              </Button>
 
-              <Styles.Button
+              <Button
                 onClick={containerProps.actions.stepForward}
                 disabled={containerProps.urlIndex === props.audioUrls.length - 1}
               >
                 Avance
-              </Styles.Button>
+              </Button>
             </Styles.ActionButtonsWrapper>
           </>
         );

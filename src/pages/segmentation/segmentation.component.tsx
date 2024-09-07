@@ -6,7 +6,7 @@ import DrawableSpectrogram from '@/components/spectrogram/spectrogram.component'
 
 const Segmentation = (): JSX.Element => {
   return (
-    <Containers.SpectrogramContainer>
+    <Containers.SegmentationContainer>
       {(containerProps: SegmentationContainerArgs): JSX.Element => {
         return (
           <Styles.ScreenWrapper>
@@ -16,12 +16,12 @@ const Segmentation = (): JSX.Element => {
               spectrogramHeight={512}
               maxFrequencyKHz={20}
               sampleRate={44100}
-              nFFT={1024}
+              nFFT={2048}
             />
           </Styles.ScreenWrapper>
         );
       }}
-    </Containers.SpectrogramContainer>
+    </Containers.SegmentationContainer>
   );
 };
 

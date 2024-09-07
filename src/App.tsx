@@ -1,4 +1,5 @@
-// import './App.css';
+// import './App.css';]
+import './global.css';
 
 import 'wavesurfer.js/dist/wavesurfer';
 import Segmentation from './pages/segmentation/segmentation.component';
