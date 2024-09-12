@@ -12,7 +12,7 @@ const Segmentation = (): JSX.Element => {
           <Styles.ScreenWrapper>
             <DrawableSpectrogram
               audioUrls={containerProps.audioUrls}
-              spectrogramWidth={1024}
+              spectrogramWidth={1840}
               spectrogramHeight={512}
               maxFrequencyKHz={20}
               sampleRate={44100}

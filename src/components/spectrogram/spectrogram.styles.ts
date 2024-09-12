@@ -24,18 +24,10 @@ export const FrequencyText = styled.span`
   font-size: 12px;
 `;
 
-// export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramHeight: number }>`
-//   width: ${({ spectrogramWidth }: { spectrogramWidth: number }) => `${spectrogramWidth}px`};
-//   height: ${({ spectrogramHeight }: { spectrogramHeight: number }) => `${spectrogramHeight}px`};
-//   overflow-x: scroll;
-//   overflow-y: scroll; // Permite rolagem vertical para visualizar a faixa completa
-// `;
-
 export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramHeight: number }>`
-  width: 1024px; // Container externo com largura fixa
-  height: ${({ spectrogramHeight }: { spectrogramHeight: number }) => `${spectrogramHeight}px`};
-  overflow-x: scroll; // Scroll horizontal para visualizar todo o espectrograma
-  overflow-y: hidden; // Sem scroll vertical
+  width: ${({ spectrogramWidth }: { spectrogramWidth: number }) => `${spectrogramWidth}px`};
+  overflow-x: scroll;
+  overflow-y: hidden;
 `;
 
 export const Text = styled.p``;

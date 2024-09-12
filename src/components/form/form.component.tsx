@@ -63,7 +63,115 @@ const ComboboxForm = (): JSX.Element => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4">
+        <div className="flex justify-between">
+          <FormField
+            control={form.control}
+            name="availableSpecies"
+            render={({ field }) => (
+              <FormItem className="flex w-[49%] flex-col">
+                <FormLabel>Nomes das Espécies Disponíveis</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
+                      >
+                        {field.value
+                          ? languages.find((language) => language.value === field.value)?.label
+                          : 'Select language'}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Command>
+                      <CommandInput placeholder="Search framework..." className="h-9" />
+                      <CommandList>
+                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandGroup>
+                          {languages.map((language) => (
+                            <CommandItem
+                              value={language.label}
+                              key={language.value}
+                              onSelect={() => {
+                                form.setValue('language', language.value);
+                              }}
+                            >
+                              {language.label}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  language.value === field.value ? 'opacity-100' : 'opacity-0',
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="speciesName"
+            render={({ field }) => (
+              <FormItem className="flex w-[49%] flex-col">
+                <FormLabel>Rótulo</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
+                      >
+                        {field.value
+                          ? languages.find((language) => language.value === field.value)?.label
+                          : 'Select language'}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search framework..." className="h-9" />
+                      <CommandList>
+                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandGroup>
+                          {languages.map((language) => (
+                            <CommandItem
+                              value={language.label}
+                              key={language.value}
+                              onSelect={() => {
+                                form.setValue('language', language.value);
+                              }}
+                            >
+                              {language.label}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  language.value === field.value ? 'opacity-100' : 'opacity-0',
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="flex justify-between">
           <FormField
             control={form.control}
@@ -77,7 +185,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -130,7 +238,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -183,7 +291,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -236,7 +344,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -290,7 +398,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label

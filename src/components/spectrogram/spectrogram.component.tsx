@@ -13,14 +13,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
         return (
           <>
-            <Styles.DrawableSpectrogramWrapper>
-              <Styles.SpectrogramWrapper spectrogramHeight={props.spectrogramHeight}>
-                {containerProps.frequencies.map((freq) => (
-                  <Styles.FrequencyWrapper key={freq}>
-                    <Styles.FrequencyText>{freq.toFixed(1)} kHz -</Styles.FrequencyText>
-                  </Styles.FrequencyWrapper>
-                ))}
-              </Styles.SpectrogramWrapper>
+            <div className="bg-white rounded-xl shadow-md m-4 p-4">
               <Styles.CanvasWrapper
                 ref={containerProps.containerRef}
                 spectrogramWidth={props.spectrogramWidth}
@@ -35,7 +28,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   ref={containerProps.spectrogramRef}
                 />
               </Styles.CanvasWrapper>
-            </Styles.DrawableSpectrogramWrapper>
+            </div>
 
             <Styles.SpeciesInputWrapper>
               <ComboboxForm />
