@@ -45,8 +45,8 @@ export const SpectrogramContainer = (
   }, [props.maxFrequencyKHz]);
 
   const calculateTimeFromColumn = (columnIndex: number): number => {
-    const dt = props.nFFT / props.sampleRate; // Interval of time per column in seconds
-    const dtMs = dt * 1000; // Convert to milliseconds
+    const dt = props.nFFT / props.sampleRate;
+    const dtMs = dt * 1000;
 
     return columnIndex * dtMs - scrollAmount * dtMs;
   };

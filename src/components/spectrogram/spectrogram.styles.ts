@@ -32,13 +32,6 @@ export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramH
 
 export const Text = styled.p``;
 
-export const ActionButtonsWrapper = styled.div`
-  margin: 1em 0;
-  display: flex;
-  gap: 1em;
-  justify-content: center;
-`;
-
 export const Button = styled.button``;
 
 export const SpeciesName = styled.input``;

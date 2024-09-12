@@ -27,6 +27,8 @@ const languages = [
 ] as const;
 
 const FormSchema = z.object({
+  records: z.string({ required_error: 'Selecione a gravação' }),
+  roi_table: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
   availableSpecies: z.string({
     required_error: 'Selecione uma categoria de espécies.',
   }),
@@ -86,7 +88,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="p-0">
+                  <PopoverContent className="w-[400px]">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -97,7 +99,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('availableSpecies', language.value);
                               }}
                             >
                               {language.label}
@@ -150,7 +152,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('speciesName', language.value);
                               }}
                             >
                               {language.label}
@@ -177,7 +179,7 @@ const ComboboxForm = (): JSX.Element => {
             control={form.control}
             name="availableSpecies"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="w-[18%] flex flex-col">
                 <FormLabel>Nomes das Espécies Disponíveis</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -185,7 +187,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
+                        className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -194,7 +196,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="p-0">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -205,7 +207,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('availableSpecies', language.value);
                               }}
                             >
                               {language.label}
@@ -230,7 +232,7 @@ const ComboboxForm = (): JSX.Element => {
             control={form.control}
             name="speciesName"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="w-[18%] flex flex-col">
                 <FormLabel>Rótulo</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -238,7 +240,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
+                        className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -247,7 +249,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="p-0">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -258,7 +260,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('speciesName', language.value);
                               }}
                             >
                               {language.label}
@@ -283,7 +285,7 @@ const ComboboxForm = (): JSX.Element => {
             control={form.control}
             name="type"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="w-[18%] flex flex-col">
                 <FormLabel>Tipo</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -291,7 +293,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
+                        className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -300,7 +302,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="p-0">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -311,7 +313,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('type', language.value);
                               }}
                             >
                               {language.label}
@@ -336,7 +338,7 @@ const ComboboxForm = (): JSX.Element => {
             control={form.control}
             name="levelOfCertainty"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="w-[18%] flex flex-col">
                 <FormLabel>Nível de Certeza</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -344,7 +346,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[100%] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -353,7 +355,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="p-0">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -364,7 +366,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('levelOfCertainty', language.value);
                               }}
                             >
                               {language.label}
@@ -390,7 +392,7 @@ const ComboboxForm = (): JSX.Element => {
             control={form.control}
             name="completude"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="w-[18%] flex flex-col">
                 <FormLabel>Completude</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -398,7 +400,7 @@ const ComboboxForm = (): JSX.Element => {
                       <Button
                         variant="outline"
                         role="combobox"
-                        className={cn('w-[200px] justify-between bg-white', !field.value && 'text-muted-foreground')}
+                        className={cn('w-[100%] justify-between bg-white', !field.value && 'text-muted-foreground')}
                       >
                         {field.value
                           ? languages.find((language) => language.value === field.value)?.label
@@ -407,7 +409,7 @@ const ComboboxForm = (): JSX.Element => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[100%] p-0">
                     <Command>
                       <CommandInput placeholder="Search framework..." className="h-9" />
                       <CommandList>
@@ -418,7 +420,7 @@ const ComboboxForm = (): JSX.Element => {
                               value={language.label}
                               key={language.value}
                               onSelect={() => {
-                                form.setValue('language', language.value);
+                                form.setValue('completude', language.value);
                               }}
                             >
                               {language.label}

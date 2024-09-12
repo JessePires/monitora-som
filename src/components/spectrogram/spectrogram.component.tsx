@@ -28,6 +28,23 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   ref={containerProps.spectrogramRef}
                 />
               </Styles.CanvasWrapper>
+
+              <div className="mt-8 flex gap-4 justify-center">
+                <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
+                  Retroceda
+                </Button>
+
+                <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }}>
+                  {containerProps.isPlaying ? 'Pause' : 'Play'}
+                </Button>
+
+                <Button
+                  onClick={containerProps.actions.stepForward}
+                  disabled={containerProps.urlIndex === props.audioUrls.length - 1}
+                >
+                  Avance
+                </Button>
+              </div>
             </div>
 
             <Styles.SpeciesInputWrapper>
@@ -43,32 +60,16 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               <Button onClick={containerProps.actions.exportSquares}>Exportar</Button>
             </Styles.SpeciesInputWrapper>
 
-            <Styles.Text>
+            <p>
               Visible time range: {containerProps.visibleTimes.start.toFixed(2)} ms -{' '}
               {containerProps.visibleTimes.end.toFixed(2)} ms
-            </Styles.Text>
-            <Styles.Text>
+            </p>
+            <p>
               Visible frequency range: {containerProps.visibleFrequencies.start.toFixed(2)} Hz -{' '}
               {containerProps.visibleFrequencies.end.toFixed(2)} Hz
-            </Styles.Text>
+            </p>
 
-            <Styles.Text>Current time: {formatTime(containerProps.currentTime)}</Styles.Text>
-            <Styles.ActionButtonsWrapper>
-              <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
-                Retroceda
-              </Button>
-
-              <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }}>
-                {containerProps.isPlaying ? 'Pause' : 'Play'}
-              </Button>
-
-              <Button
-                onClick={containerProps.actions.stepForward}
-                disabled={containerProps.urlIndex === props.audioUrls.length - 1}
-              >
-                Avance
-              </Button>
-            </Styles.ActionButtonsWrapper>
+            <p>Current time: {formatTime(containerProps.currentTime)}</p>
           </>
         );
       }}
