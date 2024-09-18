@@ -1,7 +1,10 @@
+import { SliderIcon } from '@radix-ui/react-icons';
+
 import { formatTime } from '../../utils/formatTime';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
 import { Button } from '../ui/button';
+import { Slider } from '../ui/slider';
 
 import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
@@ -14,20 +17,35 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
         return (
           <>
             <div className="bg-white rounded-xl shadow-md m-4 p-4">
-              <Styles.CanvasWrapper
-                ref={containerProps.containerRef}
-                spectrogramWidth={props.spectrogramWidth}
-                spectrogramHeight={props.spectrogramHeight}
-                onScroll={containerProps.actions.handleScroll}
-              >
-                <CanvasDrawing
+              <div className="flex flex-col items-center mb-2 ml-16 mr-8">
+                <p className="text-sm font-medium mb-2">Segundos</p>
+                <Slider max={60} defaultValue={[60]} />
+              </div>
+
+              <div className="flex mr-8">
+                <div className={`h-[${props.spectrogramHeight}] w-1 pl-12 pr-4`}>
+                  <Slider
+                    orientation="vertical"
+                    max={props.maxFrequencyKHz}
+                    defaultValue={[props.maxFrequencyKHz]}
+                    tooltipOrientation="right"
+                  />
+                </div>
+                <Styles.CanvasWrapper
+                  ref={containerProps.containerRef}
                   spectrogramWidth={props.spectrogramWidth}
                   spectrogramHeight={props.spectrogramHeight}
-                  labelInput={containerProps.labelInput}
-                  setLabelInput={containerProps.actions.setLabelInput}
-                  ref={containerProps.spectrogramRef}
-                />
-              </Styles.CanvasWrapper>
+                  onScroll={containerProps.actions.handleScroll}
+                >
+                  <CanvasDrawing
+                    spectrogramWidth={props.spectrogramWidth}
+                    spectrogramHeight={props.spectrogramHeight}
+                    labelInput={containerProps.labelInput}
+                    setLabelInput={containerProps.actions.setLabelInput}
+                    ref={containerProps.spectrogramRef}
+                  />
+                </Styles.CanvasWrapper>
+              </div>
 
               <div className="mt-8 flex gap-4 justify-center">
                 <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
