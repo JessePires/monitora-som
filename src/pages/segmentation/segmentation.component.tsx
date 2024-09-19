@@ -14,7 +14,7 @@ const Segmentation = (): JSX.Element => {
               audioUrls={containerProps.audioUrls}
               spectrogramWidth={1840}
               spectrogramHeight={512}
-              maxFrequencyKHz={20}
+              maxFrequencyKHz={50}
               sampleRate={44100}
               nFFT={2048}
             />

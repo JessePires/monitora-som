@@ -60,10 +60,12 @@ const Slider = React.forwardRef<
     tooltipOrientation?: 'left' | 'right' | 'top' | 'bottom';
   }
 >(({ className, orientation = 'horizontal', tooltipOrientation = 'top', ...props }, ref) => {
+  const tooltipRef = React.useRef<HTMLDivElement | null>(null);
+
   const [value, setValue] = React.useState(props.defaultValue ?? [0]);
   const [isHovered, setIsHovered] = React.useState(false);
+  const [tooltipWidth, setTooltipWidth] = React.useState<number>(0);
 
-  // Define classes com base na orientação
   const orientationClasses =
     orientation === 'vertical'
       ? 'flex-col h-full' // Estilos para vertical
@@ -79,10 +81,44 @@ const Slider = React.forwardRef<
       ? 'w-full' // Estilos do Range vertical
       : 'h-full'; // Estilos do Range horizontal
 
-  const thumbPosition =
+  const tooltipPosition =
     orientation === 'vertical'
       ? '-translate-y-1/2' // Centraliza o Thumb verticalmente
       : '-translate-x-1/3'; // Centraliza o Thumb horizontalmente
+
+  const tooltipPositionAdjustment = () => {
+    let adjustment: { left?: number | string; top: number | string } = { top: '' };
+
+    if (orientation === 'vertical') {
+      if (tooltipOrientation === 'right') {
+        adjustment = { left: 12, top: '50%' };
+      } else {
+        adjustment = { left: -tooltipWidth, top: '50%' };
+      }
+    } else {
+      if (tooltipOrientation === 'bottom') {
+        adjustment = { top: '100%' };
+      } else {
+        adjustment = { top: '-28px' };
+      }
+    }
+
+    return adjustment;
+  };
+
+  const handleResize = () => {
+    if (tooltipRef.current) {
+      setTooltipWidth(tooltipRef.current.offsetWidth);
+    }
+  };
+
+  React.useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [value]);
 
   return (
     <SliderPrimitive.Root
@@ -106,12 +142,13 @@ const Slider = React.forwardRef<
       >
         <div
           className={cn(
-            `absolute ${thumbPosition} bg-primary text-white text-sm px-2 py-1 rounded transition-opacity duration-300`,
+            `absolute ${tooltipPosition} bg-primary text-white text-sm px-2 py-1 rounded transition-opacity duration-300`,
             isHovered ? 'opacity-100 visible' : 'opacity-0 invisible',
           )}
-          style={orientation === 'vertical' ? { left: -30, top: '50%' } : { top: '-28px' }} // Posição do tooltip
+          style={tooltipPositionAdjustment()}
+          ref={tooltipRef}
         >
-          {value[0] ?? props.defaultValue}
+          {value[0].toString().replace('.', ',') ?? props.defaultValue?.toString().replace('.', ',')}
         </div>
       </SliderPrimitive.Thumb>
     </SliderPrimitive.Root>

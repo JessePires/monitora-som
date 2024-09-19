@@ -19,7 +19,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
             <div className="bg-white rounded-xl shadow-md m-4 p-4">
               <div className="flex flex-col items-center mb-2 ml-16 mr-8">
                 <p className="text-sm font-medium mb-2">Segundos</p>
-                <Slider max={60} defaultValue={[60]} />
+                <Slider max={60} defaultValue={[60]} step={0.1} />
               </div>
 
               <div className="flex mr-8">
@@ -28,7 +28,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                     orientation="vertical"
                     max={props.maxFrequencyKHz}
                     defaultValue={[props.maxFrequencyKHz]}
-                    tooltipOrientation="right"
+                    step={0.1}
                   />
                 </div>
                 <Styles.CanvasWrapper
