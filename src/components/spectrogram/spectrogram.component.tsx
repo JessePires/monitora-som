@@ -1,5 +1,3 @@
-import { SliderIcon } from '@radix-ui/react-icons';
-
 import { formatTime } from '../../utils/formatTime';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
