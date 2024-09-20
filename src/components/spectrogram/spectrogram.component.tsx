@@ -1,3 +1,4 @@
+import * as Icons from '../../assets/icons';
 import { formatTime } from '../../utils/formatTime';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
@@ -46,19 +47,35 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               </div>
 
               <div className="mt-8 flex gap-4 justify-center">
-                <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
-                  Retroceda
+                <Button onClick={() => console.log('Anterior não rotulado')} disabled={containerProps.urlIndex === 0}>
+                  <Icons.CustomPreviousUnseenIcon width="20" />
+                  <span className="ml-2">Anterior não rotulado</span>
                 </Button>
 
-                <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }}>
-                  {containerProps.isPlaying ? 'Pause' : 'Play'}
+                <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
+                  <Icons.CustomPreviousIcon width="11" />
+                  <span className="ml-2">Anterior</span>
+                </Button>
+
+                <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }} className="w-[30%]">
+                  <Icons.CustomPlayIcon width="11" />
+                  <span className="ml-2">{containerProps.isPlaying ? 'Pausar áudio' : 'Tocar áudio'}</span>
                 </Button>
 
                 <Button
                   onClick={containerProps.actions.stepForward}
                   disabled={containerProps.urlIndex === props.audioUrls.length - 1}
                 >
-                  Avance
+                  <span className="mr-2">Próximo</span>
+                  <Icons.CustomNextIcon width="11" />
+                </Button>
+
+                <Button
+                  onClick={() => console.log('próximo não rotulado')}
+                  disabled={containerProps.urlIndex === props.audioUrls.length - 1}
+                >
+                  <span className="mr-2">Próximo não rotulado</span>
+                  <Icons.CustomNextUnseenIcon width="20" />
                 </Button>
               </div>
             </div>

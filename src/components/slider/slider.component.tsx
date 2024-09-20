@@ -3,8 +3,6 @@ import { Slider } from '../ui/slider';
 import { SliderProps } from './slider.types';
 
 const CustomSlider = (props: SliderProps): JSX.Element => {
-  console.log('props', props);
-
   return (
     <Slider
       min={props.minValue ?? 0}

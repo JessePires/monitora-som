@@ -4,4 +4,5 @@ export interface SliderProps {
   default?: Array<number>;
   step?: number;
   showValue?: boolean;
+  orientation?: 'horizontal' | 'vertical' | undefined;
 }
