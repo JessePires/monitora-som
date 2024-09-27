@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const DrawableSpectrogramWrapper = styled.div`
   display: flex;
   position: relative;
-  margin-left: 300px;
+  /* margin-left: 300px; */
 `;
 
 export const SpectrogramWrapper = styled.div<{ spectrogramHeight: number }>`

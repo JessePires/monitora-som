@@ -10,6 +10,8 @@ export interface SpectrogramContainerProps {
   urlIndex: number;
   spectrogramRef: RefObject<HTMLCanvasElement>;
   labelInput: string;
+  headers: Array<string>;
+  species: Array<SpeciesData>;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
@@ -43,4 +45,8 @@ export interface DrawableSpectrogramProps {
   maxFrequencyKHz: number;
   sampleRate: number;
   nFFT: number;
+}
+
+export interface SpeciesData {
+  [x: string]: string;
 }

@@ -16,13 +16,16 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
         return (
           <>
             <div className="bg-white rounded-xl shadow-md m-4 p-4">
-              <div className="flex flex-col items-center mb-2 ml-16 mr-8">
+              <div className={`flex flex-col items-center mb-2 ml-12 mr-8`}>
                 <p className="text-sm font-medium mb-2">Segundos</p>
                 <Slider max={60} defaultValue={[60]} step={0.1} />
               </div>
 
               <div className="flex mr-8">
-                <div className={`h-[${props.spectrogramHeight}] w-1 pl-12 pr-4`}>
+                <div className="self-center w-10">
+                  <p className="text-sm font-medium text-center rotate-[-90deg]">Intervalo (kHz)</p>
+                </div>
+                <div className={`h-[${props.spectrogramHeight}px] w-1 mr-2`}>
                   <Slider
                     orientation="vertical"
                     max={props.maxFrequencyKHz}
@@ -81,7 +84,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
             </div>
 
             <Styles.SpeciesInputWrapper>
-              <ComboboxForm />
+              <ComboboxForm speciesTypes={containerProps.headers} species={containerProps.species} />
               <Styles.SpeciesName
                 type="text"
                 value={containerProps.labelInput}

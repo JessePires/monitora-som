@@ -7,7 +7,12 @@ import SpectrogramPlugin from 'wavesurfer.js/dist/plugins/spectrogram.js';
 
 import { Square } from '../canvas/canvas.types';
 
-import { SpectrogramContainerArgs, SpectrogramContainerProps, TimeFrequencyDots } from './spectrogram.types';
+import {
+  SpeciesData,
+  SpectrogramContainerArgs,
+  SpectrogramContainerProps,
+  TimeFrequencyDots,
+} from './spectrogram.types';
 
 import { ContainerWithProps } from '@/common/types/container.type';
 
@@ -16,11 +21,15 @@ export const SpectrogramContainer = (
 ): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const spectrogramRef = useRef<HTMLCanvasElement>(null);
+
   const [urlIndex, setUrlIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
+  const [alreadyRendered, setAlreadyRendered] = useState<boolean>(false);
+  const [species, setSpecies] = useState<Array<SpeciesData>>([]);
+  const [headers, setHeaders] = useState<Array<string>>([]);
 
   const spectrogramColorMap = createColormap({
     colormap: 'inferno',
@@ -117,7 +126,7 @@ export const SpectrogramContainer = (
   };
 
   useEffect(() => {
-    if (containerRef.current && wavesurfer) {
+    if (!alreadyRendered && containerRef.current && wavesurfer) {
       const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
 
       wavesurfer.registerPlugin(
@@ -131,6 +140,7 @@ export const SpectrogramContainer = (
       );
 
       wavesurfer.registerPlugin(RegionsPlugin.create());
+      setAlreadyRendered(true);
     }
   }, [wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
 
@@ -144,6 +154,29 @@ export const SpectrogramContainer = (
     setVisibleFrequencies({ start: visibleStartFrequency, end: visibleEndFrequency });
   }, [scrollAmount, props.spectrogramWidth, props.spectrogramHeight]);
 
+  useEffect(() => {
+    const fileUrl = `public/labels/sp_labels.csv`;
+
+    fetch(fileUrl)
+      .then((response) => response.text())
+      .then((csvText) => {
+        const rows = csvText.split('\n');
+        const headers = rows[0].split(',');
+        setHeaders(headers);
+
+        const data = rows.slice(1).map((row) => {
+          const values = row.split(',');
+
+          return headers.reduce((object, header, index) => {
+            object[header.trim()] = values[index].trim();
+            return object;
+          }, {});
+        });
+
+        setSpecies(data);
+      });
+  }, []);
+
   return props.children({
     containerRef,
     frequencies,
@@ -154,6 +187,8 @@ export const SpectrogramContainer = (
     urlIndex,
     spectrogramRef,
     labelInput,
+    headers,
+    species,
     actions: {
       handleScroll,
       stepForward,

@@ -47,7 +47,7 @@ const FormSchema = z.object({
   additionalComments: z.string().optional(),
 });
 
-const ComboboxForm = (): JSX.Element => {
+const ComboboxForm = (props): JSX.Element => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
