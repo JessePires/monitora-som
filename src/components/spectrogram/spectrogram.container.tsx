@@ -155,19 +155,23 @@ export const SpectrogramContainer = (
   }, [scrollAmount, props.spectrogramWidth, props.spectrogramHeight]);
 
   useEffect(() => {
-    const fileUrl = `public/labels/sp_labels.csv`;
+    const fileUrl = `./src/assets/labels/sp_labels.csv`;
 
     fetch(fileUrl)
       .then((response) => response.text())
       .then((csvText) => {
         const rows = csvText.split('\n');
         const headers = rows[0].split(',');
-        setHeaders(headers);
+        console.log('headers', headers);
+
+        const formattedHeaders = headers.map((header) => header.replace('\r', ''));
+
+        setHeaders(formattedHeaders);
 
         const data = rows.slice(1).map((row) => {
           const values = row.split(',');
 
-          return headers.reduce((object, header, index) => {
+          return formattedHeaders.reduce((object, header, index) => {
             object[header.trim()] = values[index].trim();
             return object;
           }, {});
