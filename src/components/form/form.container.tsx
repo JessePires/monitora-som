@@ -11,8 +11,6 @@ export const SpectrogramContainer = (props: ContainerWithProps<FormContainerProp
     setSelectedSpeciesType(selectedSpeciesType);
   };
 
-  console.log('AQUI', selectedSpeciesType);
-
   return props.children({
     selectedSpeciesType,
     actions: {

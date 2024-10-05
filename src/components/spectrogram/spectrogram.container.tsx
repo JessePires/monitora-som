@@ -155,30 +155,19 @@ export const SpectrogramContainer = (
   }, [scrollAmount, props.spectrogramWidth, props.spectrogramHeight]);
 
   useEffect(() => {
-    const fileUrl = `./src/assets/labels/sp_labels.csv`;
+    const worker: Worker = new Worker('./src/workers/loadSpecies.js');
 
-    fetch(fileUrl)
-      .then((response) => response.text())
-      .then((csvText) => {
-        const rows = csvText.split('\n');
-        const headers = rows[0].split(',');
-        console.log('headers', headers);
+    worker.postMessage(new URL('../../assets/labels/sp_labels.csv', import.meta.url).toString());
 
-        const formattedHeaders = headers.map((header) => header.replace('\r', ''));
+    worker.onmessage = (event) => {
+      const result = event.data;
+      setHeaders(result.headers);
+      setSpecies(result.data);
+    };
 
-        setHeaders(formattedHeaders);
-
-        const data = rows.slice(1).map((row) => {
-          const values = row.split(',');
-
-          return formattedHeaders.reduce((object, header, index) => {
-            object[header.trim()] = values[index].trim();
-            return object;
-          }, {});
-        });
-
-        setSpecies(data);
-      });
+    return () => {
+      worker.terminate();
+    };
   }, []);
 
   return props.children({

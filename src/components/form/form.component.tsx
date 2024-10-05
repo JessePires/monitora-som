@@ -69,8 +69,6 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
   return (
     <Containers.SpectrogramContainer>
       {(containerProps: FormContainerProps): JSX.Element => {
-        console.log('selected', containerProps.selectedSpeciesType);
-
         return (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4">
