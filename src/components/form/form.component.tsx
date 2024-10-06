@@ -210,14 +210,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                             >
                               {field.value
                                 ? props.speciesTypes.find((speciesType: string): boolean => speciesType === field.value)
-                                : 'Select language'}
+                                : 'Selecione as espécies'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="p-0">
                           <Command>
-                            <CommandInput placeholder="Procurando espécie..." className="h-9" />
+                            <CommandInput placeholder="Procurando tipo de espécie..." className="h-9" />
                             <CommandList>
                               <CommandEmpty>Nenhum tipo de espécie disponível.</CommandEmpty>
                               <CommandGroup>
@@ -275,7 +275,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               >
                                 {field.value
                                   ? formattedSpecies.find((species) => species === field.value)
-                                  : 'Select language'}
+                                  : 'Selecione a espécie'}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
@@ -284,7 +284,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                             <Command>
                               <CommandInput placeholder="Search framework..." className="h-9" />
                               <CommandList>
-                                <CommandEmpty>No framework found.</CommandEmpty>
+                                <CommandEmpty>Nenhuma espécie encontrada</CommandEmpty>
                                 <CommandGroup>
                                   {formattedSpecies.map((species) => {
                                     return (
@@ -330,31 +330,33 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                             >
                               {field.value
-                                ? languages.find((language) => language.value === field.value)?.label
-                                : 'Select language'}
+                                ? containerProps.songTypeOptions.find(
+                                    (songTypeOption) => songTypeOption.value === field.value,
+                                  )?.label
+                                : 'Selecione o tipo da roi'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="p-0">
                           <Command>
-                            <CommandInput placeholder="Search framework..." className="h-9" />
+                            <CommandInput placeholder="Procurando tipo..." className="h-9" />
                             <CommandList>
-                              <CommandEmpty>No framework found.</CommandEmpty>
+                              <CommandEmpty>Nenhum tipo encontrado</CommandEmpty>
                               <CommandGroup>
-                                {languages.map((language) => (
+                                {containerProps.songTypeOptions.map((songTypeOption) => (
                                   <CommandItem
-                                    value={language.label}
-                                    key={language.value}
+                                    value={songTypeOption.label}
+                                    key={songTypeOption.value}
                                     onSelect={() => {
-                                      form.setValue('type', language.value);
+                                      form.setValue('type', songTypeOption.value);
                                     }}
                                   >
-                                    {language.label}
+                                    {songTypeOption.label}
                                     <CheckIcon
                                       className={cn(
                                         'ml-auto h-4 w-4',
-                                        language.value === field.value ? 'opacity-100' : 'opacity-0',
+                                        songTypeOption.value === field.value ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
@@ -386,31 +388,33 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               )}
                             >
                               {field.value
-                                ? languages.find((language) => language.value === field.value)?.label
-                                : 'Select language'}
+                                ? containerProps.certaintyLevelOptions.find(
+                                    (certaintyLevelOption) => certaintyLevelOption.value === field.value,
+                                  )?.label
+                                : 'Selecione o nível de certeza'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="p-0">
                           <Command>
-                            <CommandInput placeholder="Search framework..." className="h-9" />
+                            <CommandInput placeholder="Procurando nível de certeza..." className="h-9" />
                             <CommandList>
-                              <CommandEmpty>No framework found.</CommandEmpty>
+                              <CommandEmpty>Nenhum nível de certeza encontrado</CommandEmpty>
                               <CommandGroup>
-                                {languages.map((language) => (
+                                {containerProps.certaintyLevelOptions.map((certaintyLevelOption) => (
                                   <CommandItem
-                                    value={language.label}
-                                    key={language.value}
+                                    value={certaintyLevelOption.label}
+                                    key={certaintyLevelOption.value}
                                     onSelect={() => {
-                                      form.setValue('levelOfCertainty', language.value);
+                                      form.setValue('levelOfCertainty', certaintyLevelOption.value);
                                     }}
                                   >
-                                    {language.label}
+                                    {certaintyLevelOption.label}
                                     <CheckIcon
                                       className={cn(
                                         'ml-auto h-4 w-4',
-                                        language.value === field.value ? 'opacity-100' : 'opacity-0',
+                                        certaintyLevelOption.value === field.value ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
@@ -443,31 +447,33 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               )}
                             >
                               {field.value
-                                ? languages.find((language) => language.value === field.value)?.label
-                                : 'Select language'}
+                                ? containerProps.completudeOptions.find(
+                                    (completudeOption) => completudeOption.value === field.value,
+                                  )?.label
+                                : 'Selecione a completude'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-[100%] p-0">
                           <Command>
-                            <CommandInput placeholder="Search framework..." className="h-9" />
+                            <CommandInput placeholder="Procurando completude..." className="h-9" />
                             <CommandList>
-                              <CommandEmpty>No framework found.</CommandEmpty>
+                              <CommandEmpty>Nenhum nível de completude</CommandEmpty>
                               <CommandGroup>
-                                {languages.map((language) => (
+                                {containerProps.completudeOptions.map((completudeOption) => (
                                   <CommandItem
-                                    value={language.label}
-                                    key={language.value}
+                                    value={completudeOption.label}
+                                    key={completudeOption.value}
                                     onSelect={() => {
-                                      form.setValue('completude', language.value);
+                                      form.setValue('completude', completudeOption.value);
                                     }}
                                   >
-                                    {language.label}
+                                    {completudeOption.label}
                                     <CheckIcon
                                       className={cn(
                                         'ml-auto h-4 w-4',
-                                        language.value === field.value ? 'opacity-100' : 'opacity-0',
+                                        completudeOption.value === field.value ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
