@@ -56,22 +56,21 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    props.spectrogramRef.current?.test(data);
   }
+
+  function onPressKey(data, event) {}
 
   return (
     <Containers.SpectrogramContainer>
       {(containerProps: FormContainerProps): JSX.Element => {
         return (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4">
+            <form
+              onSubmit={form.handleSubmit(onSubmit(form.getValues()))}
+              onKeyDown={(event) => form.handleSubmit(onSubmit(form.getValues(), event))}
+              className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4"
+            >
               <div className="flex justify-between">
                 <FormField
                   control={form.control}
@@ -506,7 +505,9 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   </FormItem>
                 )}
               />
+              {/* <div className="w-[100%] flex justify-end"> */}
               <Button type="submit">Submit</Button>
+              {/* </div> */}
             </form>
           </Form>
         );

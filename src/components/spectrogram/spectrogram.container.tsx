@@ -112,9 +112,11 @@ export const SpectrogramContainer = (
 
   const exportSquares = () => {
     if (spectrogramRef.current) {
-      const arrayContent = [['label, freq início, freq fim, tempo início, tempo fim']];
+      const arrayContent = [['label, freq início, freq fim, tempo início, tempo fim, tipo, nível certeza, completude']];
       spectrogramRef.current.canvasSquares.forEach((square: Square) => {
-        arrayContent.push([`${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x}`]);
+        arrayContent.push([
+          `${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x},${square.type},${square.certaintyLevel},${square.completude}`,
+        ]);
       });
 
       const csvContent = arrayContent.join('\n');

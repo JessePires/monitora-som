@@ -84,8 +84,13 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
             </div>
 
             <Styles.SpeciesInputWrapper>
-              <ComboboxForm speciesTypes={containerProps.headers} species={containerProps.species} />
-              <Styles.SpeciesName
+              <ComboboxForm
+                speciesTypes={containerProps.headers}
+                species={containerProps.species}
+                onSubmit={containerProps.actions.handleKeyPress}
+                spectrogramRef={containerProps.spectrogramRef}
+              />
+              {/* <Styles.SpeciesName
                 type="text"
                 value={containerProps.labelInput}
                 onChange={(e) => containerProps.actions.setLabelInput(e.target.value)}
@@ -93,10 +98,10 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 placeholder="Digite o nome da espécie"
               />
               <Button onClick={containerProps.actions.handleDeleteSelectedSquare}>Excluir roi selecionada</Button>
-              <Button onClick={containerProps.actions.exportSquares}>Exportar</Button>
+              <Button onClick={containerProps.actions.exportSquares}>Exportar</Button>*/}
             </Styles.SpeciesInputWrapper>
 
-            <p>
+            {/*<p>
               Visible time range: {containerProps.visibleTimes.start.toFixed(2)} ms -{' '}
               {containerProps.visibleTimes.end.toFixed(2)} ms
             </p>
@@ -105,7 +110,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               {containerProps.visibleFrequencies.end.toFixed(2)} Hz
             </p>
 
-            <p>Current time: {formatTime(containerProps.currentTime)}</p>
+            <p>Current time: {formatTime(containerProps.currentTime)}</p>*/}
           </>
         );
       }}

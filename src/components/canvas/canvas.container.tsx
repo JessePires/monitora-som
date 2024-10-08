@@ -25,7 +25,23 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
       return handleKeyPress(event);
     },
 
-    deleteSquare(event: KeyboardEvent) {
+    test(data) {
+      if (isDrawing) {
+        setIsDrawing(false);
+      }
+      if (data.speciesName?.trim() !== '' && selectedSquareIndex !== null) {
+        const updatedSquares = [...squares];
+        updatedSquares[selectedSquareIndex].label = data.speciesName;
+        updatedSquares[selectedSquareIndex].type = data.type;
+        updatedSquares[selectedSquareIndex].certaintyLevel = data.certaintyLevel;
+        updatedSquares[selectedSquareIndex].additionalComments = data.additionalComments;
+
+        setSquares(updatedSquares);
+        props.setLabelInput('');
+      }
+    },
+
+    deleteSquare() {
       return handleDeleteSelectedSquare();
     },
   }));
