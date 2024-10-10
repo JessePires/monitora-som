@@ -59,8 +59,6 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
     props.spectrogramRef.current?.test(data);
   }
 
-  function onPressKey(data, event) {}
-
   return (
     <Containers.SpectrogramContainer>
       {(containerProps: FormContainerProps): JSX.Element => {
@@ -68,7 +66,6 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit(form.getValues()))}
-              onKeyDown={(event) => form.handleSubmit(onSubmit(form.getValues(), event))}
               className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4"
             >
               <div className="flex justify-between">
