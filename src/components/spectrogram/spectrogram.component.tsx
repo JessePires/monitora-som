@@ -1,10 +1,7 @@
-import { useState } from 'react';
-
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@radix-ui/react-accordion';
-
 import * as Icons from '../../assets/icons';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
+import Sidebar from '../sidebar/sidebar.component';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 
@@ -12,55 +9,14 @@ import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
 import { DrawableSpectrogramProps, SpectrogramContainerProps } from './spectrogram.types';
 
-import { cn } from '@/lib/utils';
-
 const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
-
-  const toggleMenu = () => {
-    setIsExpanded((prevState) => !prevState);
-  };
-
   return (
     <Containers.SpectrogramContainer {...props}>
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
         return (
           <div className="flex">
-            <div
-              className={cn(
-                'h-screen bg-gray-800 text-white',
-                isExpanded ? 'w-96' : 'w-11',
-                'transition-width duration-300',
-              )}
-            >
-              <button
-                onClick={toggleMenu}
-                className={`p-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'} w-[100%]`}
-              >
-                <Icons.ChevronRightIcon width="15" height="18" />
-              </button>
-              <nav className={cn('mt-4', !isExpanded && 'hidden')}>
-                <ul>
-                  <li className="p-4 hover:bg-gray-700">
-                    <Accordion type="single" collapsible>
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger className="flex items-center justify-between w-[100%]">
-                          <span>Is it accessible?</span>
-                          <div className="bg-red-500 transform transition-transform rotate-180 duration-300">
-                            <Icons.ChevronDownIcon width="15" height="15" />
-                          </div>
-                        </AccordionTrigger>
-
-                        <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </li>
-                  <li className="p-4 hover:bg-gray-700">Opção 2</li>
-                  <li className="p-4 hover:bg-gray-700">Opção 3</li>
-                </ul>
-              </nav>
-            </div>
-            <div className={`w-[${isExpanded ? '83%' : '100%'}]`}>
+            <Sidebar onChangeExpanded={containerProps.actions.onChangeExpanded} />
+            <div className="w-[97%]">
               <div className="bg-white rounded-xl shadow-md m-4 p-4">
                 <div className={`flex flex-col items-center mb-2 ml-12 mr-8`}>
                   <p className="text-sm font-medium mb-2">Segundos</p>
@@ -88,6 +44,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                     <CanvasDrawing
                       spectrogramWidth={props.spectrogramWidth}
                       spectrogramHeight={props.spectrogramHeight}
+                      containerWidth={`${containerProps.isSidebarExpanded ? '75.2%' : '89.3%'}`}
                       labelInput={containerProps.labelInput}
                       setLabelInput={containerProps.actions.setLabelInput}
                       ref={containerProps.spectrogramRef}

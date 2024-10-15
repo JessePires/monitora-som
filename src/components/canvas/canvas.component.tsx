@@ -9,18 +9,16 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
     <Containers.CanvasContainer spectrogramRef={ref} labelInput={props.labelInput} setLabelInput={props.setLabelInput}>
       {(containerProps: CanvasContainerProps): JSX.Element => {
         return (
-          <Styles.CanvasDrwawingWrapper>
-            <Styles.CanvasWrapper>
-              <Styles.Canvas
-                ref={containerProps.canvasRef}
-                width={`${props.spectrogramWidth - 15}px`}
-                height={`${props.spectrogramHeight - 15}px`}
-                onMouseDown={containerProps.actions.handleMouseDown}
-                onMouseMove={containerProps.actions.handleMouseMove}
-                onMouseUp={containerProps.actions.handleMouseUp}
-              />
-            </Styles.CanvasWrapper>
-          </Styles.CanvasDrwawingWrapper>
+          <Styles.CanvasWrapper containerWidth={props.containerWidth}>
+            <Styles.Canvas
+              ref={containerProps.canvasRef}
+              width={props.spectrogramWidth}
+              height={props.spectrogramHeight}
+              onMouseDown={containerProps.actions.handleMouseDown}
+              onMouseMove={containerProps.actions.handleMouseMove}
+              onMouseUp={containerProps.actions.handleMouseUp}
+            />
+          </Styles.CanvasWrapper>
         );
       }}
     </Containers.CanvasContainer>

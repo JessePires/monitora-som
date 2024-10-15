@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const DrawableSpectrogramWrapper = styled.div`
   display: flex;
   position: relative;
-  /* margin-left: 300px; */
 `;
 
 export const SpectrogramWrapper = styled.div<{ spectrogramHeight: number }>`
@@ -25,7 +24,9 @@ export const FrequencyText = styled.span`
 `;
 
 export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramHeight: number }>`
-  width: ${({ spectrogramWidth }: { spectrogramWidth: number }) => `${spectrogramWidth}px`};
+  width: 100%;
+  height: 100%;
+
   overflow-x: scroll;
   overflow-y: hidden;
 `;

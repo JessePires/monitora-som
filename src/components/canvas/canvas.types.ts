@@ -38,5 +38,6 @@ export interface CanvasDrawingProps {
   spectrogramWidth: number;
   spectrogramHeight: number;
   labelInput: string;
+  containerWidth?: string;
   setLabelInput: React.Dispatch<React.SetStateAction<string>>;
 }

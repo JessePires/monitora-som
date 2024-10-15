@@ -30,6 +30,11 @@ export const SpectrogramContainer = (
   const [alreadyRendered, setAlreadyRendered] = useState<boolean>(false);
   const [species, setSpecies] = useState<Array<SpeciesData>>([]);
   const [headers, setHeaders] = useState<Array<string>>([]);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
+
+  const onChangeExpanded = (value: boolean): void => {
+    setIsSidebarExpanded(value);
+  };
 
   const spectrogramColorMap = createColormap({
     colormap: 'inferno',
@@ -174,16 +179,17 @@ export const SpectrogramContainer = (
 
   return props.children({
     containerRef,
+    spectrogramRef,
     frequencies,
     visibleTimes,
     visibleFrequencies,
     currentTime,
     isPlaying,
     urlIndex,
-    spectrogramRef,
     labelInput,
     headers,
     species,
+    isSidebarExpanded,
     actions: {
       handleScroll,
       stepForward,
@@ -193,6 +199,7 @@ export const SpectrogramContainer = (
       setLabelInput,
       handleDeleteSelectedSquare,
       exportSquares,
+      onChangeExpanded,
     },
   });
 };

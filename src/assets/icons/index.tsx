@@ -5,3 +5,6 @@ export { default as CustomNextIcon } from './customNextIcon';
 export { default as CustomNextUnseenIcon } from './customNextUnseenIcon';
 export { default as ChevronRightIcon } from './chevronRightIcon';
 export { default as ChevronDownIcon } from './chevronDownIcon';
+export { default as UserIcon } from './userIcon';
+export { default as SettingsIcon } from './settingsIcon';
+export { default as PencilIcon } from './pencilIcon';

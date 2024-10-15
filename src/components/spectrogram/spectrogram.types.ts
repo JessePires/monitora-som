@@ -2,16 +2,17 @@ import { RefObject } from 'react';
 
 export interface SpectrogramContainerProps {
   containerRef: RefObject<HTMLDivElement>;
+  spectrogramRef: RefObject<HTMLCanvasElement>;
   frequencies: Array<number>;
   visibleTimes: TimeFrequencyDots;
   visibleFrequencies: TimeFrequencyDots;
   isPlaying: boolean;
   currentTime: number;
   urlIndex: number;
-  spectrogramRef: RefObject<HTMLCanvasElement>;
   labelInput: string;
   headers: Array<string>;
   species: Array<SpeciesData>;
+  isSidebarExpanded: boolean;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
@@ -21,6 +22,7 @@ export interface SpectrogramContainerProps {
     setLabelInput: React.Dispatch<React.SetStateAction<string>>;
     handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
     exportSquares: () => void;
+    onChangeExpanded: (value: boolean) => void;
   };
 }
 

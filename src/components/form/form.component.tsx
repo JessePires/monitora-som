@@ -66,7 +66,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit(form.getValues()))}
-              className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4"
+              className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4 z-10"
             >
               <div className="flex justify-between">
                 <FormField
