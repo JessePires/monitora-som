@@ -15,7 +15,7 @@ const Sidebar = (props: SideBarProps): JSX.Element => {
     <Containers.SidebarContainer onChangeExpanded={props.onChangeExpanded}>
       {(containerProps: SidebarContainerProps): JSX.Element => {
         const items: Array<AccordionProps> = [
-          { title: <span>configurações do usuário</span>, component: <UserSettingsComponent /> },
+          { title: <span>Configurações do usuário</span>, component: <UserSettingsComponent /> },
           { title: <span>Parâmetros do espectrograma</span>, component: <SpectrogramSettingsComponent /> },
           { title: <span>Anotações</span>, component: <NotesComponent /> },
         ];

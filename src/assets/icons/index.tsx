@@ -8,3 +8,4 @@ export { default as ChevronDownIcon } from './chevronDownIcon';
 export { default as UserIcon } from './userIcon';
 export { default as SettingsIcon } from './settingsIcon';
 export { default as PencilIcon } from './pencilIcon';
+export { default as PaperClipIcon } from './paperClipIcon';
