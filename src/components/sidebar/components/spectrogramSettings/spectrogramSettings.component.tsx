@@ -6,32 +6,32 @@ import { Slider } from '@/components/ui/slider';
 
 const SpectrogramSettingsComponent = (): JSX.Element => {
   return (
-    <div>
-      <CheckboxComponent />
+    <div className="flex flex-col gap-4">
+      <CheckboxComponent title="renderização acelerada (menor qualidade)" />
 
-      <span>Ajuste do ângulo do rótulo</span>
-      <div className="flex">
-        <Slider min={0} max={180} />
-        <CheckboxComponent />
+      <div>
+        <span className="flex mb-2">Ajuste do ângulo do rótulo</span>
+        <div className="flex gap-4">
+          <Slider min={0} max={180} />
+          <CheckboxComponent title="ocultar" />
+        </div>
       </div>
 
       <div>
-        <span>Intervalo (dB)</span>
-
+        <span className="flex mb-2 text-gray-800">Intervalo (dB)</span>
         <Slider min={0} max={180} />
       </div>
       <div>
-        <span>Tamanho da janela</span>
-
+        <span className="flex mb-2 text-gray-800">Tamanho da janela</span>
         <Slider min={0} max={180} />
       </div>
       <div>
-        <span>Sobreposição (%)</span>
+        <span className="flex mb-2 text-gray-800">Sobreposição (%)</span>
         <Slider min={0} max={180} />
       </div>
 
       <Button>
-        <span>Voltar à configuração original</span>
+        <span className="mr-2">Voltar à configuração original</span>
         <Icons.SettingsIcon />
       </Button>
     </div>

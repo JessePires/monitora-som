@@ -11,20 +11,28 @@ const CustomAccordion = (props: AccordionProps): JSX.Element => {
       {(containerProps: AccordionContainerProps): JSX.Element => {
         return (
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1" className="w-full">
+            <AccordionItem value="item-1" className={`w-full ${containerProps.isExpanded ? 'bg-white' : ''}`}>
               <AccordionTrigger
                 onClick={containerProps.actions.toogleExpanded}
                 className="flex items-center justify-between w-[100%] p-4"
               >
-                <div>{props.title}</div>
+                <div>
+                  <span className={`font-extrabold ${containerProps.isExpanded ? 'text-gray-800' : 'text-white'}`}>
+                    {props.title}
+                  </span>
+                </div>
                 <div
                   className={`transform transition-transform ${containerProps.isExpanded ? 'rotate-180' : 'rotate-0'} duration-300`}
                 >
-                  <Icons.ChevronDownIcon width="20" height="20" />
+                  <Icons.ChevronDownIcon
+                    width="20"
+                    height="20"
+                    color={containerProps.isExpanded ? '#1f2937' : 'white'}
+                  />
                 </div>
               </AccordionTrigger>
 
-              <AccordionContent className="bg-slate-400 w-full p-4">
+              <AccordionContent className="bg-white w-full p-4">
                 {props.component && <div>{props.component}</div>}
               </AccordionContent>
             </AccordionItem>
