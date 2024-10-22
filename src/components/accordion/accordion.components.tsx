@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@radix-ui/react-accordion';
 
 import * as Icons from '../../assets/icons';
@@ -5,16 +7,16 @@ import * as Icons from '../../assets/icons';
 import * as Containers from './accordion.container';
 import { AccordionContainerProps, AccordionProps } from './accordion.types';
 
-const CustomAccordion = (props: AccordionProps): JSX.Element => {
+const CustomAccordion = (props: AccordionProps & { children: ReactNode }): JSX.Element => {
   return (
     <Containers.AccordionContainer>
       {(containerProps: AccordionContainerProps): JSX.Element => {
         return (
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1" className={`w-full ${containerProps.isExpanded ? 'bg-white' : ''}`}>
+            <AccordionItem value="item-1" className="w-full">
               <AccordionTrigger
                 onClick={containerProps.actions.toogleExpanded}
-                className="flex items-center justify-between w-[100%] p-4"
+                className={`flex items-center justify-between w-[100%] p-4 ${containerProps.isExpanded ? 'bg-gray-400' : ''}`}
               >
                 <div>
                   <span className={`font-extrabold ${containerProps.isExpanded ? 'text-gray-800' : 'text-white'}`}>
@@ -33,7 +35,7 @@ const CustomAccordion = (props: AccordionProps): JSX.Element => {
               </AccordionTrigger>
 
               <AccordionContent className="bg-white w-full p-4">
-                {props.component && <div>{props.component}</div>}
+                <div>{props.children}</div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -7,5 +7,4 @@ export interface AccordionContainerProps {
 
 export interface AccordionProps {
   title: string | JSX.Element;
-  component: JSX.Element;
 }
