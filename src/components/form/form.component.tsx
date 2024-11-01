@@ -1,5 +1,7 @@
 'use client';
 
+import { useContext, useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
@@ -14,23 +16,12 @@ import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { GlobalContext } from '@/contexts/global/global.context';
 import { cn } from '@/lib/utils';
-
-const languages = [
-  { label: 'English', value: 'en' },
-  { label: 'French', value: 'fr' },
-  { label: 'German', value: 'de' },
-  { label: 'Spanish', value: 'es' },
-  { label: 'Portuguese', value: 'pt' },
-  { label: 'Russian', value: 'ru' },
-  { label: 'Japanese', value: 'ja' },
-  { label: 'Korean', value: 'ko' },
-  { label: 'Chinese', value: 'zh' },
-] as const;
 
 const FormSchema = z.object({
   records: z.string({ required_error: 'Selecione a gravação' }),
-  roi_table: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
+  roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
   availableSpecies: z.string({
     required_error: 'Selecione uma categoria de espécies.',
   }),
@@ -54,6 +45,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
     resolver: zodResolver(FormSchema),
   });
 
+  const { audioFiles, roiTables, actions } = useContext(GlobalContext);
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     props.spectrogramRef.current?.test(data);
   }
@@ -70,10 +63,10 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
               <div className="flex justify-between">
                 <FormField
                   control={form.control}
-                  name="availableSpecies"
+                  name="records"
                   render={({ field }) => (
                     <FormItem className="flex w-[49%] flex-col">
-                      <FormLabel>Nomes das Espécies Disponíveis</FormLabel>
+                      <FormLabel>{`Gravação (1 de 30)`}</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -83,8 +76,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                             >
                               {field.value
-                                ? languages.find((language) => language.value === field.value)?.label
-                                : 'Select language'}
+                                ? audioFiles.find((audioFile: File) => audioFile.name === field.value)?.name
+                                : 'Selecione um Gravação'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
@@ -93,25 +86,28 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                           <Command>
                             <CommandInput placeholder="Search framework..." className="h-9" />
                             <CommandList>
-                              <CommandEmpty>No framework found.</CommandEmpty>
+                              <CommandEmpty>Nenhuma gravação encontrada</CommandEmpty>
                               <CommandGroup>
-                                {languages.map((language) => (
-                                  <CommandItem
-                                    value={language.label}
-                                    key={language.value}
-                                    onSelect={() => {
-                                      form.setValue('availableSpecies', language.value);
-                                    }}
-                                  >
-                                    {language.label}
-                                    <CheckIcon
-                                      className={cn(
-                                        'ml-auto h-4 w-4',
-                                        language.value === field.value ? 'opacity-100' : 'opacity-0',
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))}
+                                {audioFiles.map(
+                                  (audioFile: File): JSX.Element => (
+                                    <CommandItem
+                                      value={audioFile.webkitRelativePath}
+                                      key={audioFile.name}
+                                      onSelect={() => {
+                                        form.setValue('records', audioFile.name);
+                                        actions.handleSetSelectedAudio(audioFile);
+                                      }}
+                                    >
+                                      {audioFile.name}
+                                      <CheckIcon
+                                        className={cn(
+                                          'ml-auto h-4 w-4',
+                                          audioFile.name === field.value ? 'opacity-100' : 'opacity-0',
+                                        )}
+                                      />
+                                    </CommandItem>
+                                  ),
+                                )}
                               </CommandGroup>
                             </CommandList>
                           </Command>
@@ -123,20 +119,11 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                 />
                 <FormField
                   control={form.control}
-                  name="speciesName"
+                  name="roiTable"
                   render={({ field }) => {
-                    const speciesType = form.getValues().availableSpecies;
-                    const formattedSpecies: Array<string> = [];
-
-                    props.species.forEach((speciesElement: { [x: string]: string }) => {
-                      if (speciesElement[speciesType]) {
-                        formattedSpecies.push(speciesElement[speciesType]);
-                      }
-                    });
-
                     return (
                       <FormItem className="flex w-[49%] flex-col">
-                        <FormLabel>Rótulo</FormLabel>
+                        <FormLabel>Tabela de Regiões de Interesse</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -146,32 +133,33 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                 className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                               >
                                 {field.value
-                                  ? formattedSpecies.find((species) => species === field.value)
-                                  : 'Select language'}
+                                  ? roiTables.find((roiTable: File) => roiTable.name === field.value)?.name
+                                  : 'Selecione a tabela'}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-[200px] p-0">
                             <Command>
-                              <CommandInput placeholder="Search framework..." className="h-9" />
+                              <CommandInput placeholder="Procure pela tabela..." className="h-9" />
                               <CommandList>
-                                <CommandEmpty>No framework found.</CommandEmpty>
+                                <CommandEmpty>Tabela não encontrada.</CommandEmpty>
                                 <CommandGroup>
-                                  {formattedSpecies.map((species: string): JSX.Element => {
+                                  {roiTables.map((roiTable: File): JSX.Element => {
                                     return (
                                       <CommandItem
-                                        value={species}
-                                        key={species}
+                                        value={roiTable.webkitRelativePath}
+                                        key={roiTable.name}
                                         onSelect={() => {
-                                          form.setValue('speciesName', species);
+                                          form.setValue('roiTable', roiTable.name);
+                                          actions.handleSetSelectedRoiTable(roiTable);
                                         }}
                                       >
-                                        {species}
+                                        {roiTable.name}
                                         <CheckIcon
                                           className={cn(
                                             'ml-auto h-4 w-4',
-                                            species === field.value ? 'opacity-100' : 'opacity-0',
+                                            roiTable.name === field.value ? 'opacity-100' : 'opacity-0',
                                           )}
                                         />
                                       </CommandItem>
@@ -501,9 +489,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   </FormItem>
                 )}
               />
-              {/* <div className="w-[100%] flex justify-end"> */}
-              <Button type="submit">Submit</Button>
-              {/* </div> */}
+              <Button type="submit">Salvar rótulo</Button>
             </form>
           </Form>
         );

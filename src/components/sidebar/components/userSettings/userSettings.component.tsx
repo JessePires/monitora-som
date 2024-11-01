@@ -1,26 +1,23 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 
 import * as Icons from '../../../../assets/icons';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { GlobalContext } from '@/contexts/global/global.context';
 
 const UserSettingsComponent = (): JSX.Element => {
-  const [audioFiles, setAudioFiles] = useState<File[]>([]);
-  const [roiFiles, setRioFiles] = useState<File[]>([]);
+  const { actions } = useContext(GlobalContext);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []).filter((file) => file.type.startsWith('audio'));
-    setAudioFiles(files);
+    actions.handleSetRecords(files);
   };
 
   const handleRoiSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []).filter((file) => file.type.startsWith('audio'));
-    setRioFiles(files);
+    actions.handleSetRoiTables(files);
   };
-
-  console.log('audioFiles', audioFiles);
-  console.log('roiFiles', roiFiles);
 
   return (
     <div className="flex flex-col gap-4">
