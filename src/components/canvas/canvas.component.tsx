@@ -9,7 +9,7 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
     <Containers.CanvasContainer spectrogramRef={ref} labelInput={props.labelInput} setLabelInput={props.setLabelInput}>
       {(containerProps: CanvasContainerProps): JSX.Element => {
         return (
-          <Styles.CanvasWrapper containerWidth={props.containerWidth}>
+          <Styles.CanvasWrapper>
             <Styles.Canvas
               ref={containerProps.canvasRef}
               width={props.spectrogramWidth}
