@@ -4,8 +4,8 @@ export enum CompletudeEnum {
 }
 
 export enum CompletudeEnumLabels {
-  COMPLETE = 'Complete',
-  INCOMPLETE = 'Incomplete',
+  COMPLETE = 'Completo',
+  INCOMPLETE = 'Incompleto',
 }
 
 export enum CompletudeEnumToExport {

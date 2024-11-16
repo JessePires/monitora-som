@@ -7,16 +7,16 @@ import { Input } from '@/components/ui/input';
 import { GlobalContext } from '@/contexts/global/global.context';
 
 const UserSettingsComponent = (): JSX.Element => {
-  const { actions } = useContext(GlobalContext);
+  const globalContext = useContext(GlobalContext);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []).filter((file) => file.type.startsWith('audio'));
-    actions.handleSetRecords(files);
+    globalContext.actions.handleSetRecords(files);
   };
 
   const handleRoiSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []).filter((file) => file.type.startsWith('audio'));
-    actions.handleSetRoiTables(files);
+    globalContext.actions.handleSetRoiTables(files);
   };
 
   return (
@@ -35,7 +35,7 @@ const UserSettingsComponent = (): JSX.Element => {
 
       <div className="flex flex-col">
         <span className="font-bold mb-2 text-gray-800">Resultados</span>
-        <Button className="mb-2">
+        <Button className="mb-2" onClick={globalContext.actions.exportSquares}>
           <span className="mr-2">Exportar tabelas de região de interesse</span>
           <Icons.PaperClipIcon />
         </Button>

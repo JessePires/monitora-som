@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
@@ -21,7 +21,8 @@ import { cn } from '@/lib/utils';
 
 const FormSchema = z.object({
   records: z.string({ required_error: 'Selecione a gravação' }),
-  roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
+  // roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
+  roiTable: z.string().optional(),
   availableSpecies: z.string({
     required_error: 'Selecione uma categoria de espécies.',
   }),
@@ -31,7 +32,7 @@ const FormSchema = z.object({
   type: z.string({
     required_error: 'Selecione um tipo.',
   }),
-  levelOfCertainty: z.string({
+  certaintyLevel: z.string({
     required_error: 'Selecione o nível de certeza.',
   }),
   completude: z.string({
@@ -48,6 +49,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
   const { audioFiles, roiTables, actions } = useContext(GlobalContext);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log('data', data);
+
     props.spectrogramRef.current?.test(data);
   }
 
@@ -57,7 +60,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
         return (
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit(form.getValues()))}
+              onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4 z-10"
             >
               <div className="flex justify-between">
@@ -355,7 +358,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                 />
                 <FormField
                   control={form.control}
-                  name="levelOfCertainty"
+                  name="certaintyLevel"
                   render={({ field }) => (
                     <FormItem className="w-[18%] flex flex-col">
                       <FormLabel>Nível de Certeza</FormLabel>
@@ -390,7 +393,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                     value={certaintyLevelOption.label}
                                     key={certaintyLevelOption.value}
                                     onSelect={() => {
-                                      form.setValue('levelOfCertainty', certaintyLevelOption.value);
+                                      form.setValue('certaintyLevel', certaintyLevelOption.value);
                                     }}
                                   >
                                     {certaintyLevelOption.label}

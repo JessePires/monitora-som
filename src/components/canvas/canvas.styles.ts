@@ -6,7 +6,6 @@ export const CanvasWrapper = styled.div<{ containerWidth?: string }>`
   opacity: 0.5;
   left: 51;
   z-index: 5;
-  background-color: red;
   width: 89.3%;
 `;
 
