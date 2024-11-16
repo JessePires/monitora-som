@@ -28,13 +28,13 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
       return handleKeyPress(event);
     },
 
-    test(data) {
+    addNewSquare(data: Square) {
+      console.log('dataaa', data);
+
       if (isDrawing) {
         setIsDrawing(false);
       }
       if (data.speciesName?.trim() !== '' && selectedSquareIndex !== null) {
-        console.log('dataaaaa', data);
-
         const updatedSquares = [...globalContext.squares];
         updatedSquares[selectedSquareIndex].label = data.speciesName;
         updatedSquares[selectedSquareIndex].type = data.type;

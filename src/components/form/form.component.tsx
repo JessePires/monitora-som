@@ -49,9 +49,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
   const { audioFiles, roiTables, actions } = useContext(GlobalContext);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log('data', data);
-
-    props.spectrogramRef.current?.test(data);
+    props.spectrogramRef.current?.addNewSquare(data);
   }
 
   return (
