@@ -21,8 +21,7 @@ import { cn } from '@/lib/utils';
 
 const FormSchema = z.object({
   records: z.string({ required_error: 'Selecione a gravação' }),
-  // roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
-  roiTable: z.string().optional(),
+  roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
   availableSpecies: z.string({
     required_error: 'Selecione uma categoria de espécies.',
   }),

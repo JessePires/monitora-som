@@ -23,6 +23,7 @@ export type GlobalContextactions = {
   handleSetSelectedRoiTable: (roiTableFile: File) => void;
   handleSetSquares: (squares: Array<Square>) => void;
   exportSquares: () => void;
+  handleSetSquareInfo: (selectedIndex: number, info: any) => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

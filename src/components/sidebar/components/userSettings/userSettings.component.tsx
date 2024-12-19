@@ -15,7 +15,7 @@ const UserSettingsComponent = (): JSX.Element => {
   };
 
   const handleRoiSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []).filter((file) => file.type.startsWith('audio'));
+    const files = Array.from(event.target.files || []).filter((file) => file.type === 'text/csv');
     globalContext.actions.handleSetRoiTables(files);
   };
 

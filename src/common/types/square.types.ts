@@ -7,6 +7,7 @@ export interface Square {
   certaintyLevel: string;
   completude: string;
   additionalComments: string;
+  roiTable: string;
 }
 
 export interface Position {

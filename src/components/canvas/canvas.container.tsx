@@ -22,27 +22,18 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
 
   useImperativeHandle(props.spectrogramRef, () => ({
     ...props.spectrogramRef?.current,
-    canvasSquares: globalContext.squares,
 
     createLabel(event: React.KeyboardEvent<HTMLInputElement>) {
       return handleKeyPress(event);
     },
 
     addNewSquare(data: Square) {
-      console.log('dataaa', data);
-
       if (isDrawing) {
         setIsDrawing(false);
       }
-      if (data.speciesName?.trim() !== '' && selectedSquareIndex !== null) {
-        const updatedSquares = [...globalContext.squares];
-        updatedSquares[selectedSquareIndex].label = data.speciesName;
-        updatedSquares[selectedSquareIndex].type = data.type;
-        updatedSquares[selectedSquareIndex].certaintyLevel = data.certaintyLevel;
-        updatedSquares[selectedSquareIndex].completude = data.completude;
-        updatedSquares[selectedSquareIndex].additionalComments = data.additionalComments;
 
-        globalContext.actions.handleSetSquares(updatedSquares);
+      if (selectedSquareIndex !== null) {
+        globalContext.actions.handleSetSquareInfo(selectedSquareIndex, data);
       }
     },
 
@@ -88,9 +79,11 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>): void => {
     const x = event.nativeEvent.offsetX;
     const y = event.nativeEvent.offsetY;
-    const clickedSquareIndex = globalContext.squares.findIndex((square) => {
-      return x >= square.start.x && x <= square.end.x && y >= square.start.y && y <= square.end.y;
-    });
+    const clickedSquareIndex = globalContext.squares[globalContext.selectedRoiTable.name].squares.findIndex(
+      (square) => {
+        return x >= square.start.x && x <= square.end.x && y >= square.start.y && y <= square.end.y;
+      },
+    );
     if (clickedSquareIndex !== -1) {
       setSelectedSquareIndex(clickedSquareIndex);
       const resizeHandleClicked = checkResizeHandleClicked(globalContext.squares[clickedSquareIndex], { x, y });
@@ -155,7 +148,8 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
       default:
         break;
     }
-    globalContext.actions.squares(updatedSquares);
+
+    globalContext.actions.handleSetSquares(updatedSquares);
   };
 
   const dragSquare = (index: number | null, x: number, y: number): void => {
@@ -172,6 +166,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     square.end.y += offsetY;
 
     globalContext.actions.handleSetSquares(updatedSquares);
+
     setDragStartPos({ x, y });
   };
 
@@ -187,15 +182,23 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         color: 'rgba(0, 0, 255, 0.5)',
         label: props.labelInput,
       };
-      globalContext.actions.handleSetSquares([...globalContext.squares, newSquare]);
-      setSelectedSquareIndex(globalContext.squares.length); // Seleciona o quadrado mais recentemente adicionado
+
+      globalContext.actions.handleSetSquares([
+        ...globalContext.squares[globalContext.selectedRoiTable.name].squares,
+        newSquare,
+      ]);
+
+      setSelectedSquareIndex(globalContext.squares[globalContext.selectedRoiTable.name].squares.length - 1); // Seleciona o quadrado mais recentemente adicionado
       props.setLabelInput('');
     }
   };
 
   const handleDeleteSelectedSquare = (): void => {
     if (selectedSquareIndex !== null) {
-      const updatedSquares = globalContext.squares.filter((_, index) => index !== selectedSquareIndex);
+      const updatedSquares = globalContext.squares[globalContext.selectedRoiTable.name].squares.filter(
+        (_, index) => index !== selectedSquareIndex,
+      );
+
       globalContext.actions.handleSetSquares(updatedSquares);
       setSelectedSquareIndex(null);
       props.setLabelInput('');
@@ -250,8 +253,11 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   useEffect(() => {
     const handleDeleteKeyPress = (event) => {
       if (event.key === 'Delete' && selectedSquareIndex !== null) {
-        const updatedSquares = globalContext.squares.filter((_, index) => index !== selectedSquareIndex);
-        globalContext.actions.handleSetSquares(updatedSquares);
+        const updatedSquares = globalContext.squares[globalContext.selectedRoiTable.name].squares.filter((_, index) => {
+          return index !== selectedSquareIndex;
+        });
+
+        globalContext.actions.handleSetSquaresTest(updatedSquares);
         setSelectedSquareIndex(null);
       }
     };
@@ -269,13 +275,15 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
 
       if (context) {
         context?.clearRect(0, 0, canvas.width, canvas.height);
-        globalContext.squares.forEach((square, index) => {
-          drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
-          drawLabel(context, square.start, square.label);
-          if (index === selectedSquareIndex) {
-            drawResizeHandles(context, square.start, square.end);
-          }
-        });
+        if (globalContext.selectedRoiTable && globalContext.squares) {
+          globalContext.squares[globalContext.selectedRoiTable.name].squares.forEach((square, index) => {
+            drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
+            drawLabel(context, square.start, square.label);
+            if (index === selectedSquareIndex) {
+              drawResizeHandles(context, square.start, square.end);
+            }
+          });
+        }
         if (isDrawing) {
           drawSquare(context, startPos, currentPos, 'rgba(0, 0, 255, 0.5)', false);
         }
