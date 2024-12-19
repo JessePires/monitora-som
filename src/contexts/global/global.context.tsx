@@ -17,8 +17,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
 
-  console.log('SQUARES GLOBAL', squares);
-
   const [csvFiles, setCsvFiles] = useState([]); // Lista de arquivos CSV lidos
   // const [newRow, setNewRow] = useState(''); // Linha a ser adicionada
 
@@ -65,8 +63,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
       const newObject = { ...prevState };
       const test = newObject[selectedRoiTable?.name].squares;
 
-      console.log('test', test);
-
       newObject[selectedRoiTable?.name].squares[selectedIndex] = {
         ...newObject[selectedRoiTable?.name].squares[selectedIndex],
         label: info.speciesName,
@@ -76,8 +72,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         additionalComments: info.additionalComments,
         roiTable: info.roiTable,
       };
-
-      console.log('newObject', newObject);
 
       return newObject;
     });

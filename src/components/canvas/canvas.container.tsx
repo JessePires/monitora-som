@@ -86,7 +86,10 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     );
     if (clickedSquareIndex !== -1) {
       setSelectedSquareIndex(clickedSquareIndex);
-      const resizeHandleClicked = checkResizeHandleClicked(globalContext.squares[clickedSquareIndex], { x, y });
+      const resizeHandleClicked = checkResizeHandleClicked(
+        globalContext.squares[globalContext.selectedRoiTable.name].squares[clickedSquareIndex],
+        { x, y },
+      );
       if (resizeHandleClicked) {
         setIsResizing(true);
         setResizeHandle(resizeHandleClicked);
@@ -126,7 +129,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   const resizeSquare = (index: number | null, x: number, y: number, handle: string | null): void => {
     if (index === null) return;
 
-    const updatedSquares = [...globalContext.squares];
+    const updatedSquares = [...globalContext.squares[globalContext.selectedRoiTable.name].squares];
     const square = updatedSquares[index];
     switch (handle) {
       case 'top-left':
@@ -220,6 +223,8 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   };
 
   const checkResizeHandleClicked = (square: Square, { x, y }: Position): string | null => {
+    console.log('SQUARE', square);
+
     const handleSize = 10;
     const handleMargin = 10; // Margem ao redor do canto para torná-lo mais fácil de clicar
     const handles = [
