@@ -21,7 +21,7 @@ export const SpectrogramContainer = (
   const containerRef = useRef<HTMLDivElement>(null);
   const spectrogramRef = useRef<HTMLCanvasElement>(null);
 
-  const { squares, selectedAudio, isSelectedAudioAlreadyRendered, actions } = useContext(GlobalContext);
+  const globalContext = useContext(GlobalContext);
 
   const [urlIndex, setUrlIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
@@ -120,9 +120,9 @@ export const SpectrogramContainer = (
   // };
 
   useEffect(() => {
-    if (selectedAudio && wavesurfer) {
-      if (!isSelectedAudioAlreadyRendered) {
-        wavesurfer.loadBlob(selectedAudio); // Carrega o áudio
+    if (globalContext.selectedAudio && wavesurfer) {
+      if (!globalContext.isSelectedAudioAlreadyRendered) {
+        wavesurfer.loadBlob(globalContext.selectedAudio); // Carrega o áudio
 
         const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
 
@@ -137,10 +137,10 @@ export const SpectrogramContainer = (
         );
 
         wavesurfer.registerPlugin(RegionsPlugin.create());
-        actions.setIsSelectedAudioAlreadyRendered(true);
+        globalContext.actions.setIsSelectedAudioAlreadyRendered(true);
       }
     }
-  }, [selectedAudio, wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
+  }, [globalContext.selectedAudio, wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
 
   useEffect(() => {
     const visibleStartTime = calculateTimeFromColumn(0);
