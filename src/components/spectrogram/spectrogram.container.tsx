@@ -21,14 +21,13 @@ export const SpectrogramContainer = (
   const containerRef = useRef<HTMLDivElement>(null);
   const spectrogramRef = useRef<HTMLCanvasElement>(null);
 
-  const { squares, selectedAudio } = useContext(GlobalContext);
+  const { squares, selectedAudio, isSelectedAudioAlreadyRendered, actions } = useContext(GlobalContext);
 
   const [urlIndex, setUrlIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [labelInput, setLabelInput] = useState<string>('');
-  const [alreadyRendered, setAlreadyRendered] = useState<boolean>(false);
   const [species, setSpecies] = useState<Array<SpeciesData>>([]);
   const [headers, setHeaders] = useState<Array<string>>([]);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
@@ -122,7 +121,7 @@ export const SpectrogramContainer = (
 
   useEffect(() => {
     if (selectedAudio && wavesurfer) {
-      if (!alreadyRendered) {
+      if (!isSelectedAudioAlreadyRendered) {
         wavesurfer.loadBlob(selectedAudio); // Carrega o áudio
 
         const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
@@ -138,7 +137,7 @@ export const SpectrogramContainer = (
         );
 
         wavesurfer.registerPlugin(RegionsPlugin.create());
-        setAlreadyRendered(true);
+        actions.setIsSelectedAudioAlreadyRendered(true);
       }
     }
   }, [selectedAudio, wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);

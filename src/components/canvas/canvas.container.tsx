@@ -158,7 +158,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   const dragSquare = (index: number | null, x: number, y: number): void => {
     if (index === null) return;
 
-    const updatedSquares = [...globalContext.squares];
+    const updatedSquares = [...globalContext.squares[globalContext.selectedRoiTable.name].squares];
     const square = updatedSquares[index];
     const offsetX = x - dragStartPos.x;
     const offsetY = y - dragStartPos.y;
@@ -214,7 +214,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         setIsDrawing(false);
       }
       if (props.labelInput.trim() !== '' && selectedSquareIndex !== null) {
-        const updatedSquares = [...globalContext.squares];
+        const updatedSquares = [...globalContext.squares[globalContext.selectedRoiTable.name].squares];
         updatedSquares[selectedSquareIndex].label = props.labelInput;
         globalContext.actions.handleSetSquares(updatedSquares);
         props.setLabelInput('');
@@ -223,8 +223,6 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   };
 
   const checkResizeHandleClicked = (square: Square, { x, y }: Position): string | null => {
-    console.log('SQUARE', square);
-
     const handleSize = 10;
     const handleMargin = 10; // Margem ao redor do canto para torná-lo mais fácil de clicar
     const handles = [

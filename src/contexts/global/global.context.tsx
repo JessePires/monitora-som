@@ -16,6 +16,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [selectedAudio, setSelectedAudio] = useState<Blob | null>(null);
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
+  const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
 
   const [csvFiles, setCsvFiles] = useState([]); // Lista de arquivos CSV lidos
   // const [newRow, setNewRow] = useState(''); // Linha a ser adicionada
@@ -30,6 +31,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
   const handleSetSelectedAudio = (audioFile: File): void => {
     setSelectedAudio(new Blob([audioFile], { type: audioFile.type }));
+    setIsSelectedAudioAlreadyRendered(false);
   };
 
   const handleSetSelectedRoiTable = (roiTableFile: File): void => {
@@ -169,6 +171,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     handleSetSquaresTest,
     exportSquares,
     handleSetSquareInfo,
+    setIsSelectedAudioAlreadyRendered,
   };
 
   useEffect(() => {
@@ -187,7 +190,17 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   }, [roiTables]);
 
   return (
-    <GlobalContext.Provider value={{ audioFiles, roiTables, selectedAudio, selectedRoiTable, squares, actions }}>
+    <GlobalContext.Provider
+      value={{
+        audioFiles,
+        roiTables,
+        selectedAudio,
+        selectedRoiTable,
+        squares,
+        isSelectedAudioAlreadyRendered,
+        actions,
+      }}
+    >
       {props.children}
     </GlobalContext.Provider>
   );
