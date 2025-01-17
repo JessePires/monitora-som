@@ -35,7 +35,7 @@ const UserSettingsComponent = (): JSX.Element => {
 
       <div className="flex flex-col">
         <span className="font-bold mb-2 text-gray-800">Resultados</span>
-        <Button className="mb-2" onClick={globalContext.actions.exportSquares}>
+        <Button className="mb-2" onClick={() => globalContext.actions.exportSquares()}>
           <span className="mr-2">Exportar tabelas de região de interesse</span>
           <Icons.PaperClipIcon />
         </Button>

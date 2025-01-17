@@ -29,7 +29,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   ];
 
   const [csvFiles, setCsvFiles] = useState([]); // Lista de arquivos CSV lidos
-  // const [newRow, setNewRow] = useState(''); // Linha a ser adicionada
 
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
     setAudioFiles(audioFiles);
@@ -114,9 +113,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   //   });
   // };
 
-  const getFileContent = (roiTableFile: File) => {
-    const csvData = [];
-
+  const getFileContent = (roiTableFile: File, callback: (csvFiles: any) => any): void => {
     Papa.parse(roiTableFile, {
       complete: (result) => {
         let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
@@ -133,19 +130,25 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
         updatedData = [...updatedData, ...squareRows];
 
-        csvData.push({ name: roiTableFile.name, data: updatedData }); // Armazena o nome e os dados atualizados
-
-        setCsvFiles(csvData);
+        setCsvFiles((prevCsvFiles) => {
+          const newFiles = [...prevCsvFiles, { name: roiTableFile.name, data: updatedData }];
+          callback(newFiles); // Só resolve a Promise quando o estado é atualizado
+          return newFiles;
+        });
       },
       header: false,
       skipEmptyLines: true,
     });
   };
 
-  const handleDownloadZip = async () => {
+  const handleDownloadZip = async (data) => {
+    if (!data || data.length === 0) {
+      console.log('VAZIO');
+    }
+
     const zip = new JSZip();
 
-    csvFiles.forEach((file) => {
+    data.forEach((file) => {
       const csvContent = Papa.unparse(file.data);
 
       zip.file(file.name, csvContent);
@@ -156,21 +159,16 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   };
 
   const exportSquares = async () => {
-    if (squares[selectedRoiTable.name].squares.length > 0) {
-      // createSquaresByTableObject();
-
-      if (roiTables) getFileContent(roiTables[1]);
-
-      const arrayContent = [['label,freq início,freq fim,tempo início,tempo fim,tipo,nível certeza,completude']];
-      squares[selectedRoiTable.name].squares.forEach((square: Square) => {
-        arrayContent.push([
-          `${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x},${square.type},${square.certaintyLevel},${square.completude}`,
-        ]);
-      });
-
-      await handleDownloadZip();
-    } else {
-      console.log('não há regiões de interesse criadas');
+    try {
+      if (squares[selectedRoiTable.name].squares.length > 0) {
+        if (roiTables) {
+          getFileContent(roiTables[1], handleDownloadZip);
+        }
+      } else {
+        console.log('não há regiões de interesse criadas');
+      }
+    } catch (error) {
+      console.log('error', error);
     }
   };
 
