@@ -17,6 +17,16 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
+  const fileHeader = [
+    'label',
+    'freq início',
+    'freq fim',
+    'tempo início',
+    'tempo fim',
+    'tipo',
+    'nível certeza',
+    'completude',
+  ];
 
   const [csvFiles, setCsvFiles] = useState([]); // Lista de arquivos CSV lidos
   // const [newRow, setNewRow] = useState(''); // Linha a ser adicionada
@@ -109,16 +119,23 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
     Papa.parse(roiTableFile, {
       complete: (result) => {
-        const newRowArray = 'label,freq início,freq fim,tempo início,tempo fim,tipo,nível certeza,completude'.split(
-          ',',
-        ); // Divide a nova linha em colunas
-        const updatedData = [...result.data, newRowArray]; // Adiciona a nova linha ao final
+        let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
+        const squareRows = squares[roiTableFile.name].squares.map((square) => [
+          square.label,
+          square.start.x,
+          square.end.x,
+          square.start.y,
+          square.end.y,
+          square.type,
+          square.certaintyLevel,
+          square.completude,
+        ]);
+
+        updatedData = [...updatedData, ...squareRows];
 
         csvData.push({ name: roiTableFile.name, data: updatedData }); // Armazena o nome e os dados atualizados
 
-        // if (csvData.length === files.length) {
         setCsvFiles(csvData);
-        // }
       },
       header: false,
       skipEmptyLines: true,
@@ -141,22 +158,17 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const exportSquares = async () => {
     if (squares[selectedRoiTable.name].squares.length > 0) {
       // createSquaresByTableObject();
-      await handleDownloadZip();
 
       if (roiTables) getFileContent(roiTables[1]);
 
       const arrayContent = [['label,freq início,freq fim,tempo início,tempo fim,tipo,nível certeza,completude']];
-      squares.forEach((square: Square) => {
+      squares[selectedRoiTable.name].squares.forEach((square: Square) => {
         arrayContent.push([
           `${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x},${square.type},${square.certaintyLevel},${square.completude}`,
         ]);
       });
 
-      const csvContent = arrayContent.join('\n');
-      const link = window.document.createElement('a');
-      link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvContent));
-      link.setAttribute('download', 'upload_data.csv');
-      link.click();
+      await handleDownloadZip();
     } else {
       console.log('não há regiões de interesse criadas');
     }

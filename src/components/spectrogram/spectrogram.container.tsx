@@ -102,23 +102,6 @@ export const SpectrogramContainer = (
     spectrogramRef.current?.deleteSquare(event);
   };
 
-  // const exportSquares = () => {
-  //   if (spectrogramRef.current) {
-  //     const arrayContent = [['label, freq início, freq fim, tempo início, tempo fim, tipo, nível certeza, completude']];
-  //     squares.forEach((square: Square) => {
-  //       arrayContent.push([
-  //         `${square.label},${square.start.y},${square.end.y},${square.start.x},${square.end.x},${square.type},${square.certaintyLevel},${square.completude}`,
-  //       ]);
-  //     });
-
-  //     const csvContent = arrayContent.join('\n');
-  //     const link = window.document.createElement('a');
-  //     link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvContent));
-  //     link.setAttribute('download', 'upload_data.csv');
-  //     link.click();
-  //   }
-  // };
-
   useEffect(() => {
     if (globalContext.selectedAudio && wavesurfer) {
       if (!globalContext.isSelectedAudioAlreadyRendered) {
