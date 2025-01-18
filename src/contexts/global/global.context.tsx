@@ -28,8 +28,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     'completude',
   ];
 
-  const [csvFiles, setCsvFiles] = useState([]); // Lista de arquivos CSV lidos
-
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
     setAudioFiles(audioFiles);
   };
@@ -72,7 +70,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const handleSetSquareInfo = (selectedIndex: number, info: Square): void => {
     setSquares((prevState) => {
       const newObject = { ...prevState };
-      const test = newObject[selectedRoiTable?.name].squares;
 
       newObject[selectedRoiTable?.name].squares[selectedIndex] = {
         ...newObject[selectedRoiTable?.name].squares[selectedIndex],
@@ -88,64 +85,45 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     });
   };
 
-  // const createSquaresByTableObject = () => {
-  //   let tables = squares[selectedRoiTable.name].squares.map((square: Square) => square.roiTable);
-  //   tables = [...new Set(tables)];
+  const getFilesContent = (roiTables: File[], callback: (csvFiles: any[]) => any): void => {
+    const allFilesData: any[] = [];
 
-  //   const squaresByTableObject: { [x: string]: Array<Square> } = {};
+    const processFile = (roiTableFile: File, resolve: () => void) => {
+      Papa.parse(roiTableFile, {
+        complete: (result) => {
+          let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
+          const squareRows = squares[roiTableFile.name].squares.map((square) => [
+            square.label,
+            square.start.x,
+            square.end.x,
+            square.start.y,
+            square.end.y,
+            square.type,
+            square.certaintyLevel,
+            square.completude,
+          ]);
 
-  //   squares.forEach((square: Square) => {
-  //     if (squaresByTableObject[square.roiTable] === undefined) {
-  //       squaresByTableObject[square.roiTable] = [];
-  //     }
+          updatedData = [...updatedData, ...squareRows];
 
-  //     squaresByTableObject[square.roiTable].push({
-  //       label: square.label,
-  //       startY: square.start.y,
-  //       endY: square.end.y,
-  //       startX: square.start.x,
-  //       endX: square.end.x,
-  //       type: square.type,
-  //       certaintyLevel: square.certaintyLevel,
-  //       completude: square.completude,
-  //       additionalComments: square.additionalComments,
-  //     });
-  //   });
-  // };
+          allFilesData.push({ name: roiTableFile.name, data: updatedData });
+          resolve();
+        },
+        header: false,
+        skipEmptyLines: true,
+      });
+    };
 
-  const getFileContent = (roiTableFile: File, callback: (csvFiles: any) => any): void => {
-    Papa.parse(roiTableFile, {
-      complete: (result) => {
-        let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
-        const squareRows = squares[roiTableFile.name].squares.map((square) => [
-          square.label,
-          square.start.x,
-          square.end.x,
-          square.start.y,
-          square.end.y,
-          square.type,
-          square.certaintyLevel,
-          square.completude,
-        ]);
+    const promises = roiTables.map(
+      (roiTableFile) =>
+        new Promise<void>((resolve) => {
+          processFile(roiTableFile, resolve);
+        }),
+    );
 
-        updatedData = [...updatedData, ...squareRows];
-
-        setCsvFiles((prevCsvFiles) => {
-          const newFiles = [...prevCsvFiles, { name: roiTableFile.name, data: updatedData }];
-          callback(newFiles); // Só resolve a Promise quando o estado é atualizado
-          return newFiles;
-        });
-      },
-      header: false,
-      skipEmptyLines: true,
-    });
+    Promise.all(promises).then(() => callback(allFilesData));
   };
 
   const handleDownloadZip = async (data) => {
-    if (!data || data.length === 0) {
-      console.log('VAZIO');
-    }
-
     const zip = new JSZip();
 
     data.forEach((file) => {
@@ -162,7 +140,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     try {
       if (squares[selectedRoiTable.name].squares.length > 0) {
         if (roiTables) {
-          getFileContent(roiTables[1], handleDownloadZip);
+          getFilesContent(roiTables, handleDownloadZip);
         }
       } else {
         console.log('não há regiões de interesse criadas');
