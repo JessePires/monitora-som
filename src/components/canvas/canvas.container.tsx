@@ -292,7 +292,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         }
       }
     }
-  }, [globalContext.squares, startPos, currentPos, isDrawing, selectedSquareIndex]);
+  }, [globalContext.squares, globalContext.selectedRoiTable, startPos, currentPos, isDrawing, selectedSquareIndex]);
 
   return props.children({
     isDrawing,
