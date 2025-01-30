@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
@@ -45,6 +45,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
     resolver: zodResolver(FormSchema),
   });
 
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
   const { audioFiles, roiTables, actions } = useContext(GlobalContext);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -60,14 +62,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4 z-10"
             >
-              <div className="flex justify-between">
+              <div className="flex justify-between w-[100%]">
                 <FormField
                   control={form.control}
                   name="records"
                   render={({ field }) => (
                     <FormItem className="flex w-[49%] flex-col">
                       <FormLabel>{`Gravação (1 de 30)`}</FormLabel>
-                      <Popover>
+                      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
                           <FormControl>
                             <Button
@@ -96,6 +98,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                       onSelect={() => {
                                         form.setValue('records', audioFile.name);
                                         actions.handleSetSelectedAudio(audioFile);
+                                        setIsPopoverOpen(false);
                                       }}
                                     >
                                       {audioFile.name}

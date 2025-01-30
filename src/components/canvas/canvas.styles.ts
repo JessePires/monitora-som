@@ -7,6 +7,7 @@ export const CanvasWrapper = styled.div<{ containerWidth?: string }>`
   left: 51;
   z-index: 5;
   width: 89.3%;
+  /* background-color: red; */
 `;
 
 export const SpeciesName = styled.input``;
@@ -18,5 +19,6 @@ export const SpeciesInputWrapper = styled.div``;
 export const Canvas = styled.canvas<{ height: number; width: number }>`
   cursor: crosshair;
   width: ${({ width }: { width: number }): string => `${width}px`};
+
   height: ${({ height }: { height: number }): string => `${height}px`};
 `;

@@ -23,5 +23,9 @@ export interface CanvasDrawingProps {
   spectrogramHeight: number;
   labelInput: string;
   containerWidth?: string;
+  markerRef: RefObject<HTMLDivElement>;
+  arrowRef: RefObject<HTMLDivElement>;
+  markerPosition: number;
   setLabelInput: React.Dispatch<React.SetStateAction<string>>;
+  handleMarkerMouseDown: (event: React.MouseEvent) => void;
 }

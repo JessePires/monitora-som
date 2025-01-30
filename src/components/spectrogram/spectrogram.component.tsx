@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import * as Icons from '../../assets/icons';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
@@ -9,7 +11,13 @@ import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
 import { DrawableSpectrogramProps, SpectrogramContainerProps } from './spectrogram.types';
 
+import { GlobalContext } from '@/contexts/global/global.context';
+
 const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
+  const globalContext = useContext(GlobalContext);
+
+  console.log('globalContext', globalContext.selectedAudio);
+
   return (
     <Containers.SpectrogramContainer {...props}>
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
@@ -41,6 +49,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                     spectrogramHeight={props.spectrogramHeight}
                     onScroll={containerProps.actions.handleScroll}
                   >
+                    {/* {globalContext.selectedAudio && ( */}
                     <CanvasDrawing
                       spectrogramWidth={props.spectrogramWidth}
                       spectrogramHeight={props.spectrogramHeight}
@@ -48,7 +57,12 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                       labelInput={containerProps.labelInput}
                       setLabelInput={containerProps.actions.setLabelInput}
                       ref={containerProps.spectrogramRef}
+                      markerRef={containerProps.markerRef}
+                      arrowRef={containerProps.arrowRef}
+                      handleMarkerMouseDown={containerProps.actions.handleMarkerMouseDown}
+                      markerPosition={containerProps.markerPosition}
                     />
+                    {/* )} */}
                   </Styles.CanvasWrapper>
                 </div>
 

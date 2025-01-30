@@ -13,6 +13,9 @@ export interface SpectrogramContainerProps {
   headers: Array<string>;
   species: Array<SpeciesData>;
   isSidebarExpanded: boolean;
+  markerRef: RefObject<HTMLDivElement>;
+  arrowRef: RefObject<HTMLDivElement>;
+  markerPosition: number;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
@@ -22,6 +25,7 @@ export interface SpectrogramContainerProps {
     setLabelInput: React.Dispatch<React.SetStateAction<string>>;
     handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
     onChangeExpanded: (value: boolean) => void;
+    handleMarkerMouseDown: (event: React.MouseEvent) => void;
   };
 }
 
