@@ -9,3 +9,4 @@ export { default as UserIcon } from './userIcon';
 export { default as SettingsIcon } from './settingsIcon';
 export { default as PencilIcon } from './pencilIcon';
 export { default as PaperClipIcon } from './paperClipIcon';
+export { default as PauseIcon } from './pauseIcon';

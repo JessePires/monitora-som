@@ -27,6 +27,7 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
             <div
               ref={props.arrowRef}
               onMouseDown={props.handleMarkerMouseDown}
+              className="absolute"
               style={{
                 position: 'absolute',
                 left: `${props.markerPosition}px`,
@@ -41,6 +42,7 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
                 zIndex: 11,
               }}
             />
+
             <Styles.Canvas
               ref={containerProps.canvasRef}
               width={props.spectrogramWidth}

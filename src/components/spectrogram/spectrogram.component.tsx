@@ -78,7 +78,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   </Button>
 
                   <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }} className="w-[30%]">
-                    <Icons.CustomPlayIcon width="11" />
+                    {containerProps.isPlaying ? <Icons.PauseIcon /> : <Icons.CustomPlayIcon width="12" />}
                     <span className="ml-2">{containerProps.isPlaying ? 'Pausar áudio' : 'Tocar áudio'}</span>
                   </Button>
 
