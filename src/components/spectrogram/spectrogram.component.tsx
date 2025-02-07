@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-
 import * as Icons from '../../assets/icons';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
@@ -11,13 +9,7 @@ import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
 import { DrawableSpectrogramProps, SpectrogramContainerProps } from './spectrogram.types';
 
-import { GlobalContext } from '@/contexts/global/global.context';
-
 const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
-  const globalContext = useContext(GlobalContext);
-
-  console.log('globalContext', globalContext.selectedAudio);
-
   return (
     <Containers.SpectrogramContainer {...props}>
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
@@ -67,7 +59,10 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 </div>
 
                 <div className="mt-8 flex gap-4 justify-center">
-                  <Button onClick={() => console.log('Anterior não rotulado')} disabled={containerProps.urlIndex === 0}>
+                  <Button
+                    onClick={() => console.log('Anterior não rotulado')}
+                    disabled={containerProps.currentAudioIndex === 0}
+                  >
                     <Icons.CustomPreviousUnseenIcon width="20" />
                     <span className="ml-2">Anterior não rotulado</span>
                   </Button>
@@ -84,7 +79,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                   <Button
                     onClick={containerProps.actions.stepForward}
-                    disabled={containerProps.urlIndex === props.audioUrls.length - 1}
+                    disabled={containerProps.currentAudioIndex === props.audioUrls.length - 1}
                   >
                     <span className="mr-2">Próximo</span>
                     <Icons.CustomNextIcon width="11" />
@@ -92,7 +87,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                   <Button
                     onClick={() => console.log('próximo não rotulado')}
-                    disabled={containerProps.urlIndex === props.audioUrls.length - 1}
+                    disabled={containerProps.currentAudioIndex === props.audioUrls.length - 1}
                   >
                     <span className="mr-2">Próximo não rotulado</span>
                     <Icons.CustomNextUnseenIcon width="20" />

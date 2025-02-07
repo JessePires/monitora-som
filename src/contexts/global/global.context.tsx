@@ -29,6 +29,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   ];
 
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
+    console.log('aqui');
+
     setAudioFiles(audioFiles);
   };
 
@@ -37,7 +39,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   };
 
   const handleSetSelectedAudio = (audioFile: File): void => {
-    setSelectedAudio(new Blob([audioFile], { type: audioFile.type }));
+    // setSelectedAudio(new Blob([audioFile], { type: audioFile.type }));
+    setSelectedAudio(audioFile);
     setIsSelectedAudioAlreadyRendered(false);
   };
 

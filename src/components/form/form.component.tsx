@@ -47,7 +47,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  const { audioFiles, roiTables, actions } = useContext(GlobalContext);
+  const globalContext = useContext(GlobalContext);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     props.spectrogramRef.current?.addNewSquare(data);
@@ -68,7 +68,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   name="records"
                   render={({ field }) => (
                     <FormItem className="flex w-[49%] flex-col">
-                      <FormLabel>{`Gravação (1 de 30)`}</FormLabel>
+                      <FormLabel>{`Gravação (${globalContext.audioFiles.indexOf(globalContext.selectedAudio) + 1} de 30)`}</FormLabel>
                       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -78,7 +78,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                             >
                               {field.value
-                                ? audioFiles.find((audioFile: File) => audioFile.name === field.value)?.name
+                                ? globalContext.audioFiles.find((audioFile: File) => audioFile.name === field.value)
+                                    ?.name
                                 : 'Selecione um Gravação'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
@@ -90,14 +91,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                             <CommandList>
                               <CommandEmpty>Nenhuma gravação encontrada</CommandEmpty>
                               <CommandGroup>
-                                {audioFiles.map(
+                                {globalContext.audioFiles.map(
                                   (audioFile: File): JSX.Element => (
                                     <CommandItem
                                       value={audioFile.webkitRelativePath}
                                       key={audioFile.name}
                                       onSelect={() => {
                                         form.setValue('records', audioFile.name);
-                                        actions.handleSetSelectedAudio(audioFile);
+                                        globalContext.actions.handleSetSelectedAudio(audioFile);
                                         setIsPopoverOpen(false);
                                       }}
                                     >
@@ -136,7 +137,8 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                 className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                               >
                                 {field.value
-                                  ? roiTables.find((roiTable: File) => roiTable.name === field.value)?.name
+                                  ? globalContext.roiTables.find((roiTable: File) => roiTable.name === field.value)
+                                      ?.name
                                   : 'Selecione a tabela'}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -148,14 +150,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               <CommandList>
                                 <CommandEmpty>Tabela não encontrada.</CommandEmpty>
                                 <CommandGroup>
-                                  {roiTables.map((roiTable: File): JSX.Element => {
+                                  {globalContext.roiTables.map((roiTable: File): JSX.Element => {
                                     return (
                                       <CommandItem
                                         value={roiTable.webkitRelativePath}
                                         key={roiTable.name}
                                         onSelect={() => {
                                           form.setValue('roiTable', roiTable.name);
-                                          actions.handleSetSelectedRoiTable(roiTable);
+                                          globalContext.actions.handleSetSelectedRoiTable(roiTable);
                                         }}
                                       >
                                         {roiTable.name}

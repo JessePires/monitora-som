@@ -24,8 +24,9 @@ export const SpectrogramContainer = (
   const arrowRef = useRef<HTMLDivElement>(null);
 
   const globalContext = useContext(GlobalContext);
+  console.log('globalContext', globalContext);
 
-  const [urlIndex, setUrlIndex] = useState<number>(0);
+  const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
@@ -86,13 +87,19 @@ export const SpectrogramContainer = (
 
   const frequencies = calculateFrequencies();
 
-  const stepForward = useCallback(() => {
-    setUrlIndex((index) => (index + 1) % props.audioUrls.length);
-  }, [props.audioUrls.length]);
+  const stepForward = () => {
+    const newIndex = globalContext.audioFiles.indexOf(globalContext.selectedAudio);
+    globalContext.actions.handleSetSelectedAudio(
+      globalContext.audioFiles[(newIndex + 1) % globalContext.audioFiles.length],
+    );
+  };
 
-  const stepBack = useCallback(() => {
-    setUrlIndex((index) => (index - 1 + props.audioUrls.length) % props.audioUrls.length);
-  }, [props.audioUrls.length]);
+  const stepBack = () => {
+    const newIndex = globalContext.audioFiles.indexOf(globalContext.selectedAudio);
+    globalContext.actions.handleSetSelectedAudio(
+      globalContext.audioFiles[(newIndex - 1) % globalContext.audioFiles.length],
+    );
+  };
 
   const onPlayPause = useCallback(() => {
     wavesurfer && wavesurfer.playPause();
@@ -150,7 +157,8 @@ export const SpectrogramContainer = (
   useEffect(() => {
     if (globalContext.selectedAudio && wavesurfer) {
       if (!globalContext.isSelectedAudioAlreadyRendered) {
-        wavesurfer.loadBlob(globalContext.selectedAudio); // Carrega o áudio
+        // wavesurfer.loadBlob(globalContext.selectedAudio); // Carrega o áudio
+        wavesurfer.loadBlob(new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }));
 
         const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
 
@@ -253,7 +261,7 @@ export const SpectrogramContainer = (
     visibleFrequencies,
     currentTime,
     isPlaying,
-    urlIndex,
+    currentAudioIndex,
     labelInput,
     headers,
     species,

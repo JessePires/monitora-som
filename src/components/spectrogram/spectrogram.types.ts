@@ -8,7 +8,7 @@ export interface SpectrogramContainerProps {
   visibleFrequencies: TimeFrequencyDots;
   isPlaying: boolean;
   currentTime: number;
-  urlIndex: number;
+  currentAudioIndex: number;
   labelInput: string;
   headers: Array<string>;
   species: Array<SpeciesData>;
