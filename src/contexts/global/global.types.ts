@@ -25,6 +25,7 @@ export type GlobalContextactions = {
   exportSquares: () => void;
   handleSetSquareInfo: (selectedIndex: number, info: any) => void;
   setIsSelectedAudioAlreadyRendered: React.SetStateAction<boolean>;
+  isSquaresObjectEmpty: () => boolean;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

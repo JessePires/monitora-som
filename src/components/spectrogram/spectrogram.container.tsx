@@ -101,6 +101,12 @@ export const SpectrogramContainer = (
     );
   };
 
+  const moveOnToNextUnlabeled = () => {};
+
+  const goBackToPreviousUnlabeled = () => {
+    console.log('Anterior não rotulado');
+  };
+
   const onPlayPause = useCallback(() => {
     wavesurfer && wavesurfer.playPause();
   }, [wavesurfer]);
@@ -272,6 +278,8 @@ export const SpectrogramContainer = (
     actions: {
       handleScroll,
       stepForward,
+      moveOnToNextUnlabeled,
+      goBackToPreviousUnlabeled,
       stepBack,
       onPlayPause,
       handleKeyPress,

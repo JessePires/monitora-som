@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import Papa from 'papaparse';
+import { object } from 'zod';
 
 import { GlobalProviderProps, AudioFilesType } from './global.types';
 
@@ -29,8 +30,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   ];
 
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
-    console.log('aqui');
-
     setAudioFiles(audioFiles);
   };
 
@@ -153,6 +152,19 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     }
   };
 
+  const isSquaresObjectEmpty = (): boolean => {
+    const keys = Object.keys(squares);
+    if (keys.length > 0) {
+      for (const key in keys) {
+        if (squares[key].squares.length > 0) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
   const actions = {
     handleSetRecords,
     handleSetRoiTables,
@@ -163,6 +175,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     exportSquares,
     handleSetSquareInfo,
     setIsSelectedAudioAlreadyRendered,
+    isSquaresObjectEmpty,
   };
 
   useEffect(() => {

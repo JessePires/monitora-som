@@ -60,7 +60,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                 <div className="mt-8 flex gap-4 justify-center">
                   <Button
-                    onClick={() => console.log('Anterior não rotulado')}
+                    onClick={containerProps.actions.goBackToPreviousUnlabeled}
                     disabled={containerProps.currentAudioIndex === 0}
                   >
                     <Icons.CustomPreviousUnseenIcon width="20" />
@@ -86,7 +86,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   </Button>
 
                   <Button
-                    onClick={() => console.log('próximo não rotulado')}
+                    onClick={containerProps.actions.moveOnToNextUnlabeled}
                     disabled={containerProps.currentAudioIndex === props.audioUrls.length - 1}
                   >
                     <span className="mr-2">Próximo não rotulado</span>

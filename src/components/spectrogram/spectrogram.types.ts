@@ -20,6 +20,8 @@ export interface SpectrogramContainerProps {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
     stepBack: () => void;
+    moveOnToNextUnlabeled: () => void;
+    goBackToPreviousUnlabeled: () => void;
     onPlayPause: () => void;
     handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     setLabelInput: React.Dispatch<React.SetStateAction<string>>;
