@@ -5,6 +5,9 @@ export interface FormContainerProps {
   songTypeOptions: Array<SelectOptions>;
   certaintyLevelOptions: Array<SelectOptions>;
   completudeOptions: Array<SelectOptions>;
+  FormSchema: any;
+  form: any;
+  globalContext: any;
   actions: {
     onChangeSelectedSpeciesType: (selectedSpeciesType: string) => void;
   };

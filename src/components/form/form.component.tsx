@@ -16,59 +16,31 @@ import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { GlobalContext } from '@/contexts/global/global.context';
 import { cn } from '@/lib/utils';
 
-const FormSchema = z.object({
-  records: z.string({ required_error: 'Selecione a gravação' }),
-  roiTable: z.string({ required_error: 'Selecione a tabela de região de interesse' }),
-  availableSpecies: z.string({
-    required_error: 'Selecione uma categoria de espécies.',
-  }),
-  speciesName: z.string({
-    required_error: 'Selecione um rótulo.',
-  }),
-  type: z.string({
-    required_error: 'Selecione um tipo.',
-  }),
-  certaintyLevel: z.string({
-    required_error: 'Selecione o nível de certeza.',
-  }),
-  completude: z.string({
-    required_error: 'Selecione o nível de certeza.',
-  }),
-  additionalComments: z.string().optional(),
-});
-
 const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-
-  const globalContext = useContext(GlobalContext);
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    props.spectrogramRef.current?.addNewSquare(data);
-  }
-
   return (
     <Containers.SpectrogramContainer>
       {(containerProps: FormContainerProps): JSX.Element => {
+        const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+        function onSubmit(data: z.infer<typeof containerProps.FormSchema>) {
+          props.spectrogramRef.current?.addNewSquare(data);
+        }
+
         return (
-          <Form {...form}>
+          <Form {...containerProps.form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={containerProps.form.handleSubmit(onSubmit)}
               className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4 z-10"
             >
               <div className="flex justify-between w-[100%]">
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="records"
                   render={({ field }) => (
                     <FormItem className="flex w-[49%] flex-col">
-                      <FormLabel>{`Gravação (${globalContext.audioFiles.indexOf(globalContext.selectedAudio) + 1} de 30)`}</FormLabel>
+                      <FormLabel>{`Gravação (${containerProps.globalContext.audioFiles.indexOf(containerProps.globalContext.selectedAudio) + 1} de 30)`}</FormLabel>
                       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -78,8 +50,9 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                             >
                               {field.value
-                                ? globalContext.audioFiles.find((audioFile: File) => audioFile.name === field.value)
-                                    ?.name
+                                ? containerProps.globalContext.audioFiles.find(
+                                    (audioFile: File) => audioFile.name === field.value,
+                                  )?.name
                                 : 'Selecione um Gravação'}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
@@ -91,14 +64,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                             <CommandList>
                               <CommandEmpty>Nenhuma gravação encontrada</CommandEmpty>
                               <CommandGroup>
-                                {globalContext.audioFiles.map(
+                                {containerProps.globalContext.audioFiles.map(
                                   (audioFile: File): JSX.Element => (
                                     <CommandItem
                                       value={audioFile.webkitRelativePath}
                                       key={audioFile.name}
                                       onSelect={() => {
-                                        form.setValue('records', audioFile.name);
-                                        globalContext.actions.handleSetSelectedAudio(audioFile);
+                                        containerProps.form.setValue('records', audioFile.name);
+                                        containerProps.globalContext.actions.handleSetSelectedAudio(audioFile);
                                         setIsPopoverOpen(false);
                                       }}
                                     >
@@ -122,7 +95,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="roiTable"
                   render={({ field }) => {
                     return (
@@ -137,8 +110,9 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                 className={cn('justify-between bg-white', !field.value && 'text-muted-foreground')}
                               >
                                 {field.value
-                                  ? globalContext.roiTables.find((roiTable: File) => roiTable.name === field.value)
-                                      ?.name
+                                  ? containerProps.globalContext.roiTables.find(
+                                      (roiTable: File) => roiTable.name === field.value,
+                                    )?.name
                                   : 'Selecione a tabela'}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -150,14 +124,14 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                               <CommandList>
                                 <CommandEmpty>Tabela não encontrada.</CommandEmpty>
                                 <CommandGroup>
-                                  {globalContext.roiTables.map((roiTable: File): JSX.Element => {
+                                  {containerProps.globalContext.roiTables.map((roiTable: File): JSX.Element => {
                                     return (
                                       <CommandItem
                                         value={roiTable.webkitRelativePath}
                                         key={roiTable.name}
                                         onSelect={() => {
-                                          form.setValue('roiTable', roiTable.name);
-                                          globalContext.actions.handleSetSelectedRoiTable(roiTable);
+                                          containerProps.form.setValue('roiTable', roiTable.name);
+                                          containerProps.globalContext.actions.handleSetSelectedRoiTable(roiTable);
                                         }}
                                       >
                                         {roiTable.name}
@@ -183,7 +157,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
               </div>
               <div className="flex justify-between">
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="availableSpecies"
                   render={({ field }) => (
                     <FormItem className="w-[18%] flex flex-col">
@@ -216,7 +190,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                       key={speciesType}
                                       onSelect={() => {
                                         containerProps.actions.onChangeSelectedSpeciesType(speciesType);
-                                        form.setValue('availableSpecies', speciesType);
+                                        containerProps.form.setValue('availableSpecies', speciesType);
                                       }}
                                     >
                                       {speciesType}
@@ -239,7 +213,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="speciesName"
                   render={({ field }) => {
                     const formattedSpecies: Array<string> = [];
@@ -280,7 +254,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                         value={species}
                                         key={species}
                                         onSelect={() => {
-                                          form.setValue('speciesName', species);
+                                          containerProps.form.setValue('speciesName', species);
                                         }}
                                       >
                                         {species}
@@ -304,7 +278,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   }}
                 />
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="type"
                   render={({ field }) => (
                     <FormItem className="w-[18%] flex flex-col">
@@ -337,7 +311,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                     value={songTypeOption.label}
                                     key={songTypeOption.value}
                                     onSelect={() => {
-                                      form.setValue('type', songTypeOption.value);
+                                      containerProps.form.setValue('type', songTypeOption.value);
                                     }}
                                   >
                                     {songTypeOption.label}
@@ -359,7 +333,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="certaintyLevel"
                   render={({ field }) => (
                     <FormItem className="w-[18%] flex flex-col">
@@ -395,7 +369,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                     value={certaintyLevelOption.label}
                                     key={certaintyLevelOption.value}
                                     onSelect={() => {
-                                      form.setValue('certaintyLevel', certaintyLevelOption.value);
+                                      containerProps.form.setValue('certaintyLevel', certaintyLevelOption.value);
                                     }}
                                   >
                                     {certaintyLevelOption.label}
@@ -418,7 +392,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={containerProps.form.control}
                   name="completude"
                   render={({ field }) => (
                     <FormItem className="w-[18%] flex flex-col">
@@ -454,7 +428,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                                     value={completudeOption.label}
                                     key={completudeOption.value}
                                     onSelect={() => {
-                                      form.setValue('completude', completudeOption.value);
+                                      containerProps.form.setValue('completude', completudeOption.value);
                                     }}
                                   >
                                     {completudeOption.label}
@@ -477,7 +451,7 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                 />
               </div>
               <FormField
-                control={form.control}
+                control={containerProps.form.control}
                 name="additionalComments"
                 render={({ field }) => (
                   <FormItem>
