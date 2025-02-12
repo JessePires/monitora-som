@@ -24,7 +24,6 @@ export const SpectrogramContainer = (
   const arrowRef = useRef<HTMLDivElement>(null);
 
   const globalContext = useContext(GlobalContext);
-  console.log('globalContext', globalContext);
 
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
@@ -101,10 +100,15 @@ export const SpectrogramContainer = (
     );
   };
 
-  const moveOnToNextUnlabeled = () => {};
+  const moveOnToNextUnlabeled = () => {
+    console.log('isSquaresObjectEmpty', globalContext.actions.isSquaresObjectEmpty());
+    globalContext.actions.findNextUnlabeled();
+  };
 
   const goBackToPreviousUnlabeled = () => {
     console.log('Anterior não rotulado');
+    console.log('isSquaresObjectEmpty', globalContext.actions.isSquaresObjectEmpty());
+    globalContext.actions.findPreviousUnlabeled();
   };
 
   const onPlayPause = useCallback(() => {

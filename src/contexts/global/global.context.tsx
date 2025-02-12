@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import Papa from 'papaparse';
-import { object } from 'zod';
 
 import { GlobalProviderProps, AudioFilesType } from './global.types';
 
@@ -155,7 +154,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const isSquaresObjectEmpty = (): boolean => {
     const keys = Object.keys(squares);
     if (keys.length > 0) {
-      for (const key in keys) {
+      for (const key of keys) {
         if (squares[key].squares.length > 0) {
           return false;
         }
@@ -163,6 +162,23 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     }
 
     return true;
+  };
+
+  const findNextUnlabeled = () => {
+    const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
+    if (audioFiles) {
+      for (const audio of audioFiles) {
+        console.log('audio', audio);
+        console.log('squares', squares);
+      }
+    }
+
+    console.log('next', audioFiles?.slice(selectedAudioIndex + 1, audioFiles.length));
+  };
+
+  const findPreviousUnlabeled = () => {
+    const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
+    console.log('previous', audioFiles?.slice(0, selectedAudioIndex));
   };
 
   const actions = {
@@ -176,6 +192,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     handleSetSquareInfo,
     setIsSelectedAudioAlreadyRendered,
     isSquaresObjectEmpty,
+    findNextUnlabeled,
+    findPreviousUnlabeled,
   };
 
   useEffect(() => {
