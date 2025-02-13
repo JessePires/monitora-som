@@ -18,6 +18,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
   const fileHeader = [
+    'audio',
     'label',
     'freq início',
     'freq fim',
@@ -74,6 +75,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
       newObject[selectedRoiTable?.name].squares[selectedIndex] = {
         ...newObject[selectedRoiTable?.name].squares[selectedIndex],
+        audioName: selectedAudio?.name,
         label: info.speciesName,
         type: info.type,
         certaintyLevel: info.certaintyLevel,
@@ -94,6 +96,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         complete: (result) => {
           let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
           const squareRows = squares[roiTableFile.name].squares.map((square) => [
+            square.audioName,
             square.label,
             square.start.x,
             square.end.x,
@@ -165,20 +168,71 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   };
 
   const findNextUnlabeled = () => {
-    const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
     if (audioFiles) {
-      for (const audio of audioFiles) {
-        console.log('audio', audio);
-        console.log('squares', squares);
-      }
-    }
+      const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
+      const nextAudios = audioFiles?.slice(selectedAudioIndex + 1, audioFiles.length);
+      const squaresKeys = Object.keys(squares);
+      let nextAudiosIndex = 0;
 
-    console.log('next', audioFiles?.slice(selectedAudioIndex + 1, audioFiles.length));
+      while (nextAudiosIndex < nextAudios.length) {
+        let squaresKeysIndex = 0;
+        let founded = false;
+        while (squaresKeysIndex < squaresKeys.length) {
+          if (
+            squares[squaresKeys[squaresKeysIndex]].squares.find(
+              (square) => square.audioName === nextAudios[nextAudiosIndex].name,
+            )
+          ) {
+            founded = true;
+            break;
+          }
+
+          squaresKeysIndex++;
+        }
+
+        if (founded) {
+          nextAudiosIndex++;
+        } else {
+          return nextAudios[nextAudiosIndex];
+        }
+      }
+
+      return null;
+    }
   };
 
   const findPreviousUnlabeled = () => {
-    const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
-    console.log('previous', audioFiles?.slice(0, selectedAudioIndex));
+    if (audioFiles) {
+      const selectedAudioIndex = audioFiles?.indexOf(selectedAudio);
+      const previousAudios = audioFiles?.slice(0, selectedAudioIndex);
+      const squaresKeys = Object.keys(squares);
+      let nextAudiosIndex = previousAudios.length - 1;
+
+      while (nextAudiosIndex > 0) {
+        let squaresKeysIndex = 0;
+        let founded = false;
+        while (squaresKeysIndex < squaresKeys.length) {
+          if (
+            squares[squaresKeys[squaresKeysIndex]].squares.find(
+              (square) => square.audioName === previousAudios[nextAudiosIndex].name,
+            )
+          ) {
+            founded = true;
+            break;
+          }
+
+          squaresKeysIndex++;
+        }
+
+        if (founded) {
+          nextAudiosIndex--;
+        } else {
+          return previousAudios[nextAudiosIndex];
+        }
+      }
+
+      return null;
+    }
   };
 
   const actions = {

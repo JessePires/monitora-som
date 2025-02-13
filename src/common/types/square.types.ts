@@ -1,4 +1,5 @@
 export interface Square {
+  audioName: string;
   start: Position;
   end: Position;
   color: string;

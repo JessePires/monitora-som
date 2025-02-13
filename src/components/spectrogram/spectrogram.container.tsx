@@ -101,14 +101,25 @@ export const SpectrogramContainer = (
   };
 
   const moveOnToNextUnlabeled = () => {
-    console.log('isSquaresObjectEmpty', globalContext.actions.isSquaresObjectEmpty());
-    globalContext.actions.findNextUnlabeled();
+    if (globalContext.actions.isSquaresObjectEmpty()) {
+      return stepForward();
+    }
+
+    const nextAudio = globalContext.actions.findNextUnlabeled();
+    if (nextAudio !== null) {
+      globalContext.actions.handleSetSelectedAudio(nextAudio);
+    }
   };
 
   const goBackToPreviousUnlabeled = () => {
-    console.log('Anterior não rotulado');
-    console.log('isSquaresObjectEmpty', globalContext.actions.isSquaresObjectEmpty());
-    globalContext.actions.findPreviousUnlabeled();
+    if (globalContext.actions.isSquaresObjectEmpty()) {
+      return stepBack();
+    }
+
+    const previousAudio = globalContext.actions.findPreviousUnlabeled();
+    if (previousAudio !== null) {
+      globalContext.actions.handleSetSelectedAudio(previousAudio);
+    }
   };
 
   const onPlayPause = useCallback(() => {

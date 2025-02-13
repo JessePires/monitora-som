@@ -61,7 +61,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 <div className="mt-8 flex gap-4 justify-center">
                   <Button
                     onClick={containerProps.actions.goBackToPreviousUnlabeled}
-                    disabled={containerProps.currentAudioIndex === 0}
+                    // disabled={containerProps.currentAudioIndex === 0}
                   >
                     <Icons.CustomPreviousUnseenIcon width="20" />
                     <span className="ml-2">Anterior não rotulado</span>
