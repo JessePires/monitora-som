@@ -38,7 +38,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   };
 
   const handleSetSelectedAudio = (audioFile: File): void => {
-    // setSelectedAudio(new Blob([audioFile], { type: audioFile.type }));
     setSelectedAudio(audioFile);
     setIsSelectedAudioAlreadyRendered(false);
   };
@@ -201,6 +200,42 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     return null;
   };
 
+  const areAllNextLabeled = (): boolean => {
+    if (!audioFiles || !roiTables) return true;
+
+    const selectedAudioIndex = audioFiles.indexOf(selectedAudio);
+    const nextAudios = audioFiles.slice(selectedAudioIndex + 1);
+    const squaresEntries = Object.values(squares);
+
+    for (const audio of nextAudios) {
+      const isLabeled = squaresEntries.some(({ squares }) => squares.some((square) => square.audioName !== audio.name));
+
+      if (!isLabeled) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const areAllPreviousLabeled = (): boolean => {
+    if (!audioFiles || !roiTables) return true;
+
+    const selectedAudioIndex = audioFiles.indexOf(selectedAudio);
+    const previousAudios = audioFiles.slice(0, selectedAudioIndex);
+    const squaresEntries = Object.values(squares);
+
+    for (let i = previousAudios.length - 1; i >= 0; i--) {
+      const audio = previousAudios[i];
+
+      const isLabeled = squaresEntries.some(({ squares }) => squares.some((square) => square.audioName !== audio.name));
+
+      if (!isLabeled) return false;
+    }
+
+    return true;
+  };
+
   const actions = {
     handleSetRecords,
     handleSetRoiTables,
@@ -214,6 +249,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     isSquaresObjectEmpty,
     findNextUnlabeled,
     findPreviousUnlabeled,
+    areAllNextLabeled,
+    areAllPreviousLabeled,
   };
 
   useEffect(() => {

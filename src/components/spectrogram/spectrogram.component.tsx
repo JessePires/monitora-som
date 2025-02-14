@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import * as Icons from '../../assets/icons';
 import CanvasDrawing from '../canvas/canvas.component';
 import ComboboxForm from '../form/form.component';
@@ -9,7 +11,11 @@ import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
 import { DrawableSpectrogramProps, SpectrogramContainerProps } from './spectrogram.types';
 
+import { GlobalContext } from '@/contexts/global/global.context';
+
 const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
+  const globalContext = useContext(GlobalContext);
+
   return (
     <Containers.SpectrogramContainer {...props}>
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
@@ -61,13 +67,16 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                 <div className="mt-8 flex gap-4 justify-center">
                   <Button
                     onClick={containerProps.actions.goBackToPreviousUnlabeled}
-                    // disabled={containerProps.currentAudioIndex === 0}
+                    disabled={globalContext.actions.areAllPreviousLabeled()}
                   >
                     <Icons.CustomPreviousUnseenIcon width="20" />
                     <span className="ml-2">Anterior não rotulado</span>
                   </Button>
 
-                  <Button onClick={containerProps.actions.stepBack} disabled={containerProps.urlIndex === 0}>
+                  <Button
+                    onClick={containerProps.actions.stepBack}
+                    disabled={globalContext.audioFiles.indexOf(globalContext.selectedAudio) === 0}
+                  >
                     <Icons.CustomPreviousIcon width="11" />
                     <span className="ml-2">Anterior</span>
                   </Button>
@@ -79,7 +88,10 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                   <Button
                     onClick={containerProps.actions.stepForward}
-                    disabled={containerProps.currentAudioIndex === props.audioUrls.length - 1}
+                    disabled={
+                      globalContext.audioFiles.indexOf(globalContext.selectedAudio) >=
+                      globalContext.audioFiles.length - 1
+                    }
                   >
                     <span className="mr-2">Próximo</span>
                     <Icons.CustomNextIcon width="11" />
@@ -87,7 +99,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                   <Button
                     onClick={containerProps.actions.moveOnToNextUnlabeled}
-                    disabled={containerProps.currentAudioIndex === props.audioUrls.length - 1}
+                    disabled={globalContext.actions.areAllPreviousLabeled()}
                   >
                     <span className="mr-2">Próximo não rotulado</span>
                     <Icons.CustomNextUnseenIcon width="20" />

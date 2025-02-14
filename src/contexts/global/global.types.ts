@@ -28,6 +28,8 @@ export type GlobalContextactions = {
   isSquaresObjectEmpty: () => boolean;
   findNextUnlabeled: () => void;
   findPreviousUnlabeled: () => void;
+  areAllNextLabeled: () => boolean;
+  areAllPreviousLabeled: () => boolean;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;
