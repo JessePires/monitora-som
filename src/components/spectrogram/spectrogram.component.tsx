@@ -99,7 +99,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
 
                   <Button
                     onClick={containerProps.actions.moveOnToNextUnlabeled}
-                    disabled={globalContext.actions.areAllPreviousLabeled()}
+                    disabled={globalContext.actions.areAllNextLabeled()}
                   >
                     <span className="mr-2">Próximo não rotulado</span>
                     <Icons.CustomNextUnseenIcon width="20" />

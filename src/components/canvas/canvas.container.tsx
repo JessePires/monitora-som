@@ -224,12 +224,12 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
 
   const checkResizeHandleClicked = (square: Square, { x, y }: Position): string | null => {
     const handleSize = 10;
-    const handleMargin = 10; // Margem ao redor do canto para torná-lo mais fácil de clicar
+    const handleMargin = 10;
     const handles = [
-      { x: square.start.x, y: square.start.y }, // Top-left
-      { x: square.end.x, y: square.start.y }, // Top-right
-      { x: square.start.x, y: square.end.y }, // Bottom-left
-      { x: square.end.x, y: square.end.y }, // Bottom-right
+      { x: square.start.x, y: square.start.y },
+      { x: square.end.x, y: square.start.y },
+      { x: square.start.x, y: square.end.y },
+      { x: square.end.x, y: square.end.y },
     ];
     const clickedHandle = handles.find((handle) => {
       return (
@@ -280,10 +280,13 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         context?.clearRect(0, 0, canvas.width, canvas.height);
         if (globalContext.selectedRoiTable && globalContext.squares) {
           globalContext.squares[globalContext.selectedRoiTable.name].squares.forEach((square, index) => {
-            drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
-            drawLabel(context, square.start, square.label);
-            if (index === selectedSquareIndex) {
-              drawResizeHandles(context, square.start, square.end);
+            if (square.audioName === undefined || square.audioName === globalContext.selectedAudio.name) {
+              drawSquare(context, square.start, square.end, square.color, index === selectedSquareIndex);
+              drawLabel(context, square.start, square.label);
+
+              if (index === selectedSquareIndex) {
+                drawResizeHandles(context, square.start, square.end);
+              }
             }
           });
         }
@@ -292,7 +295,15 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         }
       }
     }
-  }, [globalContext.squares, globalContext.selectedRoiTable, startPos, currentPos, isDrawing, selectedSquareIndex]);
+  }, [
+    globalContext.squares,
+    globalContext.selectedAudio,
+    globalContext.selectedRoiTable,
+    startPos,
+    currentPos,
+    isDrawing,
+    selectedSquareIndex,
+  ]);
 
   return props.children({
     isDrawing,

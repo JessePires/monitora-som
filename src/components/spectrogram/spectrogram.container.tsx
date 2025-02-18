@@ -178,7 +178,6 @@ export const SpectrogramContainer = (
   useEffect(() => {
     if (globalContext.selectedAudio && wavesurfer) {
       if (!globalContext.isSelectedAudioAlreadyRendered) {
-        // wavesurfer.loadBlob(globalContext.selectedAudio); // Carrega o áudio
         wavesurfer.loadBlob(new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }));
 
         const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
