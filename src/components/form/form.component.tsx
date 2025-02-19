@@ -26,6 +26,12 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
 
         function onSubmit(data: z.infer<typeof containerProps.FormSchema>) {
           props.spectrogramRef.current?.addNewSquare(data);
+          containerProps.form.setValue('availableSpecies', '');
+          containerProps.form.setValue('speciesName', '');
+          containerProps.form.setValue('type', '');
+          containerProps.form.setValue('certaintyLevel', '');
+          containerProps.form.setValue('completude', '');
+          containerProps.form.setValue('additionalComments', '');
         }
 
         return (
