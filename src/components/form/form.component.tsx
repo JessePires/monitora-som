@@ -1,10 +1,8 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Textarea } from '../ui/textarea';

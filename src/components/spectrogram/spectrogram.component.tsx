@@ -22,7 +22,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
         return (
           <div className="flex">
             <Sidebar onChangeExpanded={containerProps.actions.onChangeExpanded} />
-            <div className="w-[97%]">
+            <div className={`w-[100vw]`}>
               <div className="bg-white rounded-xl shadow-md m-4 p-4">
                 <div className={`flex flex-col items-center mb-2 ml-12 mr-8`}>
                   <p className="text-sm font-medium mb-2">Segundos</p>
@@ -47,11 +47,11 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                     spectrogramHeight={props.spectrogramHeight}
                     onScroll={containerProps.actions.handleScroll}
                   >
-                    {/* {globalContext.selectedAudio && ( */}
                     <CanvasDrawing
                       spectrogramWidth={props.spectrogramWidth}
                       spectrogramHeight={props.spectrogramHeight}
-                      containerWidth={`${containerProps.isSidebarExpanded ? '75.2%' : '89.3%'}`}
+                      containerWidth={`${containerProps.isSidebarExpanded ? '75.6%' : '89.3%'}`}
+                      isSidebarOpen={containerProps.isSidebarExpanded}
                       labelInput={containerProps.labelInput}
                       setLabelInput={containerProps.actions.setLabelInput}
                       ref={containerProps.spectrogramRef}
@@ -60,7 +60,6 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                       handleMarkerMouseDown={containerProps.actions.handleMarkerMouseDown}
                       markerPosition={containerProps.markerPosition}
                     />
-                    {/* )} */}
                   </Styles.CanvasWrapper>
                 </div>
 

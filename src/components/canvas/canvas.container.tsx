@@ -97,7 +97,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         canvasRef.current.style.cursor = 'se-resize';
       } else {
         setIsDragging(true);
-        setDragStartPos({ x, y });
+        setDragStartPos({ x: x + 10, y });
         canvasRef.current.style.cursor = 'move';
       }
     } else {
@@ -273,6 +273,17 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
+    if (canvas) {
+      const rect = canvas.getBoundingClientRect();
+
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+  }, [props.isSidebarOpen]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
     if (canvas) {
       const context = canvas?.getContext('2d');
 
@@ -303,6 +314,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     currentPos,
     isDrawing,
     selectedSquareIndex,
+    props.isSidebarOpen,
   ]);
 
   return props.children({

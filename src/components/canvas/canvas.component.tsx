@@ -6,17 +6,22 @@ import { CanvasContainerProps, CanvasDrawingProps } from './canvas.types';
 
 const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<HTMLCanvasElement>): JSX.Element => {
   return (
-    <Containers.CanvasContainer spectrogramRef={ref} labelInput={props.labelInput} setLabelInput={props.setLabelInput}>
+    <Containers.CanvasContainer
+      spectrogramRef={ref}
+      labelInput={props.labelInput}
+      setLabelInput={props.setLabelInput}
+      isSidebarOpen={props.isSidebarOpen}
+    >
       {(containerProps: CanvasContainerProps): JSX.Element => {
         return (
-          <Styles.CanvasWrapper>
+          <Styles.CanvasWrapper containerWidth={props.containerWidth}>
             <div
               ref={props.markerRef}
               onMouseDown={props.handleMarkerMouseDown}
               style={{
                 position: 'absolute',
                 top: 0,
-                bottom: '10px', // Mantém espaço para a seta
+                bottom: '10px',
                 width: '2px',
                 backgroundColor: '#ff7300',
                 pointerEvents: 'none',

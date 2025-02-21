@@ -15,6 +15,7 @@ export interface CanvasContainerProps {
 export interface CanvasContainerArgs {
   spectrogramRef: ForwardedRef<HTMLCanvasElement>;
   labelInput: string;
+  isSidebarOpen: boolean;
   setLabelInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -26,6 +27,7 @@ export interface CanvasDrawingProps {
   markerRef: RefObject<HTMLDivElement>;
   arrowRef: RefObject<HTMLDivElement>;
   markerPosition: number;
+  isSidebarOpen: boolean;
   setLabelInput: React.Dispatch<React.SetStateAction<string>>;
   handleMarkerMouseDown: (event: React.MouseEvent) => void;
 }
