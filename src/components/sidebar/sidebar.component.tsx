@@ -29,7 +29,7 @@ const Sidebar = (props: SideBarProps): JSX.Element => {
             </button>
             <nav className={cn('mt-4', !containerProps.isExpanded && 'hidden')}>
               <CustomAccordion title="Configurações do usuário">
-                <UserSettingsComponent />
+                <UserSettingsComponent wavesurferInstance={props.waveSurferInstance} />
               </CustomAccordion>
               <CustomAccordion title="Parâmetros do espectrograma">
                 <SpectrogramSettingsComponent />

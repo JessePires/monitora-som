@@ -1,5 +1,7 @@
 import { RefObject } from 'react';
 
+import WaveSurfer from 'wavesurfer.js';
+
 export interface SpectrogramContainerProps {
   containerRef: RefObject<HTMLDivElement>;
   spectrogramRef: RefObject<HTMLCanvasElement>;
@@ -16,6 +18,7 @@ export interface SpectrogramContainerProps {
   markerRef: RefObject<HTMLDivElement>;
   arrowRef: RefObject<HTMLDivElement>;
   markerPosition: number;
+  wavesurfer: WaveSurfer;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;

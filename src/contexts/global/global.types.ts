@@ -1,3 +1,5 @@
+import WaveSurfer from 'wavesurfer.js';
+
 import { Square } from '@/common/types/square.types';
 
 export type GlobalProviderProps = {
@@ -30,6 +32,7 @@ export type GlobalContextactions = {
   findPreviousUnlabeled: () => void;
   areAllNextLabeled: () => boolean;
   areAllPreviousLabeled: () => boolean;
+  exportMultipleAudioSlices: (wavesurfer: WaveSurfer) => Promise<void>;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import Papa from 'papaparse';
+import WaveSurfer from 'wavesurfer.js';
 
 import { GlobalProviderProps, AudioFilesType } from './global.types';
 
@@ -235,6 +236,104 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     return !unlabeledQuantity;
   };
 
+  // 🔧 Função para converter AudioBuffer em WAV Blob
+  const encodeWav = async (audioBuffer: AudioBuffer) => {
+    const numOfChan = audioBuffer.numberOfChannels;
+    const length = audioBuffer.length * numOfChan * 2 + 44;
+    const buffer = new ArrayBuffer(length);
+    const view = new DataView(buffer);
+    const channels = [];
+    let position = 0;
+
+    const writeString = (str: string) => {
+      for (let i = 0; i < str.length; i++) {
+        view.setUint8(position + i, str.charCodeAt(i));
+      }
+      position += str.length;
+    };
+
+    const writeInt16 = (data: number) => {
+      view.setInt16(position, data, true);
+      position += 2;
+    };
+
+    writeString('RIFF');
+    view.setUint32(position, length - 8, true);
+    position += 4;
+    writeString('WAVE');
+    writeString('fmt ');
+    view.setUint32(position, 16, true);
+    position += 4;
+    writeInt16(1); // Formato de áudio PCM
+    writeInt16(numOfChan);
+    view.setUint32(position, audioBuffer.sampleRate, true);
+    position += 4;
+    view.setUint32(position, audioBuffer.sampleRate * numOfChan * 2, true);
+    position += 4;
+    writeInt16(numOfChan * 2);
+    writeInt16(16); // Bits por amostra
+    writeString('data');
+    view.setUint32(position, length - position - 4, true);
+    position += 4;
+
+    for (let i = 0; i < numOfChan; i++) {
+      channels.push(audioBuffer.getChannelData(i));
+    }
+
+    for (let i = 0; i < audioBuffer.length; i++) {
+      for (let j = 0; j < numOfChan; j++) {
+        let sample = Math.max(-1, Math.min(1, channels[j][i]));
+        sample = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+        writeInt16(sample);
+      }
+    }
+
+    return new Blob([buffer], { type: 'audio/wav' });
+  };
+
+  const exportMultipleAudioSlices = async (wavesurfer: WaveSurfer): Promise<void> => {
+    const buffer = wavesurfer.getDecodedData();
+    if (!buffer) return;
+
+    const audioContext = new AudioContext();
+    const duration = wavesurfer.getDuration();
+    const sampleRate = buffer.sampleRate;
+    const numChannels = buffer.numberOfChannels;
+    const zip = new JSZip();
+
+    const roiTablesNames = Object.keys(squares);
+
+    const flattenSquares = roiTablesNames.map((name) => squares[name].squares).flat();
+
+    for (const square of flattenSquares) {
+      const startTime = (square.start.x / wavesurfer.getWrapper().clientWidth) * duration;
+      const endTime = (square.end.x / wavesurfer.getWrapper().clientWidth) * duration;
+
+      const startSample = Math.floor(startTime * sampleRate);
+      const endSample = Math.floor(endTime * sampleRate);
+
+      const newBuffer = audioContext.createBuffer(numChannels, endSample - startSample, sampleRate);
+
+      for (let channel = 0; channel < numChannels; channel++) {
+        const oldData = buffer.getChannelData(channel);
+        const newData = newBuffer.getChannelData(channel);
+        newData.set(oldData.slice(startSample, endSample));
+      }
+
+      const wavBlob = await encodeWav(newBuffer);
+      zip.file(`${square.label || 'trecho'}_${startTime}-${endTime}.wav`, wavBlob);
+    }
+
+    zip.generateAsync({ type: 'blob' }).then((zipBlob) => {
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'trechos_audio.zip';
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+  };
+
   const actions = {
     handleSetRecords,
     handleSetRoiTables,
@@ -250,6 +349,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     findPreviousUnlabeled,
     areAllNextLabeled,
     areAllPreviousLabeled,
+    exportMultipleAudioSlices,
   };
 
   useEffect(() => {

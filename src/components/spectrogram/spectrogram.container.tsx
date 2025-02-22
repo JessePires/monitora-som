@@ -289,6 +289,7 @@ export const SpectrogramContainer = (
     markerRef,
     arrowRef,
     markerPosition,
+    wavesurfer,
     actions: {
       handleScroll,
       stepForward,

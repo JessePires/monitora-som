@@ -21,7 +21,10 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
       {(containerProps: SpectrogramContainerProps): JSX.Element => {
         return (
           <div className="flex">
-            <Sidebar onChangeExpanded={containerProps.actions.onChangeExpanded} />
+            <Sidebar
+              onChangeExpanded={containerProps.actions.onChangeExpanded}
+              waveSurferInstance={containerProps.wavesurfer}
+            />
             <div className={`w-[100vw]`}>
               <div className="bg-white rounded-xl shadow-md m-4 p-4">
                 <div className={`flex flex-col items-center mb-2 ml-12 mr-8`}>

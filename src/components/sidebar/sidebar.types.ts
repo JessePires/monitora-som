@@ -1,4 +1,7 @@
+import WaveSurfer from 'wavesurfer.js';
+
 export interface SideBarProps {
+  waveSurferInstance: WaveSurfer;
   onChangeExpanded: (value: boolean) => void;
 }
 

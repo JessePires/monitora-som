@@ -2,11 +2,13 @@ import { useContext } from 'react';
 
 import * as Icons from '../../../../assets/icons';
 
+import { UserSettingsProps } from './userSettings.types';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GlobalContext } from '@/contexts/global/global.context';
 
-const UserSettingsComponent = (): JSX.Element => {
+const UserSettingsComponent = (props: UserSettingsProps): JSX.Element => {
   const globalContext = useContext(GlobalContext);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +41,10 @@ const UserSettingsComponent = (): JSX.Element => {
           <span className="mr-2">Exportar tabelas de região de interesse</span>
           <Icons.PaperClipIcon />
         </Button>
-        <Button>
+        <Button
+          className="mb-2"
+          onClick={() => globalContext.actions.exportMultipleAudioSlices(props.wavesurferInstance)}
+        >
           <span className="mr-2">Exportar cortes das regiões de interesse</span>
           <Icons.PaperClipIcon />
         </Button>
