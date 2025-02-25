@@ -1,18 +1,23 @@
+import { useContext } from 'react';
+
 import * as Icons from '../../../../assets/icons';
 
 import CheckboxComponent from '@/components/checkbox/checkbox.component';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { GlobalContext } from '@/contexts/global/global.context';
 
 const SpectrogramSettingsComponent = (): JSX.Element => {
+  const globalContext = useContext(GlobalContext);
+
   return (
     <div className="flex flex-col gap-4">
       <CheckboxComponent title="renderização acelerada (menor qualidade)" />
 
       <div>
-        <span className="flex mb-2">Ajuste do ângulo do rótulo</span>
+        <span className="flex mb-2 text-gray-800">Ajuste do ângulo do rótulo</span>
         <div className="flex gap-4">
-          <Slider min={0} max={180} />
+          <Slider min={0} max={180} onValueChange={(value) => globalContext.actions.setLabelAngle(value[0])} />
           <CheckboxComponent title="ocultar" />
         </div>
       </div>

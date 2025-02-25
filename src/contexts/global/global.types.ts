@@ -33,6 +33,7 @@ export type GlobalContextactions = {
   areAllNextLabeled: () => boolean;
   areAllPreviousLabeled: () => boolean;
   exportMultipleAudioSlices: (wavesurfer: WaveSurfer) => Promise<void>;
+  setLabelAngle: React.SetStateAction<number>;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

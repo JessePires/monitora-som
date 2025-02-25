@@ -70,10 +70,15 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
   };
 
   const drawLabel = (context: CanvasRenderingContext2D, position: Position, label: string): void => {
+    context.save();
+    context.translate(position.x, position.y);
+    context.rotate(((globalContext.labelAngle * Math.PI) / 180) * -1);
+
     context.fillStyle = '#fff';
-    context.font = '12px Arial';
-    context.fontWeight = '600';
-    context.fillText(label, position.x, position.y - 5);
+    context.font = '600 12px Arial';
+    context.fillText(label, 0, -10);
+
+    context.restore();
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>): void => {
@@ -282,7 +287,7 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     }
   }, [props.isSidebarOpen]);
 
-  useEffect(() => {
+  const drawAllSquares = (): void => {
     const canvas = canvasRef.current;
     if (canvas) {
       const context = canvas?.getContext('2d');
@@ -306,6 +311,10 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
         }
       }
     }
+  };
+
+  useEffect(() => {
+    drawAllSquares();
   }, [
     globalContext.squares,
     globalContext.selectedAudio,
@@ -316,6 +325,18 @@ export const CanvasContainer = (props: ContainerWithProps<CanvasContainerProps, 
     selectedSquareIndex,
     props.isSidebarOpen,
   ]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawAllSquares();
+  }, [globalContext.labelAngle]);
 
   return props.children({
     isDrawing,

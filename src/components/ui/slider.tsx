@@ -17,25 +17,12 @@ const Slider = React.forwardRef<
   const [isHovered, setIsHovered] = React.useState(false);
   const [tooltipWidth, setTooltipWidth] = React.useState<number>(0);
 
-  const orientationClasses =
-    orientation === 'vertical'
-      ? 'flex-col h-full' // Estilos para vertical
-      : 'flex-row w-full'; // Estilos para horizontal
+  const orientationClasses = orientation === 'vertical' ? 'flex-col h-full' : 'flex-row w-full';
+  const trackClasses = orientation === 'vertical' ? 'w-1.5 h-full' : 'h-1.5 w-full';
 
-  const trackClasses =
-    orientation === 'vertical'
-      ? 'w-1.5 h-full' // Estilos da faixa (Track) vertical
-      : 'h-1.5 w-full'; // Estilos da faixa (Track) horizontal
+  const rangeClasses = orientation === 'vertical' ? 'w-full' : 'h-full';
 
-  const rangeClasses =
-    orientation === 'vertical'
-      ? 'w-full' // Estilos do Range vertical
-      : 'h-full'; // Estilos do Range horizontal
-
-  const tooltipPosition =
-    orientation === 'vertical'
-      ? '-translate-y-1/2' // Centraliza o Thumb verticalmente
-      : '-translate-x-1/3'; // Centraliza o Thumb horizontalmente
+  const tooltipPosition = orientation === 'vertical' ? '-translate-y-1/2' : '-translate-x-1/3';
 
   const tooltipPositionAdjustment = () => {
     let adjustment: { left?: number | string; top: number | string } = { top: '' };
@@ -77,8 +64,13 @@ const Slider = React.forwardRef<
       className={cn(`relative flex touch-none select-none items-center ${orientationClasses}`, className)}
       {...props}
       value={value}
-      onValueChange={(newValue) => setValue(newValue)}
-      orientation={orientation} // Define a orientação
+      onValueChange={(newValue) => {
+        setValue(newValue);
+        if (props.onValueChange) {
+          props.onValueChange(newValue);
+        }
+      }}
+      orientation={orientation}
     >
       <SliderPrimitive.Track className={cn(`relative overflow-hidden rounded-full bg-primary/20 ${trackClasses}`)}>
         <SliderPrimitive.Range className={cn(`absolute bg-primary ${rangeClasses}`)} />

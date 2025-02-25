@@ -18,6 +18,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
+  const [labelAngle, setLabelAngle] = useState<number>(0);
   const fileHeader = [
     'audio',
     'label',
@@ -236,7 +237,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     return !unlabeledQuantity;
   };
 
-  // 🔧 Função para converter AudioBuffer em WAV Blob
   const encodeWav = async (audioBuffer: AudioBuffer) => {
     const numOfChan = audioBuffer.numberOfChannels;
     const length = audioBuffer.length * numOfChan * 2 + 44;
@@ -264,14 +264,14 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     writeString('fmt ');
     view.setUint32(position, 16, true);
     position += 4;
-    writeInt16(1); // Formato de áudio PCM
+    writeInt16(1);
     writeInt16(numOfChan);
     view.setUint32(position, audioBuffer.sampleRate, true);
     position += 4;
     view.setUint32(position, audioBuffer.sampleRate * numOfChan * 2, true);
     position += 4;
     writeInt16(numOfChan * 2);
-    writeInt16(16); // Bits por amostra
+    writeInt16(16);
     writeString('data');
     view.setUint32(position, length - position - 4, true);
     position += 4;
@@ -350,6 +350,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     areAllNextLabeled,
     areAllPreviousLabeled,
     exportMultipleAudioSlices,
+    setLabelAngle,
   };
 
   useEffect(() => {
@@ -377,6 +378,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         squares,
         isSelectedAudioAlreadyRendered,
         actions,
+        labelAngle,
       }}
     >
       {props.children}
