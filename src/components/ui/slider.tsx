@@ -9,11 +9,13 @@ const Slider = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
     orientation?: 'horizontal' | 'vertical';
     tooltipOrientation?: 'left' | 'right' | 'top' | 'bottom';
+    labelFormat?: (value: number) => string;
   }
 >(({ className, orientation = 'horizontal', tooltipOrientation = 'top', ...props }, ref) => {
   const tooltipRef = React.useRef<HTMLDivElement | null>(null);
 
   const [value, setValue] = React.useState(props.defaultValue ?? [0]);
+
   const [isHovered, setIsHovered] = React.useState(false);
   const [tooltipWidth, setTooltipWidth] = React.useState<number>(0);
 
@@ -48,6 +50,12 @@ const Slider = React.forwardRef<
     if (tooltipRef.current) {
       setTooltipWidth(tooltipRef.current.offsetWidth);
     }
+  };
+
+  const formatLabel = (value: number): string => {
+    if (props.labelFormat) return props.labelFormat(value ?? props.defaultValue);
+
+    return value.toString().replace('.', ',') ?? props.defaultValue?.toString().replace('.', ',');
   };
 
   React.useEffect(() => {
@@ -91,13 +99,11 @@ const Slider = React.forwardRef<
           style={tooltipPositionAdjustment()}
           ref={tooltipRef}
         >
-          {value[0].toString().replace('.', ',') ?? props.defaultValue?.toString().replace('.', ',')}
+          {formatLabel(value[0])}
         </div>
       </SliderPrimitive.Thumb>
     </SliderPrimitive.Root>
   );
 });
-
-Slider.displayName = SliderPrimitive.Root.displayName;
 
 export { Slider };

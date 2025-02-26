@@ -12,6 +12,8 @@ import { Square } from '@/common/types/square.types';
 export const GlobalContext = createContext({});
 
 export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element => {
+  const fftSizeOptions = [128, 256, 512, 1024, 2048, 4096, 8192, 16384];
+
   const [audioFiles, setAudioFiles] = useState<Array<AudioFilesType> | null>([]);
   const [roiTables, setRoiTables] = useState<Array<File> | null>([]);
   const [selectedAudio, setSelectedAudio] = useState<Blob | null>(null);
@@ -19,6 +21,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
   const [labelAngle, setLabelAngle] = useState<number>(0);
+  const [fftSizeIndex, setFftSizeIndex] = useState<number>(3);
+
   const fileHeader = [
     'audio',
     'label',
@@ -139,6 +143,11 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     saveAs(zipBlob, 'csv-files.zip');
+  };
+
+  const handleSetFftSizeIndex = (value: number): void => {
+    setIsSelectedAudioAlreadyRendered(false);
+    setFftSizeIndex(value);
   };
 
   const exportSquares = async () => {
@@ -351,6 +360,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     areAllPreviousLabeled,
     exportMultipleAudioSlices,
     setLabelAngle,
+    handleSetFftSizeIndex,
   };
 
   useEffect(() => {
@@ -379,6 +389,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         isSelectedAudioAlreadyRendered,
         actions,
         labelAngle,
+        fftSizeIndex,
+        fftSizeOptions,
       }}
     >
       {props.children}

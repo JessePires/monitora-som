@@ -34,6 +34,7 @@ export type GlobalContextactions = {
   areAllPreviousLabeled: () => boolean;
   exportMultipleAudioSlices: (wavesurfer: WaveSurfer) => Promise<void>;
   setLabelAngle: React.SetStateAction<number>;
+  handleSetFftSizeIndex: (value: number) => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

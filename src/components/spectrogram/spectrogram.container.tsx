@@ -180,48 +180,31 @@ export const SpectrogramContainer = (
       if (!globalContext.isSelectedAudioAlreadyRendered) {
         wavesurfer.loadBlob(new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }));
 
-        const fftSamples = Math.pow(2, Math.ceil(Math.log2((props.maxFrequencyKHz * 1000) / 20)));
+        // const fftSamples = Math.pow(2, Math.ceil(Math.log2(globalContext.fftSize)));
 
         wavesurfer.registerPlugin(
           SpectrogramPlugin.create({
             labels: false,
-            height: props.spectrogramHeight,
             colorMap: spectrogramColorMap,
             container: containerRef.current,
-            fftSamples: fftSamples,
+            height: 512,
+            fftSamples: globalContext.fftSizeOptions[globalContext.fftSizeIndex],
+            windowFunc: 'hamming',
           }),
         );
 
         wavesurfer.registerPlugin(RegionsPlugin.create());
-
         globalContext.actions.setIsSelectedAudioAlreadyRendered(true);
       }
     }
-  }, [globalContext.selectedAudio, wavesurfer, props.maxFrequencyKHz, props.spectrogramHeight, spectrogramColorMap]);
-
-  // useEffect(() => {
-  //   if (wavesurfer) {
-  //     const updateMarkerPosition = () => {
-  //       const currentTime = wavesurfer.getCurrentTime();
-  //       const duration = wavesurfer.getDuration();
-
-  //       if (markerRef.current && containerRef.current) {
-  //         const containerWidth = containerRef.current.offsetWidth;
-  //         const markerPosition = (currentTime / duration) * containerWidth;
-
-  //         markerRef.current.style.left = `${markerPosition}px`;
-  //       }
-  //     };
-
-  //     wavesurfer.on('audioprocess', updateMarkerPosition);
-  //     wavesurfer.on('seeking', updateMarkerPosition);
-
-  //     return () => {
-  //       wavesurfer.un('audioprocess', updateMarkerPosition);
-  //       wavesurfer.un('seeking', updateMarkerPosition);
-  //     };
-  //   }
-  // }, [wavesurfer]);
+  }, [
+    globalContext.selectedAudio,
+    wavesurfer,
+    props.maxFrequencyKHz,
+    props.spectrogramHeight,
+    spectrogramColorMap,
+    globalContext.fftSize,
+  ]);
 
   useEffect(() => {
     if (wavesurfer) {
@@ -233,7 +216,7 @@ export const SpectrogramContainer = (
 
           const newPosition = (currentTime / duration) * containerWidth;
 
-          setMarkerPosition(Math.max(0, Math.min(newPosition, containerWidth))); // Garante que não saia do espectrograma
+          setMarkerPosition(Math.max(0, Math.min(newPosition, containerWidth)));
         }
       };
 

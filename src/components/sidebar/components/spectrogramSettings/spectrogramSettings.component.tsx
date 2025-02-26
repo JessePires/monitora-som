@@ -28,7 +28,17 @@ const SpectrogramSettingsComponent = (): JSX.Element => {
       </div>
       <div>
         <span className="flex mb-2 text-gray-800">Tamanho da janela</span>
-        <Slider min={0} max={180} />
+        <Slider
+          defaultValue={[globalContext.fftSizeIndex]}
+          value={[globalContext.fftSizeIndex]}
+          onValueChange={(value) => {
+            globalContext.actions.handleSetFftSizeIndex(globalContext.fftSizeOptions.indexOf(value[0]));
+          }}
+          min={0}
+          max={globalContext.fftSizeOptions.length - 1}
+          step={1}
+          labelFormat={(value) => globalContext.fftSizeOptions[value]}
+        />
       </div>
       <div>
         <span className="flex mb-2 text-gray-800">Sobreposição (%)</span>

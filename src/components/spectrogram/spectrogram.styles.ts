@@ -25,7 +25,7 @@ export const FrequencyText = styled.span`
 
 export const CanvasWrapper = styled.div<{ spectrogramWidth: number; spectrogramHeight: number }>`
   width: 100%;
-  height: 527px;
+  height: 527px !important;
 
   overflow-x: scroll;
   overflow-y: hidden;

@@ -49,7 +49,6 @@ export interface TimeFrequencyDots {
 }
 
 export interface DrawableSpectrogramProps {
-  audioUrls: Array<string>;
   spectrogramWidth: number;
   spectrogramHeight: number;
   maxFrequencyKHz: number;
