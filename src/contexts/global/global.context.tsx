@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { debounce } from 'lodash';
 import Papa from 'papaparse';
 import WaveSurfer from 'wavesurfer.js';
 
@@ -22,6 +23,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
   const [labelAngle, setLabelAngle] = useState<number>(0);
   const [fftSizeIndex, setFftSizeIndex] = useState<number>(3);
+  const [windowOverlap, setWindowOverlap] = useState<number>(50);
 
   const fileHeader = [
     'audio',
@@ -149,6 +151,11 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     setIsSelectedAudioAlreadyRendered(false);
     setFftSizeIndex(value);
   };
+
+  const handleSetWindowOverlap = debounce((value: number): void => {
+    setIsSelectedAudioAlreadyRendered(false);
+    setWindowOverlap(value);
+  });
 
   const exportSquares = async () => {
     try {
@@ -361,6 +368,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     exportMultipleAudioSlices,
     setLabelAngle,
     handleSetFftSizeIndex,
+    handleSetWindowOverlap,
   };
 
   useEffect(() => {
@@ -391,6 +399,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         labelAngle,
         fftSizeIndex,
         fftSizeOptions,
+        windowOverlap,
       }}
     >
       {props.children}

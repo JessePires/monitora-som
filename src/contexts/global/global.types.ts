@@ -35,6 +35,7 @@ export type GlobalContextactions = {
   exportMultipleAudioSlices: (wavesurfer: WaveSurfer) => Promise<void>;
   setLabelAngle: React.SetStateAction<number>;
   handleSetFftSizeIndex: (value: number) => void;
+  handleSetWindowOverlap: (value: number) => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

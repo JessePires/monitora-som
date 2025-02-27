@@ -181,6 +181,11 @@ export const SpectrogramContainer = (
         wavesurfer.loadBlob(new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }));
 
         // const fftSamples = Math.pow(2, Math.ceil(Math.log2(globalContext.fftSize)));
+        const hopLength = Math.floor(
+          globalContext.fftSizeOptions[globalContext.fftSizeIndex] * (1 - globalContext.windowOverlap / 100),
+        );
+
+        console.log('AQUII');
 
         wavesurfer.registerPlugin(
           SpectrogramPlugin.create({
@@ -190,6 +195,7 @@ export const SpectrogramContainer = (
             height: 512,
             fftSamples: globalContext.fftSizeOptions[globalContext.fftSizeIndex],
             windowFunc: 'hamming',
+            noverlap: hopLength,
           }),
         );
 
@@ -204,6 +210,7 @@ export const SpectrogramContainer = (
     props.spectrogramHeight,
     spectrogramColorMap,
     globalContext.fftSize,
+    globalContext.windowOverlap,
   ]);
 
   useEffect(() => {

@@ -42,7 +42,16 @@ const SpectrogramSettingsComponent = (): JSX.Element => {
       </div>
       <div>
         <span className="flex mb-2 text-gray-800">Sobreposição (%)</span>
-        <Slider min={0} max={180} />
+        <Slider
+          min={0}
+          max={100}
+          defaultValue={[globalContext.windowOverlap]}
+          onValueChange={(value) => {
+            globalContext.actions.handleSetWindowOverlap(value[0]);
+          }}
+          step={1}
+          labelFormat={(value) => `${value}%`}
+        />
       </div>
 
       <Button>
