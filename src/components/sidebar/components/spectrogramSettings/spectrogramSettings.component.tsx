@@ -32,7 +32,7 @@ const SpectrogramSettingsComponent = (): JSX.Element => {
           defaultValue={[globalContext.fftSizeIndex]}
           value={[globalContext.fftSizeIndex]}
           onValueChange={(value) => {
-            globalContext.actions.handleSetFftSizeIndex(globalContext.fftSizeOptions.indexOf(value[0]));
+            globalContext.actions.handleSetFftSizeIndex(value[0]);
           }}
           min={0}
           max={globalContext.fftSizeOptions.length - 1}

@@ -185,8 +185,6 @@ export const SpectrogramContainer = (
           globalContext.fftSizeOptions[globalContext.fftSizeIndex] * (1 - globalContext.windowOverlap / 100),
         );
 
-        console.log('AQUII');
-
         wavesurfer.registerPlugin(
           SpectrogramPlugin.create({
             labels: false,
@@ -215,6 +213,8 @@ export const SpectrogramContainer = (
 
   useEffect(() => {
     if (wavesurfer) {
+      console.log('CADSE');
+
       const updateMarkerPosition = () => {
         if (!isMarkerDragging && containerRef.current) {
           const currentTime = wavesurfer.getCurrentTime();

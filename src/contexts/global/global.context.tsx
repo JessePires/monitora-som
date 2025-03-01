@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
@@ -147,15 +147,21 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     saveAs(zipBlob, 'csv-files.zip');
   };
 
-  const handleSetFftSizeIndex = (value: number): void => {
-    setIsSelectedAudioAlreadyRendered(false);
-    setFftSizeIndex(value);
-  };
+  const handleSetFftSizeIndex = useCallback(
+    debounce((value: number): void => {
+      setIsSelectedAudioAlreadyRendered(false);
+      setFftSizeIndex(value);
+    }, 300),
+    [],
+  );
 
-  const handleSetWindowOverlap = debounce((value: number): void => {
-    setIsSelectedAudioAlreadyRendered(false);
-    setWindowOverlap(value);
-  });
+  const handleSetWindowOverlap = useCallback(
+    debounce((value: number): void => {
+      setIsSelectedAudioAlreadyRendered(false);
+      setWindowOverlap(value);
+    }, 300),
+    [],
+  );
 
   const exportSquares = async () => {
     try {
