@@ -15,27 +15,38 @@ export const GlobalContext = createContext({});
 export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element => {
   const fftSizeOptions = [128, 256, 512, 1024, 2048, 4096, 8192, 16384];
 
+  const windowFunctionOptions = [
+    { value: 'bartlett', name: 'Barllet' },
+    { value: 'bartlettHann', name: 'Bartlett-Hann' },
+    { value: 'blackman', name: 'Blackman' },
+    { value: 'cosine', name: 'Cosseno' },
+    { value: 'gauss', name: 'Gauss' },
+    { value: 'hamming', name: 'Hamming' },
+    { value: 'hann', name: 'Hann' },
+    { value: 'lanczoz', name: 'Lanczos' },
+    { value: 'rectangular', name: 'Retangular' },
+    { value: 'triangular', name: 'Triangular' },
+  ];
+
+  const defaultParamsConfig = {
+    labelAngle: 0,
+    fftSizeIndex: 3,
+    windowOverlap: 50,
+    windowFunction: windowFunctionOptions[5],
+  };
+
   const [audioFiles, setAudioFiles] = useState<Array<AudioFilesType> | null>([]);
   const [roiTables, setRoiTables] = useState<Array<File> | null>([]);
   const [selectedAudio, setSelectedAudio] = useState<Blob | null>(null);
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
-  const [labelAngle, setLabelAngle] = useState<number>(0);
-  const [fftSizeIndex, setFftSizeIndex] = useState<number>(3);
-  const [windowOverlap, setWindowOverlap] = useState<number>(50);
-
-  const fileHeader = [
-    'audio',
-    'label',
-    'freq início',
-    'freq fim',
-    'tempo início',
-    'tempo fim',
-    'tipo',
-    'nível certeza',
-    'completude',
-  ];
+  const [labelAngle, setLabelAngle] = useState<number>(defaultParamsConfig.labelAngle);
+  const [fftSizeIndex, setFftSizeIndex] = useState<number>(defaultParamsConfig.fftSizeIndex);
+  const [windowOverlap, setWindowOverlap] = useState<number>(defaultParamsConfig.windowOverlap);
+  const [windowFunction, setWindowFunction] = useState<{ name: string; value: string }>(
+    defaultParamsConfig.windowFunction,
+  );
 
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
     setAudioFiles(audioFiles);
@@ -47,6 +58,19 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
   const handleSetSelectedAudio = (audioFile: File): void => {
     setSelectedAudio(audioFile);
+    setIsSelectedAudioAlreadyRendered(false);
+  };
+
+  const handleSetWindowFunction = (windowFunction: string): void => {
+    setWindowFunction(windowFunction);
+    setIsSelectedAudioAlreadyRendered(false);
+  };
+
+  const handleResetConfigParams = (): void => {
+    setLabelAngle(defaultParamsConfig.labelAngle);
+    setFftSizeIndex(defaultParamsConfig.fftSizeIndex);
+    setWindowOverlap(defaultParamsConfig.windowOverlap);
+    setWindowFunction(defaultParamsConfig.windowFunction);
     setIsSelectedAudioAlreadyRendered(false);
   };
 
@@ -375,6 +399,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     setLabelAngle,
     handleSetFftSizeIndex,
     handleSetWindowOverlap,
+    handleSetWindowFunction,
+    handleResetConfigParams,
   };
 
   useEffect(() => {
@@ -406,6 +432,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         fftSizeIndex,
         fftSizeOptions,
         windowOverlap,
+        windowFunctionOptions,
+        windowFunction,
       }}
     >
       {props.children}

@@ -20,12 +20,12 @@ export const SpectrogramContainer = (
 ): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const spectrogramRef = useRef<HTMLCanvasElement>(null);
+  const spectrogramRefTest = useRef<HTMLDivElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
 
   const globalContext = useContext(GlobalContext);
 
-  const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [visibleTimes, setVisibleTimes] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
   const [visibleFrequencies, setVisibleFrequencies] = useState<TimeFrequencyDots>({ start: 0, end: 0 });
@@ -47,10 +47,7 @@ export const SpectrogramContainer = (
     alpha: 1,
   });
 
-  const { wavesurfer, isPlaying, currentTime } = useWavesurfer({
-    container: containerRef,
-    height: 0,
-  });
+  const wavesurferHook = useWavesurfer({ container: containerRef, height: 0 });
 
   const calculateFrequencies = useCallback(() => {
     const frequencies = [];
@@ -76,7 +73,8 @@ export const SpectrogramContainer = (
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const newScrollAmount =
-      (event.currentTarget.scrollLeft / event.currentTarget.scrollWidth) * (wavesurfer.getDuration() * 1000);
+      (event.currentTarget.scrollLeft / event.currentTarget.scrollWidth) *
+      (wavesurferHook.wavesurfer.getDuration() * 1000);
     setScrollAmount(newScrollAmount);
 
     const visibleStartTime = calculateTimeFromColumn(0);
@@ -91,6 +89,7 @@ export const SpectrogramContainer = (
     globalContext.actions.handleSetSelectedAudio(
       globalContext.audioFiles[(newIndex + 1) % globalContext.audioFiles.length],
     );
+    setMarkerPosition(0);
   };
 
   const stepBack = () => {
@@ -98,6 +97,7 @@ export const SpectrogramContainer = (
     globalContext.actions.handleSetSelectedAudio(
       globalContext.audioFiles[(newIndex - 1) % globalContext.audioFiles.length],
     );
+    setMarkerPosition(0);
   };
 
   const moveOnToNextUnlabeled = () => {
@@ -109,10 +109,13 @@ export const SpectrogramContainer = (
     if (nextAudio !== null) {
       globalContext.actions.handleSetSelectedAudio(nextAudio);
     }
+
+    setMarkerPosition(0);
   };
 
   const goBackToPreviousUnlabeled = () => {
     if (globalContext.actions.isSquaresObjectEmpty()) {
+      setMarkerPosition(0);
       return stepBack();
     }
 
@@ -123,8 +126,8 @@ export const SpectrogramContainer = (
   };
 
   const onPlayPause = useCallback(() => {
-    wavesurfer && wavesurfer.playPause();
-  }, [wavesurfer]);
+    wavesurferHook.wavesurfer && wavesurferHook.wavesurfer.playPause();
+  }, [wavesurferHook.wavesurfer]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     spectrogramRef.current?.createLabel(event);
@@ -140,10 +143,10 @@ export const SpectrogramContainer = (
   };
 
   const handleMarkerMouseMove = (event: MouseEvent) => {
-    if (isMarkerDragging && containerRef.current && wavesurfer) {
+    if (isMarkerDragging && containerRef.current && wavesurferHook.wavesurfer) {
       const rect = containerRef.current.getBoundingClientRect();
       const containerWidth = containerRef.current.offsetWidth;
-      const duration = wavesurfer.getDuration();
+      const duration = wavesurferHook.wavesurfer.getDuration();
 
       let newPosition = event.clientX - rect.left;
 
@@ -152,7 +155,7 @@ export const SpectrogramContainer = (
       setMarkerPosition(newPosition);
 
       const newTime = (newPosition / containerWidth) * duration;
-      wavesurfer.setTime(newTime);
+      wavesurferHook.wavesurfer.setTime(newTime);
     }
   };
 
@@ -176,16 +179,18 @@ export const SpectrogramContainer = (
   }, [isMarkerDragging]);
 
   useEffect(() => {
-    if (globalContext.selectedAudio && wavesurfer) {
+    if (globalContext.selectedAudio && wavesurferHook.wavesurfer) {
       if (!globalContext.isSelectedAudioAlreadyRendered) {
-        wavesurfer.loadBlob(new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }));
+        wavesurferHook.wavesurfer.loadBlob(
+          new Blob([globalContext.selectedAudio], { type: globalContext.selectedAudio.type }),
+        );
 
         // const fftSamples = Math.pow(2, Math.ceil(Math.log2(globalContext.fftSize)));
         const hopLength = Math.floor(
           globalContext.fftSizeOptions[globalContext.fftSizeIndex] * (1 - globalContext.windowOverlap / 100),
         );
 
-        wavesurfer.registerPlugin(
+        wavesurferHook.wavesurfer.registerPlugin(
           SpectrogramPlugin.create({
             labels: false,
             colorMap: spectrogramColorMap,
@@ -197,13 +202,13 @@ export const SpectrogramContainer = (
           }),
         );
 
-        wavesurfer.registerPlugin(RegionsPlugin.create());
+        wavesurferHook.wavesurfer.registerPlugin(RegionsPlugin.create());
         globalContext.actions.setIsSelectedAudioAlreadyRendered(true);
       }
     }
   }, [
     globalContext.selectedAudio,
-    wavesurfer,
+    wavesurferHook.wavesurfer,
     props.maxFrequencyKHz,
     props.spectrogramHeight,
     spectrogramColorMap,
@@ -212,13 +217,11 @@ export const SpectrogramContainer = (
   ]);
 
   useEffect(() => {
-    if (wavesurfer) {
-      console.log('CADSE');
-
+    if (wavesurferHook.wavesurfer) {
       const updateMarkerPosition = () => {
         if (!isMarkerDragging && containerRef.current) {
-          const currentTime = wavesurfer.getCurrentTime();
-          const duration = wavesurfer.getDuration();
+          const currentTime = wavesurferHook.wavesurfer.getCurrentTime();
+          const duration = wavesurferHook.wavesurfer.getDuration();
           const containerWidth = containerRef.current.offsetWidth;
 
           const newPosition = (currentTime / duration) * containerWidth;
@@ -227,15 +230,15 @@ export const SpectrogramContainer = (
         }
       };
 
-      wavesurfer.on('audioprocess', updateMarkerPosition);
-      wavesurfer.on('seeking', updateMarkerPosition);
+      wavesurferHook.wavesurfer.on('audioprocess', updateMarkerPosition);
+      wavesurferHook.wavesurfer.on('seeking', updateMarkerPosition);
 
       return () => {
-        wavesurfer.un('audioprocess', updateMarkerPosition);
-        wavesurfer.un('seeking', updateMarkerPosition);
+        wavesurferHook.wavesurfer.un('audioprocess', updateMarkerPosition);
+        wavesurferHook.wavesurfer.un('seeking', updateMarkerPosition);
       };
     }
-  }, [wavesurfer, isMarkerDragging]);
+  }, [wavesurferHook.wavesurfer, isMarkerDragging]);
 
   useEffect(() => {
     const visibleStartTime = calculateTimeFromColumn(0);
@@ -266,12 +269,12 @@ export const SpectrogramContainer = (
   return props.children({
     containerRef,
     spectrogramRef,
+    spectrogramRefTest,
     frequencies,
     visibleTimes,
     visibleFrequencies,
-    currentTime,
-    isPlaying,
-    currentAudioIndex,
+    currentTime: wavesurferHook.currentTime,
+    isPlaying: wavesurferHook.isPlaying,
     labelInput,
     headers,
     species,
@@ -279,7 +282,7 @@ export const SpectrogramContainer = (
     markerRef,
     arrowRef,
     markerPosition,
-    wavesurfer,
+    wavesurfer: wavesurferHook.wavesurfer,
     actions: {
       handleScroll,
       stepForward,

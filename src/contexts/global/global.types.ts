@@ -36,6 +36,8 @@ export type GlobalContextactions = {
   setLabelAngle: React.SetStateAction<number>;
   handleSetFftSizeIndex: (value: number) => void;
   handleSetWindowOverlap: (value: number) => void;
+  handleSetWindowFunction: (windowFunction: string) => void;
+  handleResetConfigParams: () => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

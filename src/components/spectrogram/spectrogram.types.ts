@@ -5,6 +5,7 @@ import WaveSurfer from 'wavesurfer.js';
 export interface SpectrogramContainerProps {
   containerRef: RefObject<HTMLDivElement>;
   spectrogramRef: RefObject<HTMLCanvasElement>;
+  spectrogramRefTest: RefObject<HTMLDivElement>;
   frequencies: Array<number>;
   visibleTimes: TimeFrequencyDots;
   visibleFrequencies: TimeFrequencyDots;
@@ -35,7 +36,6 @@ export interface SpectrogramContainerProps {
 }
 
 export interface SpectrogramContainerArgs {
-  audioUrls: Array<string>;
   spectrogramWidth: number;
   spectrogramHeight: number;
   maxFrequencyKHz: number;
