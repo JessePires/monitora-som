@@ -10,6 +10,7 @@ export interface FormContainerProps {
   globalContext: any;
   actions: {
     onChangeSelectedSpeciesType: (selectedSpeciesType: string) => void;
+    progress: () => number;
   };
 }
 

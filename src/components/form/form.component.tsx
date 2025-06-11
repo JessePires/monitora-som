@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { z } from 'zod';
 
+import { Progress } from '../ui/progress';
 import { Textarea } from '../ui/textarea';
 
 import * as Containers from './form.container';
@@ -36,8 +37,9 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
           <Form {...containerProps.form}>
             <form
               onSubmit={containerProps.form.handleSubmit(onSubmit)}
-              className="space-y-6 rounded-xl bg-white shadow-md m-4 p-4 z-10"
+              className="space-y-6 rounded-xl bg-white shadow-md m-4 pt-1 px-4 z-10"
             >
+              <Progress value={containerProps.actions.progress()} className="" />
               <div className="flex justify-between w-[100%]">
                 <FormField
                   control={containerProps.form.control}

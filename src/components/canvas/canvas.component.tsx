@@ -26,7 +26,7 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
                 backgroundColor: '#ff7300',
                 pointerEvents: 'none',
                 zIndex: 10,
-                left: `${props.markerPosition}px`,
+                left: `${props.markerPosition + 6}px`,
               }}
             />
             <div
@@ -35,7 +35,7 @@ const CanvasDrawing = forwardRef((props: CanvasDrawingProps, ref: ForwardedRef<H
               className="absolute"
               style={{
                 position: 'absolute',
-                left: `${props.markerPosition}px`,
+                left: `${props.markerPosition + 6}px`,
                 transform: 'translateX(-44%)',
                 bottom: '0px',
                 width: '0px',

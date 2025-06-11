@@ -45,6 +45,13 @@ export const SpectrogramContainer = (props: ContainerWithProps<FormContainerProp
     setSelectedSpeciesType(selectedSpeciesType);
   };
 
+  const progress = (): number => {
+    const total = globalContext.audioFiles.length;
+    const alreadyLabeled = globalContext.actions.getTotalLabeled();
+
+    return (100 * alreadyLabeled) / total;
+  };
+
   const songTypeOptions: Array<SelectOptions> = useMemo((): Array<SelectOptions> => {
     const songTypesArray: Array<SelectOptions> = [];
     Object.keys(SongTypesEnum).forEach((songTypesKey: string) => {
@@ -106,6 +113,7 @@ export const SpectrogramContainer = (props: ContainerWithProps<FormContainerProp
     form,
     globalContext,
     actions: {
+      progress,
       onChangeSelectedSpeciesType,
     },
   });

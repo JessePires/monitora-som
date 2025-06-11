@@ -380,6 +380,26 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     });
   };
 
+  const getTotalLabeled = (): number => {
+    let total = 0;
+
+    const squaresTablesNames = Object.keys(squares);
+
+    for (const tableName of squaresTablesNames) {
+      if (squares[tableName].squares.length > 0) {
+        const audioNames: Array<string> = [];
+        squares[tableName].squares.forEach((square) => {
+          if (square.label !== '') {
+            audioNames.push(square.audioName);
+          }
+        });
+        total += new Set(audioNames).size;
+      }
+    }
+
+    return total;
+  };
+
   const actions = {
     handleSetRecords,
     handleSetRoiTables,
@@ -401,6 +421,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     handleSetWindowOverlap,
     handleSetWindowFunction,
     handleResetConfigParams,
+    getTotalLabeled,
   };
 
   useEffect(() => {
