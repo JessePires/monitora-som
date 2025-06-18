@@ -474,7 +474,9 @@ const ComboboxForm = (props: ComboBoxFormProps): JSX.Element => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Salvar rótulo</Button>
+                <Button className="w-1/4 self-end" type="submit">
+                  Salvar rótulo
+                </Button>
               </form>
             </Form>
           </div>

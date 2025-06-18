@@ -100,23 +100,43 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     });
   };
 
-  const handleSetSquareInfo = (selectedIndex: number, info: Square): void => {
-    setSquares((prevState) => {
-      const newObject = { ...prevState };
+  const handleSetSquareInfo = (selectedIndex: number | null, info: Square): void => {
+    if (selectedIndex === null) {
+      setSquares((prevState) => {
+        const newObject = { ...prevState };
 
-      newObject[selectedRoiTable?.name].squares[selectedIndex] = {
-        ...newObject[selectedRoiTable?.name].squares[selectedIndex],
-        audioName: selectedAudio?.name,
-        label: info.speciesName,
-        type: info.type,
-        certaintyLevel: info.certaintyLevel,
-        completude: info.completude,
-        additionalComments: info.additionalComments,
-        roiTable: info.roiTable,
-      };
+        newObject[selectedRoiTable?.name].squares.push({
+          start: { x: 0, y: 0 },
+          end: { x: 0, y: 0 },
+          audioName: selectedAudio?.name,
+          label: info.speciesName,
+          type: info.type,
+          certaintyLevel: info.certaintyLevel,
+          completude: info.completude,
+          additionalComments: info.additionalComments,
+          roiTable: info.roiTable,
+        });
 
-      return newObject;
-    });
+        return newObject;
+      });
+    } else {
+      setSquares((prevState) => {
+        const newObject = { ...prevState };
+
+        newObject[selectedRoiTable?.name].squares[selectedIndex] = {
+          ...newObject[selectedRoiTable?.name].squares[selectedIndex],
+          audioName: selectedAudio?.name,
+          label: info.speciesName,
+          type: info.type,
+          certaintyLevel: info.certaintyLevel,
+          completude: info.completude,
+          additionalComments: info.additionalComments,
+          roiTable: info.roiTable,
+        };
+
+        return newObject;
+      });
+    }
   };
 
   const getFilesContent = (roiTables: File[], callback: (csvFiles: any[]) => any): void => {

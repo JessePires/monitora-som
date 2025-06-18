@@ -2,11 +2,10 @@ import { useContext } from 'react';
 
 import * as Icons from '../../assets/icons';
 import CanvasDrawing from '../canvas/canvas.component';
-import EmptySpectrogram from '../emptySpectrogram/emptySpectrogram.component';
+import CheckboxComponent from '../checkbox/checkbox.component';
 import ComboboxForm from '../form/form.component';
 import Sidebar from '../sidebar/sidebar.component';
 import { Button } from '../ui/button';
-import { Slider } from '../ui/slider';
 
 import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';
@@ -27,10 +26,7 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
               waveSurferInstance={containerProps.wavesurfer}
             />
             <div className={`w-[100vw]`}>
-              <div className="bg-white rounded-xl shadow-md m-4 p-4">
-                {/* {!globalContext.selectedAudio && <EmptySpectrogram />}
-                {globalContext.selectedAudio && ( */}
-
+              <div className="bg-white rounded-xl shadow-md m-4 px-8 py-4">
                 <div className="flex mr-8">
                   <Styles.CanvasWrapper
                     ref={containerProps.containerRef}
@@ -54,48 +50,72 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   </Styles.CanvasWrapper>
                 </div>
 
-                {/* )} */}
+                <div className="flex justify-center w-[100%]">
+                  <div className="mt-8 flex flex-1">
+                    <div className="flex gap-4 w-[100%] justify-center pl-4">
+                      <Button
+                        onClick={containerProps.actions.goBackToPreviousUnlabeled}
+                        disabled={globalContext.actions.areAllPreviousLabeled()}
+                      >
+                        <Icons.CustomPreviousUnseenIcon width="20" />
+                        <span className="ml-2">Anterior não rotulado</span>
+                      </Button>
 
-                <div className="mt-8 flex gap-4 justify-center">
-                  <Button
-                    onClick={containerProps.actions.goBackToPreviousUnlabeled}
-                    disabled={globalContext.actions.areAllPreviousLabeled()}
-                  >
-                    <Icons.CustomPreviousUnseenIcon width="20" />
-                    <span className="ml-2">Anterior não rotulado</span>
-                  </Button>
+                      <Button
+                        onClick={containerProps.actions.stepBack}
+                        disabled={globalContext.audioFiles.indexOf(globalContext.selectedAudio) === 0}
+                      >
+                        <Icons.CustomPreviousIcon width="11" />
+                        <span className="ml-2">Anterior</span>
+                      </Button>
 
-                  <Button
-                    onClick={containerProps.actions.stepBack}
-                    disabled={globalContext.audioFiles.indexOf(globalContext.selectedAudio) === 0}
-                  >
-                    <Icons.CustomPreviousIcon width="11" />
-                    <span className="ml-2">Anterior</span>
-                  </Button>
+                      <Button
+                        onClick={containerProps.actions.onPlayPause}
+                        style={{ minWidth: '5em' }}
+                        className="w-[30%]"
+                      >
+                        {containerProps.isPlaying ? <Icons.PauseIcon /> : <Icons.CustomPlayIcon width="12" />}
+                        <span className="ml-2">{containerProps.isPlaying ? 'Pausar áudio' : 'Tocar áudio'}</span>
+                      </Button>
 
-                  <Button onClick={containerProps.actions.onPlayPause} style={{ minWidth: '5em' }} className="w-[30%]">
-                    {containerProps.isPlaying ? <Icons.PauseIcon /> : <Icons.CustomPlayIcon width="12" />}
-                    <span className="ml-2">{containerProps.isPlaying ? 'Pausar áudio' : 'Tocar áudio'}</span>
-                  </Button>
+                      <Button
+                        onClick={containerProps.actions.stepForward}
+                        disabled={
+                          globalContext.audioFiles.indexOf(globalContext.selectedAudio) >=
+                          globalContext.audioFiles.length - 1
+                        }
+                      >
+                        <span className="mr-2">Próximo</span>
+                        <Icons.CustomNextIcon width="11" />
+                      </Button>
 
-                  <Button
-                    onClick={containerProps.actions.stepForward}
-                    disabled={
-                      globalContext.audioFiles.indexOf(globalContext.selectedAudio) >=
-                      globalContext.audioFiles.length - 1
-                    }
-                  >
-                    <span className="mr-2">Próximo</span>
-                    <Icons.CustomNextIcon width="11" />
-                  </Button>
+                      <Button
+                        onClick={containerProps.actions.moveOnToNextUnlabeled}
+                        disabled={globalContext.actions.areAllNextLabeled()}
+                      >
+                        <span className="mr-2">Próximo não rotulado</span>
+                        <Icons.CustomNextUnseenIcon width="20" />
+                      </Button>
+                    </div>
+                  </div>
 
-                  <Button
-                    onClick={containerProps.actions.moveOnToNextUnlabeled}
-                    disabled={globalContext.actions.areAllNextLabeled()}
-                  >
-                    <span className="mr-2">Próximo não rotulado</span>
-                    <Icons.CustomNextUnseenIcon width="20" />
-                  </Button>
+                  <div className="flex mt-8 justify-end items-center">
+                    <CheckboxComponent
+                      title="Este áudio não tem ROI"
+                      onChecked={(checked) => {
+                        if (checked) {
+                          globalContext.actions.handleSetSquareInfo(null, {
+                            availableSpecies: '-',
+                            speciesName: '-',
+                            type: '-',
+                            certaintyLevel: '-',
+                            completude: '-',
+                            additionalComments: '-',
+                          });
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
 
