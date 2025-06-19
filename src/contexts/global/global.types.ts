@@ -38,6 +38,7 @@ export type GlobalContextactions = {
   handleSetWindowOverlap: (value: number) => void;
   handleSetWindowFunction: (windowFunction: string) => void;
   handleResetConfigParams: () => void;
+  removeNoLabelsMarker: () => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

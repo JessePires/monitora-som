@@ -100,21 +100,56 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     });
   };
 
-  const handleSetSquareInfo = (selectedIndex: number | null, info: Square): void => {
-    if (selectedIndex === null) {
+  const removeNoLabelsMarker = () => {
+    const roiTablesNames = roiTables?.map((roiTable) => roiTable.name);
+
+    if (roiTablesNames) {
       setSquares((prevState) => {
         const newObject = { ...prevState };
 
-        newObject[selectedRoiTable?.name].squares.push({
-          start: { x: 0, y: 0 },
-          end: { x: 0, y: 0 },
-          audioName: selectedAudio?.name,
-          label: info.speciesName,
-          type: info.type,
-          certaintyLevel: info.certaintyLevel,
-          completude: info.completude,
-          additionalComments: info.additionalComments,
-          roiTable: info.roiTable,
+        for (const roiTableName of roiTablesNames) {
+          const selectedAudioSquareIndex = squares[roiTableName].squares.findIndex(
+            (element) => element.audioName === selectedAudio?.name,
+          );
+
+          if (selectedAudioSquareIndex === squares[roiTableName].squares.length - 1) {
+            newObject[roiTableName].squares.pop();
+          } else {
+            const firstPart = newObject[roiTableName].squares.slice(0, selectedAudioSquareIndex);
+            const secondPart = newObject[roiTableName].squares.slice(
+              selectedAudioSquareIndex + 1,
+              newObject[roiTableName].squares.length,
+            );
+
+            newObject[roiTableName].squares = [...firstPart, ...secondPart];
+          }
+        }
+
+        return newObject;
+      });
+    }
+  };
+
+  const handleSetSquareInfo = (selectedIndex: number | null, info: Square): void => {
+    if (selectedIndex === null) {
+      const roiTablesNames = roiTables?.map((roiTable) => roiTable.name);
+
+      setSquares((prevState) => {
+        const newObject = { ...prevState };
+
+        roiTablesNames?.forEach((roiTableName) => {
+          newObject[roiTableName].squares.push({
+            color: '',
+            start: { x: 0, y: 0 },
+            end: { x: 0, y: 0 },
+            audioName: selectedAudio?.name,
+            label: info.speciesName,
+            type: info.type,
+            certaintyLevel: info.certaintyLevel,
+            completude: info.completude,
+            additionalComments: info.additionalComments,
+            roiTable: info.roiTable,
+          });
         });
 
         return newObject;
@@ -442,6 +477,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     handleSetWindowFunction,
     handleResetConfigParams,
     getTotalLabeled,
+    removeNoLabelsMarker,
   };
 
   useEffect(() => {

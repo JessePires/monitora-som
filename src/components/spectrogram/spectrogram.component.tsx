@@ -112,6 +112,8 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                             completude: '-',
                             additionalComments: '-',
                           });
+                        } else {
+                          globalContext.actions.removeNoLabelsMarker();
                         }
                       }}
                     />
