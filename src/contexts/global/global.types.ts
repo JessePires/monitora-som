@@ -43,6 +43,7 @@ export type GlobalContextactions = {
   removeNoLabelsMarker: () => void;
   isAudioMarkedAsEmpty: () => void;
   setIsNoLabelsMarkerChecked: Dispatch<SetStateAction<boolean>>;
+  removeAllAudioSquares: () => void;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

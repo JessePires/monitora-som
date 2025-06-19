@@ -138,10 +138,28 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     const foundedLabel = squares[roiTables[0]?.name].squares.find((square) => square.audioName === audioFile.name);
 
     if (!foundedLabel) return false;
-
     if (foundedLabel.label === '-') return true;
 
     return false;
+  };
+
+  const removeAllAudioSquares = () => {
+    const audioName = selectedAudio?.name;
+    const roiTablesNames = roiTables?.map((roiTable) => roiTable.name);
+
+    if (roiTablesNames) {
+      for (const roiTableName of roiTablesNames) {
+        setSquares((prevState) => {
+          const newObject = { ...prevState };
+
+          newObject[roiTableName].squares = newObject[roiTableName].squares.filter(
+            (square) => square.audioName !== audioName,
+          );
+
+          return newObject;
+        });
+      }
+    }
   };
 
   const handleSetSquareInfo = (selectedIndex: number | null, info: Square): void => {
@@ -494,6 +512,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     removeNoLabelsMarker,
     isAudioMarkedAsEmpty,
     setIsNoLabelsMarkerChecked,
+    removeAllAudioSquares,
   };
 
   useEffect(() => {

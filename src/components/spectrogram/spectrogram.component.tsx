@@ -107,6 +107,8 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                         globalContext.actions.setIsNoLabelsMarkerChecked(checked);
 
                         if (checked) {
+                          globalContext.actions.removeAllAudioSquares();
+
                           globalContext.actions.handleSetSquareInfo(null, {
                             availableSpecies: '-',
                             speciesName: '-',
