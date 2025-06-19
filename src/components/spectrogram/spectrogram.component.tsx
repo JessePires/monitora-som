@@ -102,7 +102,10 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                   <div className="flex mt-8 justify-end items-center">
                     <CheckboxComponent
                       title="Este áudio não tem ROI"
+                      checked={globalContext.isNoLabelsMarkerChecked}
                       onChecked={(checked) => {
+                        globalContext.actions.setIsNoLabelsMarkerChecked(checked);
+
                         if (checked) {
                           globalContext.actions.handleSetSquareInfo(null, {
                             availableSpecies: '-',

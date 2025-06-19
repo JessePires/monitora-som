@@ -47,6 +47,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [windowFunction, setWindowFunction] = useState<{ name: string; value: string }>(
     defaultParamsConfig.windowFunction,
   );
+  const [isNoLabelsMarkerChecked, setIsNoLabelsMarkerChecked] = useState<boolean>(false);
 
   const handleSetRecords = (audioFiles: Array<AudioFilesType>): void => {
     setAudioFiles(audioFiles);
@@ -59,6 +60,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const handleSetSelectedAudio = (audioFile: File): void => {
     setSelectedAudio(audioFile);
     setIsSelectedAudioAlreadyRendered(false);
+    setIsNoLabelsMarkerChecked(isAudioMarkedAsEmpty(audioFile));
   };
 
   const handleSetWindowFunction = (windowFunction: string): void => {
@@ -128,6 +130,18 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         return newObject;
       });
     }
+  };
+
+  const isAudioMarkedAsEmpty = (audioFile: File): boolean => {
+    if (roiTables?.length === 0) return false;
+
+    const foundedLabel = squares[roiTables[0]?.name].squares.find((square) => square.audioName === audioFile.name);
+
+    if (!foundedLabel) return false;
+
+    if (foundedLabel.label === '-') return true;
+
+    return false;
   };
 
   const handleSetSquareInfo = (selectedIndex: number | null, info: Square): void => {
@@ -478,6 +492,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     handleResetConfigParams,
     getTotalLabeled,
     removeNoLabelsMarker,
+    isAudioMarkedAsEmpty,
+    setIsNoLabelsMarkerChecked,
   };
 
   useEffect(() => {
@@ -511,6 +527,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         windowOverlap,
         windowFunctionOptions,
         windowFunction,
+        isNoLabelsMarkerChecked,
       }}
     >
       {props.children}

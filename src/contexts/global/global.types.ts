@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import WaveSurfer from 'wavesurfer.js';
 
 import { Square } from '@/common/types/square.types';
@@ -39,6 +41,8 @@ export type GlobalContextactions = {
   handleSetWindowFunction: (windowFunction: string) => void;
   handleResetConfigParams: () => void;
   removeNoLabelsMarker: () => void;
+  isAudioMarkedAsEmpty: () => void;
+  setIsNoLabelsMarkerChecked: Dispatch<SetStateAction<boolean>>;
 };
 
 export type GlobalContextValues = ContextType<GlobalContextactions>;

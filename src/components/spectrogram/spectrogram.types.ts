@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { Dispatch, KeyboardEvent, RefObject, SetStateAction } from 'react';
 
 import WaveSurfer from 'wavesurfer.js';
 
@@ -27,8 +27,8 @@ export interface SpectrogramContainerProps {
     moveOnToNextUnlabeled: () => void;
     goBackToPreviousUnlabeled: () => void;
     onPlayPause: () => void;
-    handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    setLabelInput: React.Dispatch<React.SetStateAction<string>>;
+    handleKeyPress: (event: KeyboardEvent<HTMLInputElement>) => void;
+    setLabelInput: Dispatch<SetStateAction<string>>;
     handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
     onChangeExpanded: (value: boolean) => void;
     handleMarkerMouseDown: (event: React.MouseEvent) => void;
