@@ -35,6 +35,7 @@ export const SpectrogramContainer = (
   const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
   const [isMarkerDragging, setIsMarkerDragging] = useState<boolean>(false);
   const [markerPosition, setMarkerPosition] = useState(0);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   const onChangeExpanded = (value: boolean): void => {
     setIsSidebarExpanded(value);
@@ -157,6 +158,20 @@ export const SpectrogramContainer = (
       const newTime = (newPosition / containerWidth) * duration;
       wavesurferHook.wavesurfer.setTime(newTime);
     }
+  };
+
+  const onConfirmMarkAsNoLabels = (): void => {
+    globalContext.actions.removeAllAudioSquares();
+    globalContext.actions.handleSetSquareInfo(null, {
+      availableSpecies: '-',
+      speciesName: '-',
+      type: '-',
+      certaintyLevel: '-',
+      completude: '-',
+      additionalComments: '-',
+    });
+    setShowDialog(false);
+    globalContext.actions.setIsNoLabelsMarkerChecked(true);
   };
 
   const handleMarkerMouseUp = () => {
@@ -283,6 +298,7 @@ export const SpectrogramContainer = (
     arrowRef,
     markerPosition,
     wavesurfer: wavesurferHook.wavesurfer,
+    showDialog,
     actions: {
       handleScroll,
       stepForward,
@@ -295,6 +311,8 @@ export const SpectrogramContainer = (
       handleDeleteSelectedSquare,
       onChangeExpanded,
       handleMarkerMouseDown,
+      setShowDialog,
+      onConfirmMarkAsNoLabels,
     },
   });
 };

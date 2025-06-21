@@ -20,6 +20,7 @@ export interface SpectrogramContainerProps {
   arrowRef: RefObject<HTMLDivElement>;
   markerPosition: number;
   wavesurfer: WaveSurfer;
+  showDialog: boolean;
   actions: {
     handleScroll: (event: React.UIEvent<HTMLDivElement>) => void;
     stepForward: () => void;
@@ -32,6 +33,8 @@ export interface SpectrogramContainerProps {
     handleDeleteSelectedSquare: (event: KeyboardEvent) => void;
     onChangeExpanded: (value: boolean) => void;
     handleMarkerMouseDown: (event: React.MouseEvent) => void;
+    setShowDialog: Dispatch<SetStateAction<boolean>>;
+    onConfirmMarkAsNoLabels: () => void;
   };
 }
 
