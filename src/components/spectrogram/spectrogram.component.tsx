@@ -6,7 +6,7 @@ import CheckboxComponent from '../checkbox/checkbox.component';
 import ComboboxForm from '../form/form.component';
 import Sidebar from '../sidebar/sidebar.component';
 import { Button } from '../ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 import * as Containers from './spectrogram.container';
 import * as Styles from './spectrogram.styles';

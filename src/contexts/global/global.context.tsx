@@ -40,6 +40,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
   const [selectedAudio, setSelectedAudio] = useState<Blob | null>(null);
   const [selectedRoiTable, setSelectedRoiTable] = useState<File | null>(null);
   const [squares, setSquares] = useState<{ [x: string]: { squares: Array<Square>; roiTable: File } }>({});
+
   const [isSelectedAudioAlreadyRendered, setIsSelectedAudioAlreadyRendered] = useState<boolean>(false);
   const [labelAngle, setLabelAngle] = useState<number>(defaultParamsConfig.labelAngle);
   const [fftSizeIndex, setFftSizeIndex] = useState<number>(defaultParamsConfig.fftSizeIndex);
@@ -487,6 +488,57 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     return total;
   };
 
+  const readRoiTables = (roiTables: Array<File> | null) => {
+    console.log('roiTables', roiTables);
+
+    roiTables?.forEach((roiTable: File) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        try {
+          const text = reader.result as string;
+
+          // Quebra por linha
+          const lines = text
+            .split('\n')
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
+
+          if (lines.length === 0) {
+            console.warn(`Arquivo ${roiTable.name} está vazio ou inválido.`);
+            return;
+          }
+
+          // Extrai cabeçalhos
+          const headers = lines[0].split(',');
+
+          // Converte linhas restantes em objetos
+          const data = lines.slice(1).map((line) => {
+            const values = line.split(',');
+            const row: Record<string, string> = {};
+
+            headers.forEach((header, index) => {
+              row[header] = values[index] ?? '';
+            });
+
+            return row;
+          });
+
+          console.log('Arquivo:', roiTable.name);
+          console.log('Dados CSV:', data);
+        } catch (error) {
+          console.error(`Erro ao processar CSV do arquivo ${roiTable.name}:`, error);
+        }
+      };
+
+      reader.onerror = () => {
+        console.error(`Erro ao ler o arquivo ${roiTable.name}:`, reader.error);
+      };
+
+      reader.readAsText(roiTable);
+    });
+  };
+
   const actions = {
     handleSetRecords,
     handleSetRoiTables,
@@ -517,6 +569,8 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
 
   useEffect(() => {
     if (roiTables) {
+      readRoiTables(roiTables);
+
       const squaresByTableObject: { [x: string]: { squares: Array<Square>; roiTable: File } } = {};
 
       roiTables.forEach((roiTable) => {
