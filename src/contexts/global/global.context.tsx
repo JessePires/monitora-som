@@ -498,7 +498,6 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
         try {
           const text = reader.result as string;
 
-          // Quebra por linha
           const lines = text
             .split('\n')
             .map((line) => line.trim())
@@ -509,10 +508,7 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
             return;
           }
 
-          // Extrai cabeçalhos
-          const headers = lines[0].split(',');
-
-          // Converte linhas restantes em objetos
+          const headers = lines[0].split(',').map((lineElement) => lineElement.trim());
           const data = lines.slice(1).map((line) => {
             const values = line.split(',');
             const row: Record<string, string> = {};
@@ -524,8 +520,28 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
             return row;
           });
 
-          console.log('Arquivo:', roiTable.name);
-          console.log('Dados CSV:', data);
+          if (data.length > 0) {
+            data.forEach((element) =>
+              setSquares((prevState) => {
+                const newState = { ...prevState };
+
+                newState[roiTable.name].squares.push({
+                  color: 'rgba(0, 0, 255, 0.5)',
+                  start: { x: Number(element['tempo início']), y: Number(element['freq início']) },
+                  end: { x: Number(element['tempo fim']), y: Number(element['freq fim']) },
+                  audioName: element['nome'],
+                  label: element['label'],
+                  type: element['tipo'],
+                  certaintyLevel: element['nível certeza'],
+                  completude: element['completude'],
+                  additionalComments: '',
+                  roiTable: roiTable.name,
+                });
+
+                return newState;
+              }),
+            );
+          }
         } catch (error) {
           console.error(`Erro ao processar CSV do arquivo ${roiTable.name}:`, error);
         }
