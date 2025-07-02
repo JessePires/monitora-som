@@ -35,6 +35,18 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     windowFunction: windowFunctionOptions[5],
   };
 
+  const fileHeader = [
+    'nome',
+    'label',
+    'freq início',
+    'freq fim',
+    'tempo início',
+    'tempo fim',
+    'tipo',
+    'nível certeza',
+    'completude',
+  ];
+
   const [audioFiles, setAudioFiles] = useState<Array<AudioFilesType> | null>([]);
   const [roiTables, setRoiTables] = useState<Array<File> | null>([]);
   const [selectedAudio, setSelectedAudio] = useState<Blob | null>(null);
@@ -211,29 +223,22 @@ export const GlobalContextProvider = (props: GlobalProviderProps): JSX.Element =
     const allFilesData: any[] = [];
 
     const processFile = (roiTableFile: File, resolve: () => void) => {
-      Papa.parse(roiTableFile, {
-        complete: (result) => {
-          let updatedData = result.data.length === 0 ? [fileHeader] : [...result.data];
-          const squareRows = squares[roiTableFile.name].squares.map((square) => [
-            square.audioName,
-            square.label,
-            square.start.x,
-            square.end.x,
-            square.start.y,
-            square.end.y,
-            square.type,
-            square.certaintyLevel,
-            square.completude,
-          ]);
+      const squareRows = squares[roiTableFile.name].squares.map((square) => [
+        square.audioName,
+        square.label,
+        square.start.y,
+        square.end.y,
+        square.start.x,
+        square.end.x,
+        square.type,
+        square.certaintyLevel,
+        square.completude,
+      ]);
 
-          updatedData = [...updatedData, ...squareRows];
+      const updatedData = [fileHeader, ...squareRows];
 
-          allFilesData.push({ name: roiTableFile.name, data: updatedData });
-          resolve();
-        },
-        header: false,
-        skipEmptyLines: true,
-      });
+      allFilesData.push({ name: roiTableFile.name, data: updatedData });
+      resolve();
     };
 
     const promises = roiTables.map(
