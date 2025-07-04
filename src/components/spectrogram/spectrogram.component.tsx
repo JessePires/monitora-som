@@ -135,15 +135,6 @@ const DrawableSpectrogram = (props: DrawableSpectrogramProps): JSX.Element => {
                         onChecked={(checked) => {
                           if (checked) {
                             containerProps.actions.setShowDialog(true);
-                            globalContext.actions.removeAllAudioSquares();
-                            globalContext.actions.handleSetSquareInfo(null, {
-                              availableSpecies: '-',
-                              speciesName: '-',
-                              type: '-',
-                              certaintyLevel: '-',
-                              completude: '-',
-                              additionalComments: '-',
-                            });
                           } else {
                             globalContext.actions.setIsNoLabelsMarkerChecked(false);
                             globalContext.actions.removeNoLabelsMarker();
